@@ -1,59 +1,73 @@
 <script>
+	// @ts-nocheck
 	import { goto } from "$app/navigation";
+	import { sanityClient } from "$lib/utils/sanityClient";
+	import imageUrlBuilder from "@sanity/image-url";
 	import { page } from "$app/stores";
-	import { onMount } from "svelte";
 	import { changeFontColor } from "$lib/utils/changeFontColor";
+	import { buildFileUrl, parseAssetId } from "@sanity/asset-utils";
+	import Slider from "$lib/components/Slider.svelte";
+
 	export let data;
+	console.log(data);
 
-	$: numOfProjects = data.body.data.length;
-	$: ({ project } = data);
-	$: mediaPagination = project.data[0].attributes.media.data.length;
-
-	let min = 12;
-	let max = 22;
+	// variables
+	let values;
+	$: fontSize = 0.1 * values + 12 + "px";
 	let w;
 	let hover = false;
-	let value = (min + max) / 2;
-	$: projectIndex = project.data[0].id;
-	let pageIndex = 1;
+	$: projectIndex = data.projects.findIndex(
+		(el) => data.project._id === el._id,
+	);
+	$: pageIndex = 0;
+	let direction = 0;
+	let fontColor = "#fff";
+	let m = { x: 0, y: 0 };
+	const builder = imageUrlBuilder(sanityClient);
+	let expression;
 
-	$: currentImage = `http://localhost:1337${
-		project.data[0].attributes.media.data[pageIndex - 1].attributes
-			.url
-	}`;
+	$: leading = -0.002 * values + 1.3;
+
+	$: console.log(
+		"page index: ",
+		pageIndex,
+		", projectIndex: ",
+		projectIndex,
+	);
+	// functions
 	const gotoNextPage = async () => {
 		pageIndex++;
 		if (
-			pageIndex > mediaPagination
+			pageIndex >
+			data.projects[projectIndex].media.length - 1
 			// if person clicks beyond max number of pages
 		) {
-			pageIndex = 1;
 			projectIndex++;
-			if ((projectIndex + 1) % numOfProjects === 0) {
-				projectIndex = 1;
+			if (projectIndex > data.projects.length - 1) {
+				projectIndex = 0;
 			}
-			const res = await fetch(
-				`http://localhost:1337/api/projects/${projectIndex}`,
-			);
-			const nextProjectData = await res.json();
-			goto(`/${nextProjectData.data.attributes.slug}`);
+			pageIndex = 0;
+			goto(`/${data.projects[projectIndex].slug.current}`);
 		}
 	};
-	const debounce = (callback, wait) => {
-		let timeout;
-		return (...args) => {
-			const context = this;
-			clearTimeout(timeout);
-			timeout = setTimeout(
-				() => callback.apply(context, args),
-				wait,
-			);
-		};
+	const gotoPrevPage = async () => {
+		pageIndex--;
+		if (
+			pageIndex < 0
+			// if person clicks below first page
+		) {
+			projectIndex--;
+			// if project index is less than 0, loop back to last project
+			if (projectIndex < 0) {
+				projectIndex = data.projects.length - 1;
+			}
+			pageIndex =
+				data.projects[projectIndex].media.length - 1;
+
+			goto(`/${data.projects[projectIndex].slug.current}`);
+		}
 	};
 
-	let m = { x: 0, y: 0 };
-	let direction;
-	let fontColor = "#fff";
 	const handleMouseMove = (e) => {
 		hover = true;
 		m = { x: e.clientX, y: e.clientY };
@@ -63,74 +77,58 @@
 			direction = -1;
 		}
 	};
+
 	const handleMouseLeave = () => {
 		hover = false;
 	};
+
 	const handleClick = async () => {
 		if (direction === 1) {
-			pageIndex++;
-			if (pageIndex > mediaPagination) {
-				pageIndex = 1;
-				projectIndex++;
-				if ((projectIndex + 1) % numOfProjects === 0) {
-					projectIndex = 1;
-				}
-				const res = await fetch(
-					`http://localhost:1337/api/projects/${projectIndex}`,
-				);
-				const nextProjectData = await res.json();
-				goto(
-					`/${nextProjectData.data.attributes.slug}`,
-				);
-			}
+			gotoNextPage();
 		} else {
-			pageIndex--;
-			if (pageIndex === 0) {
-				projectIndex--;
-				if (projectIndex === 0) {
-					projectIndex = numOfProjects;
-				}
-				pageIndex = mediaPagination;
-				const res = await fetch(
-					`http://localhost:1337/api/projects/${projectIndex}`,
-				);
-				const prevProjectData = await res.json();
-				goto(
-					`/${prevProjectData.data.attributes.slug}`,
-				);
-			}
+			gotoPrevPage();
 		}
 	};
-	$: imgSrc = `http://localhost:1337${
-		project.data[0].attributes.media.data[pageIndex - 1].attributes
-			.url
-	}`;
+
+	const generateImageUrl = (source) => {
+		if (source) {
+			return builder.image(source);
+		}
+	};
+
+	// const generateFileUrl = (source) => {
+	// 	const parsedAssetId = parseAssetId(source.asset._ref);
+	// 	return buildFileUrl(parsedAssetId, sanityClient);
+	// };
+	console.log(data.project);
 </script>
 
 <div
 	class="site-layout"
-	style:background-color={project.data[0].attributes.color || "#fff"}
-	style:--font-size={value + "px"}
+	style:--red={data.projects[projectIndex].color.rgb.r || 255}
+	style:--green={data.projects[projectIndex].color.rgb.g || 255}
+	style:--blue={data.projects[projectIndex].color.rgb.b || 255}
+	style:--font-size={fontSize}
 >
 	<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div
 		class="media-container"
-		style:--font-size={value + "px"}
 		bind:clientWidth={w}
 		on:mousemove={handleMouseMove}
+		on:mouseover={handleMouseMove}
+		on:mouseleave={handleMouseLeave}
 		on:click={handleClick}
-		style:color={fontColor}
-		style:background-image="url({imgSrc})"
 	>
-		<!-- <img -->
-		<!-- 	src={imgSrc} -->
-		<!-- 	alt="" -->
-		<!-- 	use:changeFontColor={imgSrc} -->
-		<!-- 	on:changeBrightness={(e) => { -->
-		<!-- 		fontColor = e.detail; -->
-		<!-- 	}} -->
-		<!-- /> -->
+		<img
+			src={generateImageUrl(
+				data.projects[projectIndex].media[pageIndex],
+			)
+				.width(1000)
+				.url()}
+			alt=""
+		/>
+		<svelte:component this={expression} />
 		<div
 			class="cursor"
 			style:display={hover ? "block" : "none"}
@@ -139,15 +137,70 @@
 			style:background-color={direction === 1
 				? "green"
 				: "blue"}
-		></div>
-
+		>
+			{#if direction === 1}
+				<svg
+					width="100%"
+					height="100%"
+					version="1.1"
+					viewBox="0 0 1200 1200"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<g
+						stroke-miterlimit="10"
+						stroke-width="2.5"
+					>
+						<path
+							transform="scale(12)"
+							d="m24.5 49.9h50.4"
+						/>
+						<path
+							transform="scale(12)"
+							d="m59.9 35.3 15.6 15.6"
+						/>
+						<path
+							transform="scale(12)"
+							d="m59.9 64.7 15.6-15.6"
+						/>
+					</g>
+				</svg>
+			{:else}
+				<svg
+					width="100%"
+					height="100%"
+					version="1.1"
+					viewBox="0 0 1200 1200"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<g
+						stroke-miterlimit="10"
+						stroke-width="2.5"
+					>
+						<path
+							transform="scale(12)"
+							d="m75.5 50.1h-50.4"
+						/>
+						<path
+							transform="scale(12)"
+							d="m40.1 64.7-15.6-15.6"
+						/>
+						<path
+							transform="scale(12)"
+							d="m40.1 35.3-15.6 15.6"
+						/>
+					</g>
+				</svg>
+			{/if}
+		</div>
 		<div class="media">
 			<p class="description">
-				{project.data[0].attributes.description}
+				{data.projects[projectIndex].description}
 			</p>
 			<ul class="pagination">
 				<li>
-					{pageIndex} / {mediaPagination}
+					{pageIndex + 1} / {data.projects[
+						projectIndex
+					].media.length}
 				</li>
 				<li>
 					<button
@@ -173,61 +226,77 @@
 				</h1>
 			</section>
 			<section class="projects">
-				{#each data.body.data as project}
-					<section>
+				{#each data.projects as project}
+					<section style:--leading={leading}>
 						<a
-							href="/{project
-								.attributes
-								.slug}"
+							href="/{project.slug
+								.current}"
 							aria-current={$page.url
 								.pathname ===
-							project.attributes.slug
+							project.slug.current
 								? "page"
 								: false}
 						>
 							<h2>
 								<span
 									class="bold"
-									>{project
-										.attributes
-										.company}</span
-								>, {project
-									.attributes
-									.title}
+									>{project.company}</span
+								>, {project.title}
 							</h2>
 							<h3 class="italic">
-								{project
-									.attributes
-									.role}
+								{project.role}
 							</h3>
 						</a>
 					</section>
 				{/each}
 			</section>
-			<div class="slider-wrapper">
-				<input
-					type="range"
-					{min}
-					{max}
-					bind:value
-					class="slider"
-				/>
-			</div>
+			<Slider bind:value={values}></Slider>
 		</div>
 	</div>
 </div>
 
 <style lang="postcss">
+	.site-layout {
+		/* calculates perceived lightness using the sRGB Luma method 
+  Luma = (red * 0.2126 + green * 0.7152 + blue * 0.0722) / 255 */
+		--r: calc(var(--red) * 0.2126);
+		--g: calc(var(--green) * 0.7152);
+		--b: calc(var(--blue) * 0.0722);
+		--sum: calc(var(--r) + var(--g) + var(--b));
+		--perceived-lightness: calc(var(--sum) / 255);
+		--threshold: 0.5;
+
+		/* shows either white or black color depending on perceived darkness */
+		--color: hsl(
+			0,
+			0%,
+			calc(
+				(var(--perceived-lightness) - var(--threshold)) *
+					-10000000%
+			)
+		);
+	}
 	.media-container {
 		position: relative;
 		cursor: none;
-		background-size: cover;
-		background-position: center;
+		> :global(img) {
+			width: 100%;
+			height: 100%;
+		}
+		background-color: rgb(var(--red), var(--green), var(--blue));
+		overflow: hidden;
+		color: var(--color);
+	}
+	.media-container svg {
+		fill: var(--color);
+	}
+	.projects > section {
+		line-height: var(--leading);
 	}
 	.cursor {
 		display: none;
-		width: 12px;
-		height: 12px;
+		width: 128px;
+		height: 128px;
 		border-radius: 1000px;
 		transform: translate(-50%, -50%);
 		top: var(--y);
@@ -235,6 +304,9 @@
 		position: absolute;
 		background-color: red;
 		pointer-events: none;
+		svg {
+			stroke: black;
+		}
 	}
 	.site-layout {
 		display: grid;
@@ -263,20 +335,12 @@
 		position: relative;
 		height: 100%;
 	}
-	.slider-wrapper {
-		width: 100%;
-		position: absolute;
-		bottom: 0;
-		left: 0;
-	}
-	.slider {
-		width: 100%;
-		cursor: pointer;
-	}
+
 	.projects {
 		display: grid;
 		margin-top: 80px;
 		grid-template: "a b" auto / 1fr 1fr;
+		overflow-y: auto;
 	}
 	@media (max-width: 575px) {
 		.projects {
@@ -327,5 +391,10 @@
 	}
 	.title {
 		max-width: 30rem;
+	}
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
 	}
 </style>

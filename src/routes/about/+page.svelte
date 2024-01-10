@@ -1,65 +1,31 @@
 <script>
-	import { goto } from "$app/navigation";
+	// @ts-nocheck
+	import { sanityClient } from "$lib/utils/sanityClient";
+	import imageUrlBuilder from "@sanity/image-url";
 	import { page } from "$app/stores";
+	import Slider from "$lib/components/Slider.svelte";
+
 	export let data;
+	console.log(data);
 
-	$: numOfProjects = data.body.data.length;
-	$: ({ project } = data);
-	$: mediaPagination = project.data[0].attributes.media.data.length;
-
-	let min = 12;
-	let max = 22;
-	let value = (min + max) / 2;
-	$: projectIndex = project.data[0].id;
-	let pageIndex = 1;
-	const gotoNextPage = async () => {
-		pageIndex++;
-		if (
-			pageIndex > mediaPagination
-			// if person clicks beyond max number of pages
-		) {
-			pageIndex = 1;
-			projectIndex++;
-			if ((projectIndex + 1) % numOfProjects === 0) {
-				projectIndex = 1;
-			}
-			const res = await fetch(
-				`http://localhost:1337/api/projects/${projectIndex}`,
-			);
-			const nextProjectData = await res.json();
-			goto(`/${nextProjectData.data.attributes.slug}`);
-		}
-	};
+	// variables
+	let values;
+	$: fontSize = 0.1 * values + 12 + "px";
+	$: leading = 0.12 * values + 1.2;
 </script>
 
 <div
 	class="site-layout"
-	style:background-color={project.data[0].attributes.color || "#fff"}
+	style:background-color="green"
+	style:--font-size={fontSize}
+	style:--leading={leading}
 >
-	<div
-		class="media-container"
-		style:background-image="url(https://assets.petco.com/petco/image/upload/f_auto,q_auto/21-477776_Parakeet_WhiteBG_1080x720)"
-		style:--font-size={value + "px"}
-	>
-		<div class="media">
-			<p class="description">
-				{project.data[0].attributes.description}
-			</p>
-			<ul class="pagination">
-				<li>
-					{pageIndex} / {mediaPagination}
-				</li>
-				<li>
-					<button
-						class="next-btn"
-						on:click={gotoNextPage}
-						>Next</button
-					>
-				</li>
-			</ul>
-		</div>
+	<!-- svelte-ignore a11y-mouse-events-have-key-events -->
+	<!-- svelte-ignore a11y-no-static-element-interactions -->
+	<div class="media-container">
+		<img src="https://picsum.photos/id/237/536/354" alt="" />
 	</div>
-	<div class="info-container" style:--font-size={value + "px"}>
+	<div class="info-container">
 		<div class="info">
 			<section class="title">
 				<h1>
@@ -73,56 +39,86 @@
 				</h1>
 			</section>
 			<section class="projects">
-				{#each data.body.data as project}
+				{#each data.projects as project}
 					<section>
 						<a
-							href="/{project
-								.attributes
-								.slug}"
+							href="/{project.slug
+								.current}"
 							aria-current={$page.url
 								.pathname ===
-							project.attributes.slug
+							project.slug.current
 								? "page"
 								: false}
 						>
 							<h2>
 								<span
 									class="bold"
-									>{project
-										.attributes
-										.company}</span
-								>, {project
-									.attributes
-									.title}
+									>{project.company}</span
+								>, {project.title}
 							</h2>
 							<h3 class="italic">
-								{project
-									.attributes
-									.role}
+								{project.role}
 							</h3>
 						</a>
 					</section>
 				{/each}
 			</section>
-			<div class="slider-wrapper">
-				<input
-					type="range"
-					{min}
-					{max}
-					bind:value
-					class="slider"
-				/>
-			</div>
+			<Slider bind:value={values}></Slider>
 		</div>
 	</div>
 </div>
 
 <style lang="postcss">
+	.media-container {
+		position: relative;
+		cursor: none;
+		> :global(img) {
+			width: 100%;
+			height: 100%;
+		}
+		background-color: rgb(var(--red), var(--green), var(--blue));
+		overflow: hidden;
+		/* calculates perceived lightness using the sRGB Luma method 
+  Luma = (red * 0.2126 + green * 0.7152 + blue * 0.0722) / 255 */
+		--r: calc(var(--red) * 0.2126);
+		--g: calc(var(--green) * 0.7152);
+		--b: calc(var(--blue) * 0.0722);
+		--sum: calc(var(--r) + var(--g) + var(--b));
+		--perceived-lightness: calc(var(--sum) / 255);
+		--threshold: 0.5;
+
+		/* shows either white or black color depending on perceived darkness */
+		color: hsl(
+			0,
+			0%,
+			calc(
+				(var(--perceived-lightness) - var(--threshold)) *
+					-10000000%
+			)
+		);
+	}
+	.cursor {
+		display: none;
+		width: 12px;
+		height: 12px;
+		border-radius: 1000px;
+		transform: translate(-50%, -50%);
+		top: var(--y);
+		left: var(--x);
+		position: absolute;
+		background-color: red;
+		pointer-events: none;
+	}
 	.site-layout {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
-		min-height: 100vh;
+		grid-template: 1fr / 1fr 1fr;
+		height: 100svh;
 		font-size: var(--font-size);
+	}
+	@media (max-width: 991px) {
+		.site-layout {
+			grid-template: 1fr 1fr / 1fr;
+		}
 	}
 	.italic {
 		font-style: italic;
@@ -140,20 +136,19 @@
 		position: relative;
 		height: 100%;
 	}
-	.slider-wrapper {
-		width: 100%;
-		position: absolute;
-		bottom: 0;
-		left: 0;
-	}
-	.slider {
-		width: 100%;
-		cursor: pointer;
-	}
+
 	.projects {
 		display: grid;
 		margin-top: 80px;
 		grid-template: "a b" auto / 1fr 1fr;
+		overflow-y: auto;
+	}
+	@media (max-width: 575px) {
+		.projects {
+			grid-template:
+				"a" auto
+				"b" auto / 1fr;
+		}
 	}
 	.projects > section:nth-of-type(2n) {
 		grid-area: b;
@@ -165,10 +160,18 @@
 		padding: 32px;
 	}
 	.media-container {
-		background-size: cover;
-		background-position: center;
+		position: relative;
+	}
+	img {
+		width: 100%;
+		height: 50svh;
+		object-fit: cover;
 	}
 	.media {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
 		display: flex;
 		padding: 32px;
 		justify-content: space-between;
@@ -185,8 +188,15 @@
 		cursor: pointer;
 	}
 	.media {
-		color: white;
 		text-shadow: 0px 0px 1px rgb(0 0 0 / 0.5);
+	}
+	.title {
+		max-width: 30rem;
+	}
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
 	}
 </style>
 
