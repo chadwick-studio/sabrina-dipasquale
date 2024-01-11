@@ -1,202 +1,282 @@
 <script>
-	// @ts-nocheck
-	import { sanityClient } from "$lib/utils/sanityClient";
-	import imageUrlBuilder from "@sanity/image-url";
-	import { page } from "$app/stores";
-	import Slider from "$lib/components/Slider.svelte";
-
+	import { browser } from "$app/environment";
+	import Slider from "$components/Slider.svelte";
+	import { color } from "$stores/stores.js";
+	import { generateImageUrl } from "$utils/generateImageUrl";
 	export let data;
-	console.log(data);
+	export let alt = "";
 
-	// variables
-	let values;
-	$: fontSize = 0.1 * values + 12 + "px";
-	$: leading = 0.12 * values + 1.2;
+	$: ({ aboutme } = data);
+
+	$: color.set(aboutme.color);
+
+	let lightboxVisibility = false;
+	const openLightbox = () => {
+		lightboxVisibility = true;
+	};
+	const closeLightbox = () => {
+		lightboxVisibility = false;
+	};
+
+	const move = (node, { duration }) => {
+		return {
+			duration,
+			css: (t, u) => {
+				return `transform: translateY(-${u * 100}%)`;
+			},
+		};
+	};
+	const goBack = () => {
+		if (browser) window.history.back();
+	};
 </script>
 
-<div
-	class="site-layout"
-	style:background-color="green"
-	style:--font-size={fontSize}
-	style:--leading={leading}
->
-	<!-- svelte-ignore a11y-mouse-events-have-key-events -->
-	<!-- svelte-ignore a11y-no-static-element-interactions -->
-	<div class="media-container">
-		<img src="https://picsum.photos/id/237/536/354" alt="" />
-	</div>
-	<div class="info-container">
-		<div class="info">
-			<section class="title">
-				<h1>
-					<span class="uppercase bold"
-						>Sabrina Dipasquale</span
-					>
-					is a NYC-based Designer & Art Director.
-					<a class="link" href="/about"
-						>Read more.</a
-					>
-				</h1>
+<div class="about-me-image">
+	<img src={generateImageUrl(aboutme.img).url()} {alt} />
+</div>
+<div class="aboutme-container">
+	<h1>{aboutme.description.title}</h1>
+	<div class="text-grid">
+		<div class="column">
+			<section class="description">
+				<p>{aboutme.description.text}</p>
 			</section>
-			<section class="projects">
-				{#each data.projects as project}
-					<section>
-						<a
-							href="/{project.slug
-								.current}"
-							aria-current={$page.url
-								.pathname ===
-							project.slug.current
-								? "page"
-								: false}
-						>
-							<h2>
-								<span
-									class="bold"
-									>{project.company}</span
-								>, {project.title}
-							</h2>
-							<h3 class="italic">
-								{project.role}
-							</h3>
-						</a>
-					</section>
-				{/each}
+		</div>
+		<div class="column">
+			<section class="experience">
+				<h2>{aboutme.experience.title}</h2>
+				<p>{aboutme.experience.text}</p>
 			</section>
-			<Slider bind:value={values}></Slider>
+			<section class="awards">
+				<h2>{aboutme.awards.title}</h2>
+				<p>{aboutme.awards.text}</p>
+			</section>
 		</div>
 	</div>
+	<div class="contact-info-container">
+		<ul>
+			<li>
+				<button on:click={openLightbox}
+					><span>Email</span>
+					<svg
+						width="1em"
+						height="1em"
+						version="1.1"
+						viewBox="0 0 1200 1200"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path
+							d="m300 200h629.5l-865 864.5 71 71 864.5-865v629.5h100v-800h-800z"
+						/>
+					</svg></button
+				>
+			</li>
+			{#each aboutme.social as social}
+				<li>
+					<a href={social.link}>
+						<span>{social.title}</span>
+						<svg
+							width="1em"
+							height="1em"
+							version="1.1"
+							viewBox="0 0 1200 1200"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								d="m300 200h629.5l-865 864.5 71 71 864.5-865v629.5h100v-800h-800z"
+							/>
+						</svg>
+					</a>
+				</li>
+			{/each}
+		</ul>
+		<button class="link" on:click={goBack}>Show less</button>
+	</div>
+	<Slider></Slider>
 </div>
+{#if lightboxVisibility}
+	<div class="email-lightbox-container" transition:move>
+		<div class="email-form-container">
+			<h1>Let's talk.</h1>
+			<form action="">
+				<section class="name">
+					<label for="name">Full Name</label>
+					<input
+						type="text"
+						id="name"
+						name="name"
+					/>
+				</section>
+				<section class="email">
+					<label for="email">
+						Email Address
+					</label>
+					<input
+						type="text"
+						id="email"
+						name="email"
+					/>
+				</section>
+				<section class="subject full-width">
+					<label for="subject"> Subject </label>
+					<input
+						type="text"
+						id="subject"
+						name="subject"
+					/>
+				</section>
+				<section class="message full-width">
+					<label for="message"> Message </label>
+					<input
+						type="text"
+						id="message"
+						name="message"
+					/>
+				</section>
+				<button>Send</button>
+			</form>
+			<button on:click={closeLightbox}>
+				<span class="sr-only">Close</span>
+				<svg
+					width="100%"
+					height="100%"
+					version="1.1"
+					viewBox="0 0 1200 1200"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<g
+						stroke-miterlimit="10"
+						stroke-width="2.5"
+						stroke="black"
+					>
+						<path
+							transform="scale(12)"
+							d="m24.5 49.9h50.4"
+						/>
+						<path
+							transform="scale(12)"
+							d="m59.9 35.3 15.6 15.6"
+						/>
+						<path
+							transform="scale(12)"
+							d="m59.9 64.7 15.6-15.6"
+						/>
+					</g>
+				</svg>
+			</button>
+		</div>
+		<div class="img-container">
+			<img
+				src="https://picsum.photos/id/237/536/354"
+				alt=""
+			/>
+		</div>
+	</div>
+{/if}
 
 <style lang="postcss">
-	.media-container {
-		position: relative;
-		cursor: none;
-		> :global(img) {
-			width: 100%;
-			height: 100%;
-		}
-		background-color: rgb(var(--red), var(--green), var(--blue));
-		overflow: hidden;
-		/* calculates perceived lightness using the sRGB Luma method 
-  Luma = (red * 0.2126 + green * 0.7152 + blue * 0.0722) / 255 */
-		--r: calc(var(--red) * 0.2126);
-		--g: calc(var(--green) * 0.7152);
-		--b: calc(var(--blue) * 0.0722);
-		--sum: calc(var(--r) + var(--g) + var(--b));
-		--perceived-lightness: calc(var(--sum) / 255);
-		--threshold: 0.5;
-
-		/* shows either white or black color depending on perceived darkness */
-		color: hsl(
-			0,
-			0%,
-			calc(
-				(var(--perceived-lightness) - var(--threshold)) *
-					-10000000%
-			)
-		);
-	}
-	.cursor {
-		display: none;
-		width: 12px;
-		height: 12px;
-		border-radius: 1000px;
-		transform: translate(-50%, -50%);
-		top: var(--y);
-		left: var(--x);
-		position: absolute;
-		background-color: red;
-		pointer-events: none;
-	}
-	.site-layout {
-		display: grid;
-		grid-template: 1fr / 1fr 1fr;
-		height: 100svh;
-		font-size: var(--font-size);
-	}
-	@media (max-width: 991px) {
-		.site-layout {
-			grid-template: 1fr 1fr / 1fr;
-		}
-	}
-	.italic {
-		font-style: italic;
-	}
-	.uppercase {
-		text-transform: uppercase;
-	}
-	.bold {
-		font-weight: bold;
-	}
-	.link {
-		text-decoration: underline;
-	}
-	.info {
-		position: relative;
-		height: 100%;
-	}
-
-	.projects {
-		display: grid;
-		margin-top: 80px;
-		grid-template: "a b" auto / 1fr 1fr;
-		overflow-y: auto;
-	}
-	@media (max-width: 575px) {
-		.projects {
-			grid-template:
-				"a" auto
-				"b" auto / 1fr;
-		}
-	}
-	.projects > section:nth-of-type(2n) {
-		grid-area: b;
-	}
-	a[aria-current="page"] {
-		color: blue;
-	}
-	.info-container {
+	.aboutme-container {
 		padding: 32px;
-	}
-	.media-container {
+		padding-top: 64px;
+		overflow-y: auto;
 		position: relative;
+	}
+	.about-me-image {
+		overflow: hidden;
 	}
 	img {
-		width: 100%;
-		height: 50svh;
 		object-fit: cover;
+		width: 100%;
+		height: 100%;
 	}
-	.media {
-		position: absolute;
+	.text-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		column-gap: 32px;
+		margin-top: 4em;
+	}
+	.awards {
+		grid-column: 2 / 3;
+	}
+	.contact-info-container {
+		margin-top: 64px;
+	}
+	.aboutme-container {
+		section + section {
+			margin-top: 56px;
+		}
+	}
+	.column > section {
+		white-space: pre-wrap;
+	}
+	.email-lightbox-container {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+		position: fixed;
 		top: 0;
 		left: 0;
 		width: 100%;
-		display: flex;
-		padding: 32px;
-		justify-content: space-between;
-		gap: 8rem;
+		min-height: fit-content;
+		background-color: #ead4dc;
+		z-index: 1000;
 	}
-	.pagination {
-		display: inline-flex;
-		gap: 1em;
-		& > * {
-			width: max-content;
+	h1 {
+		font-size: 36px;
+		color: #c53232;
+	}
+	label {
+		color: #c53232;
+		font-size: 12px;
+	}
+	input {
+		border-bottom: 1px solid #c53232;
+		font-size: 12px;
+		padding-block: 4px;
+	}
+	.email-lightbox-container {
+		& section {
+			display: grid;
 		}
 	}
-	.next-btn {
-		cursor: pointer;
+	ul > li > * {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25em;
 	}
-	.media {
-		text-shadow: 0px 0px 1px rgb(0 0 0 / 0.5);
+	.email-form-container {
+		padding: 32px;
+		display: grid;
+		& > button {
+			width: fit-content;
+			cursor: pointer;
+			justify-self: end;
+			aspect-ratio: 1;
+			width: 64px;
+			rotate: 270deg;
+		}
 	}
-	.title {
-		max-width: 30rem;
+	form {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		column-gap: max(5vw, 1rem);
+		align-items: end;
+		& button {
+			background-color: #c53232;
+			color: white;
+			margin-top: 112px;
+			text-align: center;
+			width: fit-content;
+			padding: 1rem 3rem;
+			cursor: pointer;
+		}
 	}
-	img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
+
+	@media (max-width: 575px) {
+		form {
+			grid-template: auto auto/ 1fr;
+		}
+	}
+	.full-width {
+		grid-column: 1 / -1;
 	}
 </style>
-

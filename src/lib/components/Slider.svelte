@@ -1,19 +1,33 @@
 <script>
 	// @ts-nocheck
-	export let value = 50;
-	let min = 0;
-	let max = 100;
-	$: transform = `translateX(${-value + "%"})`;
+	import { percentage } from "$lib/stores/stores";
+	export let active = false;
+	let MIN = 0;
+	let MAX = 100;
+	const thumbWidth = 16; // 30px for example
+	$: fraction = ($percentage - MIN) / (MAX - MIN);
+	$: left = `calc(${fraction * 100}% + ${
+		(0.5 - fraction) * thumbWidth
+	}px)`;
 </script>
 
 <div class="slider-wrapper">
-	<span style:left={value + "%"} style:transform class="label"></span>
-	<input class="slider" type="range" bind:value {min} {max} step="1" />
+	<div class="slider">
+		<span style:left class="label" class:active></span>
+		<input
+			class="slider-input"
+			type="range"
+			bind:value={$percentage}
+			min={MIN}
+			max={MAX}
+			step="1"
+		/>
+	</div>
 </div>
 
 <style>
 	.label {
-		display: block;
+		display: none;
 		position: absolute;
 		background: red;
 		color: #000;
@@ -21,18 +35,28 @@
 		height: 16px;
 		pointer-events: none;
 		z-index: 100;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		&.active {
+			display: block;
+		}
 	}
 	.slider-wrapper {
 		width: 100%;
-		height: fit-content;
 		position: absolute;
 		bottom: 0;
 		left: 0;
-		outline: 1px solid red;
+		padding-inline: 32px;
 	}
 	.slider {
+		position: relative;
+	}
+	.slider-input {
+		display: block;
 		width: 100%;
 		position: relative;
+		height: 40px;
 	}
 	/********** Range Input Styles **********/
 	/*Range Reset*/
@@ -51,9 +75,8 @@
 	/***** Chrome, Safari, Opera and Edge Chromium styles *****/
 	/* slider track */
 	input[type="range"]::-webkit-slider-runnable-track {
-		background-color: #053a5f;
-		border-radius: 0.5rem;
-		height: 0.5rem;
+		background-color: black;
+		height: 1px;
 	}
 
 	/* slider thumb */
@@ -63,9 +86,8 @@
 		margin-top: -12px; /* Centers thumb on the track */
 
 		/*custom styles*/
-		height: 1rem;
-		width: 1rem;
-		content: "5";
+		height: 16px;
+		width: 16px;
 	}
 
 	/******** Firefox styles ********/
@@ -81,9 +103,9 @@
 		border-radius: 0; /*Removes default border-radius that FF applies*/
 
 		/*custom styles*/
-		background-color: #5cd5eb;
-		height: 1rem;
-		width: 1rem;
-		content: "5";
+		background-color: transparent;
+		height: 16px;
+		width: 16px;
 	}
 </style>
+
