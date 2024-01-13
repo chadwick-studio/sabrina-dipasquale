@@ -102,6 +102,8 @@
 		/*custom styles*/
 		height: 16px;
 		width: 16px;
+		border: none;
+		box-shadow: none;
 	}
 
 	/******** Firefox styles ********/
