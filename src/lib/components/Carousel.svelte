@@ -3,15 +3,15 @@
 	import { setContext, getContext, onMount } from "svelte";
 	import { writable } from "svelte/store";
 	import { color } from "$stores/stores";
-	import { direction, pageIndex } from "$stores/stores";
+	import { direction, pageIndex, hidden } from "$stores/stores";
 	import { generateImageUrl } from "$utils/generateImageUrl";
 	import { scroller } from "$utils/scroller";
 
 	export let project;
 	export let keyphrase;
-	console.log(keyphrase);
 	import Cursor from "./Cursor.svelte";
 	import { browser } from "$app/environment";
+	import { generateFileUrl } from "$utils/generateVideoUrl";
 
 	const projects = getContext("projects");
 	let carouselWidth;
@@ -24,7 +24,7 @@
 
 	$: projectIndex = projects.findIndex((el) => el._id === project._id);
 
-	$: hidden = project.hidden;
+	$: hidden.set(project.hidden || false);
 
 	// const scrollElementIntoView = (index) => {
 	// 	if (scrollerNode && index) {
@@ -102,7 +102,7 @@
 		projectInfoLightbox = !projectInfoLightbox;
 	};
 	let clicked = false;
-
+	let value;
 	afterNavigate(() => {
 		pageIndex.set($direction === 1 ? 0 : project.media.length - 1);
 		scrollerNode.scrollTo({
@@ -121,7 +121,7 @@
 	bind:clientWidth={carouselWidth}
 	style:--bg-color={$color.hex}
 >
-	{#if !hidden}
+	{#if !$hidden}
 		<div class="media">
 			<p class="description">
 				{project.description}
@@ -177,27 +177,50 @@
 				pageIndex.set(e.detail);
 			}}
 		>
-			{#if !hidden}
-				{#each project.media as img, i}
+			{#if !$hidden}
+				{#each project.media as el, i}
 					<li data-index={i}>
-						<img
-							src={generateImageUrl(
-								img,
-							).url()}
-							alt=""
-							draggable="false"
-						/>
+						{#if el._type === "img"}
+							<img
+								src={generateImageUrl(
+									el,
+								).url()}
+								alt=""
+								draggable="false"
+							/>
+						{:else}
+							<video
+								src={generateFileUrl(
+									el,
+								)}
+								autoplay
+								muted
+								playsinline
+							></video>
+						{/if}
 					</li>
 				{/each}
 			{:else}
 				<li></li>
 			{/if}
 		</ul>
-		{#if hidden}
-			<form class="form">
+		{#if $hidden}
+			<form
+				class="form"
+				on:submit={() => {
+					if (value === keyphrase.keyphrase) {
+						hidden.set(false);
+						pageIndex.set(1);
+						scrollerNode.scrollTo({
+							left: 0,
+							behavior: "instant",
+						});
+					}
+				}}
+			>
 				<section>
 					<label for="keyphrase"
-						>Enter Password:</label
+						>Enter Keyphrase:</label
 					>
 					<input
 						on:click|stopPropagation
@@ -205,22 +228,10 @@
 						id="keyphrase"
 						name="keyphrase"
 						bind:this={keyphraseInput}
+						bind:value
 					/>
 				</section>
-				<button
-					bind:this={viewProjectButton}
-					on:click|stopPropagation={() => {
-						hidden = false;
-						pageIndex.set(1);
-						scrollerNode.scrollTo({
-							left:
-								$direction === 1
-									? 0
-									: scrollerNode.scrollWidth,
-							behavior: "instant",
-						});
-					}}
-				>
+				<button bind:this={viewProjectButton}>
 					View Project
 				</button>
 			</form>
@@ -307,7 +318,8 @@
 		height: 100cqh;
 		scroll-snap-align: start;
 	}
-	.images-scroller > li > img {
+	.images-scroller > li > img,
+	video {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
@@ -331,7 +343,7 @@
 		& > section {
 			display: grid;
 		}
-		z-index: 10000;
+		z-index: 999;
 		background-color: var(--bg-color);
 		height: 100%;
 	}
@@ -357,7 +369,7 @@
 		position: absolute;
 		bottom: 20px;
 		left: 20px;
-		z-index: 1001;
+		z-index: 1000;
 		cursor: pointer;
 	}
 	@media (min-width: 768px) {
@@ -375,7 +387,7 @@
 		height: 100%;
 		top: 0;
 		left: 0;
-		z-index: 1000;
+		z-index: 990;
 		background-color: var(--bg-color);
 		padding: var(--padding);
 		& > p {

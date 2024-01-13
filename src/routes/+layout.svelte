@@ -15,7 +15,6 @@
 </div>
 
 <style lang="postcss">
-	@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400&display=swap");
 	.site-layout {
 		/* calculates perceived lightness using the sRGB Luma method 
   Luma = (red * 0.2126 + green * 0.7152 + blue * 0.0722) / 255 */
@@ -38,7 +37,7 @@
 		--padding: 20px;
 		display: grid;
 		grid-template: 1fr 1fr / 1fr;
-		font-family: "Open Sans";
+		font-family: "Helvetica";
 		height: 100svh;
 		color: var(--color);
 	}

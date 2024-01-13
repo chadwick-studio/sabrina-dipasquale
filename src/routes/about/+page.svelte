@@ -191,6 +191,7 @@
 		height: 100%;
 		overflow-y: auto;
 		padding: var(--padding);
+		line-height: 1.4;
 	}
 	.aboutme {
 		overflow-y: auto;
