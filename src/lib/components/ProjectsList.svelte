@@ -73,7 +73,6 @@
 		overflow: hidden;
 		&::before,
 		&::after {
-			--opacity: 0;
 			content: "";
 			display: block;
 			opacity: var(--opacity);
@@ -112,8 +111,7 @@
 		overflow: auto;
 		height: 100%;
 		margin-top: var(--projects-margin-top);
-		column-gap: 32px;
-		row-gap: 12px;
+		column-gap: var(--padding);
 		grid-auto-rows: min-content;
 		grid-template-columns: 1fr;
 		padding-block: 1px;
@@ -139,8 +137,9 @@
 	.project-link {
 		display: block;
 		position: relative;
-		padding-block: 4px;
+		padding-block: 12px;
 		font-family: "PSFournier Std Petit";
+		overflow: hidden;
 		& > * {
 			line-height: 1.3;
 		}
@@ -151,21 +150,26 @@
 			position: absolute;
 			width: 0;
 			height: 1px;
-			background-color: #686868;
+			background-color: var(--color);
+			opacity: 0.3;
 		}
 		&::before {
-			top: calc(100% - 2px);
+			top: 5px;
 			left: 0;
 		}
 		&::after {
-			bottom: calc(100% - 2px);
+			bottom: 4px;
 			left: 0;
 		}
 		&[aria-current="page"] {
-			color: #3a3a3a;
 			&::before,
 			&::after {
 				width: 100%;
+			}
+			& > h2,
+			& > h3 {
+				color: var(--color);
+				opacity: 0.6;
 			}
 		}
 	}

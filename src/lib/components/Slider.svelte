@@ -82,10 +82,10 @@
 		-webkit-appearance: none;
 		appearance: none;
 		background: transparent;
-		cursor: pointer;
+		cursor: default;
 	}
 	.active .slider-input {
-		cursor: default;
+		cursor: pointer;
 	}
 	/* Removes default focus */
 	input[type="range"]:focus {
