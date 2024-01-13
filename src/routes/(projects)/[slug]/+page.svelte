@@ -5,9 +5,10 @@
 
 	export let data;
 	$: ({ project } = data);
+	$: ({ keyphrase } = data);
 
 	$: color.set(project.color);
+	$: console.log(keyphrase);
 </script>
 
-<Carousel {project}></Carousel>
-
+<Carousel {keyphrase} {project}></Carousel>

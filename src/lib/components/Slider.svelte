@@ -1,19 +1,19 @@
 <script>
 	// @ts-nocheck
-	import { percentage } from "$lib/stores/stores";
+	import { percentage, color } from "$lib/stores/stores";
 	export let active = false;
 	let MIN = 0;
 	let MAX = 100;
-	const thumbWidth = 16; // 30px for example
+	const thumbWidth = 18;
 	$: fraction = ($percentage - MIN) / (MAX - MIN);
 	$: left = `calc(${fraction * 100}% + ${
 		(0.5 - fraction) * thumbWidth
 	}px)`;
 </script>
 
-<div class="slider-wrapper">
+<div class="slider-wrapper" style:--currentColor={$color.hex}>
 	<div class="slider">
-		<span style:left class="label" class:active></span>
+		<span style:left class="label" class:active>A</span>
 		<input
 			class="slider-input"
 			type="range"
@@ -28,18 +28,20 @@
 <style>
 	.label {
 		display: none;
+		font-size: 18px;
 		position: absolute;
-		background: red;
 		color: #000;
-		width: 16px;
-		height: 16px;
+		width: 18px;
+		height: 18px;
 		pointer-events: none;
 		z-index: 100;
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
+		text-align: center;
 		&.active {
 			display: block;
+			cursor: none;
 		}
 	}
 	.slider-wrapper {
@@ -47,16 +49,26 @@
 		position: absolute;
 		bottom: 0;
 		left: 0;
-		padding-inline: 32px;
+		padding: 20px;
+		background-color: var(--currentColor);
 	}
 	.slider {
 		position: relative;
+		&::before {
+			content: "";
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			height: 1px;
+			background-color: black;
+		}
 	}
 	.slider-input {
 		display: block;
 		width: 100%;
 		position: relative;
-		height: 40px;
+		height: 32px;
 	}
 	/********** Range Input Styles **********/
 	/*Range Reset*/
@@ -77,6 +89,8 @@
 	input[type="range"]::-webkit-slider-runnable-track {
 		background-color: black;
 		height: 1px;
+
+		background: transparent;
 	}
 
 	/* slider thumb */
@@ -95,6 +109,7 @@
 	input[type="range"]::-moz-range-track {
 		background-color: black;
 		height: 1px;
+		background: transparent;
 	}
 
 	/* slider thumb */
@@ -108,4 +123,3 @@
 		width: 16px;
 	}
 </style>
-

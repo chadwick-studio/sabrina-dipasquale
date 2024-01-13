@@ -1,5 +1,5 @@
 <script>
-	import { browser } from "$app/environment";
+	import { goto, afterNavigate } from "$app/navigation";
 	import Slider from "$components/Slider.svelte";
 	import { color } from "$stores/stores.js";
 	import { generateImageUrl } from "$utils/generateImageUrl";
@@ -26,55 +26,46 @@
 			},
 		};
 	};
+
+	let previousPage = "/";
+
+	afterNavigate(({ from }) => {
+		previousPage = from?.url.pathname || previousPage;
+	});
+
 	const goBack = () => {
-		if (browser) window.history.back();
+		goto(previousPage);
 	};
 </script>
 
-<div class="about-me-image">
+<div class="aboutme-img">
 	<img src={generateImageUrl(aboutme.img).url()} {alt} />
 </div>
 <div class="aboutme-container">
-	<h1>{aboutme.description.title}</h1>
-	<div class="text-grid">
-		<div class="column">
-			<section class="description">
-				<p>{aboutme.description.text}</p>
-			</section>
+	<div class="aboutme">
+		<h1 class="description-title">{aboutme.description.title}</h1>
+		<div class="text-grid">
+			<div class="column">
+				<section class="description">
+					<p>{aboutme.description.text}</p>
+				</section>
+			</div>
+			<div class="column">
+				<section class="experience">
+					<h2>{aboutme.experience.title}</h2>
+					<p>{aboutme.experience.text}</p>
+				</section>
+				<section class="awards">
+					<h2>{aboutme.awards.title}</h2>
+					<p>{aboutme.awards.text}</p>
+				</section>
+			</div>
 		</div>
-		<div class="column">
-			<section class="experience">
-				<h2>{aboutme.experience.title}</h2>
-				<p>{aboutme.experience.text}</p>
-			</section>
-			<section class="awards">
-				<h2>{aboutme.awards.title}</h2>
-				<p>{aboutme.awards.text}</p>
-			</section>
-		</div>
-	</div>
-	<div class="contact-info-container">
-		<ul>
-			<li>
-				<button on:click={openLightbox}
-					><span>Email</span>
-					<svg
-						width="1em"
-						height="1em"
-						version="1.1"
-						viewBox="0 0 1200 1200"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							d="m300 200h629.5l-865 864.5 71 71 864.5-865v629.5h100v-800h-800z"
-						/>
-					</svg></button
-				>
-			</li>
-			{#each aboutme.social as social}
+		<div class="contact-info-container">
+			<ul>
 				<li>
-					<a href={social.link}>
-						<span>{social.title}</span>
+					<button on:click={openLightbox}
+						><span>Email</span>
 						<svg
 							width="1em"
 							height="1em"
@@ -85,19 +76,40 @@
 							<path
 								d="m300 200h629.5l-865 864.5 71 71 864.5-865v629.5h100v-800h-800z"
 							/>
-						</svg>
-					</a>
+						</svg></button
+					>
 				</li>
-			{/each}
-		</ul>
-		<button class="link" on:click={goBack}>Show less</button>
+				{#each aboutme.social as social}
+					<li>
+						<a href={social.link}>
+							<span
+								>{social.title}</span
+							>
+							<svg
+								width="1em"
+								height="1em"
+								version="1.1"
+								viewBox="0 0 1200 1200"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="m300 200h629.5l-865 864.5 71 71 864.5-865v629.5h100v-800h-800z"
+								/>
+							</svg>
+						</a>
+					</li>
+				{/each}
+			</ul>
+			<button class="show-less | link" on:click={goBack}
+				>Show less</button
+			>
+		</div>
 	</div>
-	<Slider></Slider>
 </div>
 {#if lightboxVisibility}
 	<div class="email-lightbox-container" transition:move>
 		<div class="email-form-container">
-			<h1>Let's talk.</h1>
+			<h1 class="email-form-title">Let's talk.</h1>
 			<form action="">
 				<section class="name">
 					<label for="name">Full Name</label>
@@ -147,7 +159,7 @@
 					<g
 						stroke-miterlimit="10"
 						stroke-width="2.5"
-						stroke="black"
+						stroke="#c53232"
 					>
 						<path
 							transform="scale(12)"
@@ -176,12 +188,22 @@
 
 <style lang="postcss">
 	.aboutme-container {
-		padding: 32px;
-		padding-top: 64px;
+		height: 100%;
+		overflow-y: auto;
+		padding: var(--padding);
+	}
+	.aboutme {
 		overflow-y: auto;
 		position: relative;
+		& section + section {
+			margin-top: 56px;
+		}
+		padding-bottom: 96px;
 	}
-	.about-me-image {
+	.show-less {
+		margin-top: 32px;
+	}
+	.aboutme-img {
 		overflow: hidden;
 	}
 	img {
@@ -191,60 +213,37 @@
 	}
 	.text-grid {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
-		column-gap: 32px;
-		margin-top: 4em;
+		row-gap: 48px;
+		margin-top: 48px;
 	}
-	.awards {
-		grid-column: 2 / 3;
+	@media (min-width: 768px) {
+		.text-grid {
+			grid-template-columns: 1fr 1fr;
+			gap: var(--padding);
+		}
 	}
+	/* .awards { */
+	/* 	grid-column: 2 / 3; */
+	/* } */
 	.contact-info-container {
 		margin-top: 64px;
-	}
-	.aboutme-container {
-		section + section {
-			margin-top: 56px;
-		}
 	}
 	.column > section {
 		white-space: pre-wrap;
 	}
 	.email-lightbox-container {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-		position: fixed;
+		grid-template-rows: 1fr 1fr;
+		position: absolute;
 		top: 0;
 		left: 0;
+		height: 100svh;
 		width: 100%;
-		min-height: fit-content;
 		background-color: #ead4dc;
 		z-index: 1000;
 	}
-	h1 {
-		font-size: 36px;
-		color: #c53232;
-	}
-	label {
-		color: #c53232;
-		font-size: 12px;
-	}
-	input {
-		border-bottom: 1px solid #c53232;
-		font-size: 12px;
-		padding-block: 4px;
-	}
-	.email-lightbox-container {
-		& section {
-			display: grid;
-		}
-	}
-	ul > li > * {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.25em;
-	}
 	.email-form-container {
-		padding: 32px;
+		padding: 20px;
 		display: grid;
 		& > button {
 			width: fit-content;
@@ -256,6 +255,15 @@
 		}
 	}
 	form {
+		margin-top: 24px;
+		& > section {
+			display: grid;
+			& + section {
+				margin-top: 32px;
+			}
+		}
+	}
+	form {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		column-gap: max(5vw, 1rem);
@@ -263,19 +271,42 @@
 		& button {
 			background-color: #c53232;
 			color: white;
-			margin-top: 112px;
+			margin-top: 96px;
 			text-align: center;
 			width: fit-content;
 			padding: 1rem 3rem;
 			cursor: pointer;
 		}
 	}
-
-	@media (max-width: 575px) {
-		form {
-			grid-template: auto auto/ 1fr;
-		}
+	.email-form-title {
+		font-size: 24px;
+		color: #c53232;
+		line-height: 1;
 	}
+	label {
+		color: #c53232;
+		font-size: 12px;
+	}
+	input {
+		border-bottom: 1px solid #c53232;
+		font-size: 12px;
+		padding-block: 4px;
+	}
+	a,
+	button {
+		cursor: pointer;
+	}
+	ul > li > * {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25em;
+	}
+	ul {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+
 	.full-width {
 		grid-column: 1 / -1;
 	}

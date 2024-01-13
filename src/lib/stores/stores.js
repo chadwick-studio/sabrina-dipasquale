@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 
-export const percentage = writable(0);
+export const percentage = writable(50);
 
-export const pageDirection = writable(1);
-
+export const direction = writable(1);
+export let pageIndex = writable(0);
 export const color = writable({});

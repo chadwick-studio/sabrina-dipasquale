@@ -2,7 +2,6 @@
 	import "../app.pcss";
 	import "../styles/reset.css";
 	import { color } from "$stores/stores";
-	$: console.log($color);
 </script>
 
 <div
@@ -36,17 +35,17 @@
 					-10000000%
 			)
 		);
-
+		--padding: 20px;
 		display: grid;
-		grid-template: 1fr / 1fr 1fr;
+		grid-template: 1fr 1fr / 1fr;
 		font-family: "Open Sans";
 		height: 100svh;
 		color: var(--color);
 	}
-
-	@media (max-width: 991px) {
+	@media (min-width: 768px) {
 		.site-layout {
-			grid-template: 1fr 1fr / 1fr;
+			--padding: 32px;
+			grid-template: 1fr / 1fr 1fr;
 		}
 	}
 	:global(.italic) {

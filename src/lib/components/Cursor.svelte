@@ -1,15 +1,14 @@
 <script>
-	import { getContext } from "svelte";
-
 	// @ts-nocheck
+
 	export let x;
 	export let y;
-	const isHovering = getContext("isHovering");
+	export let isHovering;
 </script>
 
 <div
+	style:display={isHovering ? "block" : "none"}
 	class="cursor"
-	style:display={$isHovering ? "block" : "none"}
 	style:--x={x + "px"}
 	style:--y={y + "px"}
 >

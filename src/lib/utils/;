@@ -1,0 +1,61 @@
+export const scroller = (node) => {
+  // the node has been mounted in the DOM
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+  const nodeChildren = [...node.children];
+  let currentIndex = 0;
+
+  const options = {
+    root: node,
+    threshold: 1.0,
+  };
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    let active = entries.reduce((max, entry) => {
+      return entry.intersectionRatio > max.intersectionRatio ? entry : max;
+    });
+    if (active.intersectionRatio >= 1) {
+      currentIndex = active.target.getAttribute("data-index");
+      console.log(currentIndex);
+    }
+  }, options);
+
+  nodeChildren.forEach((el) => observer.observe(el));
+  // nodeChildren.forEach((el, i) => observer.observe(child));
+
+  const stopScrolling = () => {
+    isDown = false;
+    node.classList.remove("active");
+  };
+
+  const handleMouseDown = (e) => {
+    isDown = true;
+    node.classList.add("active");
+    startX = e.pageX - node.offsetLeft;
+    scrollLeft = node.scrollLeft;
+  };
+  const handleMouseMove = (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - node.offsetLeft;
+    const SCROLL_SPEED = 5;
+    const walk = (x - startX) * SCROLL_SPEED;
+    node.scrollLeft = scrollLeft - walk;
+  };
+
+  node.addEventListener("mousedown", handleMouseDown);
+  node.addEventListener("mousemove", handleMouseMove);
+  node.addEventListener("mouseup", stopScrolling);
+  node.addEventListener("mouseleave", stopScrolling);
+
+  return {
+    destroy() {
+      node.removeEventListener("mousedown", handleMouseDown);
+      node.removeEventListener("mousemove", handleMouseMove);
+      node.removeEventListener("mouseup", stopScrolling);
+      node.removeEventListener("mouseleave", stopScrolling);
+      nodeChildren.forEach((el) => observer.unobserve(el));
+    },
+  };
+};

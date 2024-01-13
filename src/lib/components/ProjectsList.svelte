@@ -1,12 +1,16 @@
 <script>
 	// @ts-nocheck
 	import { page } from "$app/stores";
-	import { getContext } from "svelte";
+	import { getContext, onMount } from "svelte";
 	import { color } from "$stores/stores";
+	import { checkScroll } from "$utils/checkScroll";
 	import Slider from "./Slider.svelte";
 
 	const projects = getContext("projects");
-	$: console.log($color);
+	let display = "none";
+	onMount(() => {
+		display = "block";
+	});
 </script>
 
 <div class="projects-list" style:--background-color={$color.hex}>
@@ -17,71 +21,471 @@
 			<a class="link" href="/about">Read more.</a>
 		</h1>
 	</section>
-	<section class="projects">
-		{#each projects as project}
-			<section>
+	<section class="projects-wrapper" style:--display={display}>
+		<div class="projects" use:checkScroll>
+			{#each projects as project}
+				<section>
+					<a
+						class="project-link"
+						href="/{project.slug.current}"
+						aria-current={$page.url
+							.pathname ===
+						`/${project.slug.current}`
+							? "page"
+							: false}
+					>
+						<h2>
+							<span class="bold"
+								>{project.company}</span
+							>, {project.title}
+						</h2>
+						<h3 class="italic">
+							{project.role}
+						</h3>
+					</a>
+				</section>
+			{/each}
+			<section class="s-Bjbib3IMB8aI">
 				<a
-					class="project-link"
-					href="/{project.slug.current}"
-					aria-current={$page.url.pathname ===
-					`/${project.slug.current}`
-						? "page"
-						: false}
-				>
-					<h2>
-						<span class="bold"
-							>{project.company}</span
-						>, {project.title}
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
 					</h2>
-					<h3 class="italic">
-						{project.role}
-					</h3>
-				</a>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
 			</section>
-		{/each}
+			<section class="s-Bjbib3IMB8aI">
+				<a
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
+					</h2>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
+			</section>
+			<section class="s-Bjbib3IMB8aI">
+				<a
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
+					</h2>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
+			</section>
+			<section class="s-Bjbib3IMB8aI">
+				<a
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
+					</h2>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
+			</section>
+			<section class="s-Bjbib3IMB8aI">
+				<a
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
+					</h2>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
+			</section>
+			<section class="s-Bjbib3IMB8aI">
+				<a
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
+					</h2>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
+			</section>
+			<section class="s-Bjbib3IMB8aI">
+				<a
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
+					</h2>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
+			</section>
+			<section class="s-Bjbib3IMB8aI">
+				<a
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
+					</h2>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
+			</section>
+			<section class="s-Bjbib3IMB8aI">
+				<a
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
+					</h2>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
+			</section>
+			<section class="s-Bjbib3IMB8aI">
+				<a
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
+					</h2>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
+			</section>
+			<section class="s-Bjbib3IMB8aI">
+				<a
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
+					</h2>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
+			</section>
+			<section class="s-Bjbib3IMB8aI">
+				<a
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
+					</h2>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
+			</section>
+			<section class="s-Bjbib3IMB8aI">
+				<a
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
+					</h2>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
+			</section>
+			<section class="s-Bjbib3IMB8aI">
+				<a
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
+					</h2>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
+			</section>
+			<section class="s-Bjbib3IMB8aI">
+				<a
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
+					</h2>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
+			</section>
+			<section class="s-Bjbib3IMB8aI">
+				<a
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
+					</h2>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
+			</section>
+			<section class="s-Bjbib3IMB8aI">
+				<a
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
+					</h2>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
+			</section>
+			<section class="s-Bjbib3IMB8aI">
+				<a
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
+					</h2>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
+			</section>
+			<section class="s-Bjbib3IMB8aI">
+				<a
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
+					</h2>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
+			</section>
+			<section class="s-Bjbib3IMB8aI">
+				<a
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
+					</h2>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
+			</section>
+			<section class="s-Bjbib3IMB8aI">
+				<a
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
+					</h2>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
+			</section>
+			<section class="s-Bjbib3IMB8aI">
+				<a
+					class="project-link s-Bjbib3IMB8aI"
+					href="/holiday-gift-guide"
+					aria-current="false"
+					><h2 class="s-Bjbib3IMB8aI">
+						<span
+							class="bold s-Bjbib3IMB8aI"
+							>Fisher Price</span
+						>, Holiday Gift Guide
+					</h2>
+					<h3 class="italic s-Bjbib3IMB8aI">
+						Social Design + Art Direction
+					</h3></a
+				>
+			</section>
+		</div>
 	</section>
+	<Slider></Slider>
 </div>
 
 <style lang="postcss">
+	.projects-list {
+		position: relative;
+		padding: var(--padding);
+		height: 100%;
+		background-color: var(--background-color);
+		display: grid;
+		grid-template: auto 1fr / 1fr;
+		padding-bottom: 64px;
+	}
+	@media (min-width: 768px) {
+		.projects-list {
+			gap: 64px;
+		}
+	}
+	.projects-wrapper {
+		position: relative;
+		overflow: hidden;
+		&::before,
+		&::after {
+			content: "";
+			display: var(--display);
+			position: absolute;
+			width: 100%;
+			height: 64px;
+			left: 0;
+			z-index: 1000;
+			pointer-events: none;
+		}
+		&::before {
+			top: 0;
+			background-image: linear-gradient(
+				to top,
+				transparent,
+				var(--background-color)
+			);
+		}
+		&::after {
+			bottom: 0;
+			background-image: linear-gradient(
+				to bottom,
+				transparent,
+				var(--background-color)
+			);
+		}
+		&:has(> .projects.scroll-top)::before {
+			opacity: 0;
+		}
+		&:has(> .projects.scroll-bottom)::after {
+			opacity: 0;
+		}
+	}
 	.projects {
 		display: grid;
-		overflow-y: auto;
+		overflow: auto;
+		height: 100%;
 		margin-top: var(--projects-margin-top);
-		padding-top: 64px;
 		column-gap: 32px;
+		row-gap: 12px;
 		grid-auto-rows: min-content;
 		grid-template-columns: 1fr;
-		width: max(40rem, 100%);
+		padding-block: 1px;
+		position: relative;
 	}
-	@media (min-width: 576px) {
+	@media (min-width: 1080px) {
 		.projects {
 			grid-template-columns: 1fr 1fr;
-			row-gap: 0px;
 			& > section:nth-of-type(2n) {
 				grid-column: 2 / 3;
 			}
 		}
 	}
-	.projects-list {
-		position: relative;
-		padding: 16px;
-		height: 100%;
-		background-color: var(--background-color);
-		display: grid;
-		grid-template: auto 1fr / 1fr;
-	}
-	@media (min-width: 576px) {
-		.projects-list {
-			grid-template: auto 1fr / 1fr;
-			padding: 32px;
-		}
-	}
 	.title {
-		max-width: 30rem;
+		display: none;
+	}
+	@media (min-width: 768px) {
+		.title {
+			display: block;
+		}
 	}
 	.project-link {
 		display: block;
 		position: relative;
+		padding-block: 4px;
 		&::before,
 		&::after {
 			content: "";
@@ -89,20 +493,18 @@
 			position: absolute;
 			width: 0;
 			height: 1px;
-			background-color: #626262;
-			mix-blend-mode: overlay;
+			background-color: #686868;
 		}
 		&::before {
-			top: calc(100% + 8px);
+			top: calc(100% - 1px);
 			left: 0;
 		}
 		&::after {
-			bottom: calc(100% + 8px);
+			bottom: calc(100% - 1px);
 			left: 0;
 		}
 		&[aria-current="page"] {
 			color: #3a3a3a;
-			mix-blend-mode: overlay;
 			&::before,
 			&::after {
 				width: 100%;
