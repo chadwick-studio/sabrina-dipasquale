@@ -107,8 +107,8 @@
 		margin-top: -12px; /* Centers thumb on the track */
 
 		/*custom styles*/
-		height: 16px;
-		width: 16px;
+		height: 24px;
+		width: 24px;
 		border: none;
 		box-shadow: none;
 		background: transparent;
@@ -128,7 +128,7 @@
 
 		/*custom styles*/
 		background-color: transparent;
-		height: 16px;
-		width: 16px;
+		height: 24px;
+		width: 24px;
 	}
 </style>
