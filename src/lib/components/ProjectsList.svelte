@@ -7,9 +7,9 @@
 	import Slider from "./Slider.svelte";
 
 	const projects = getContext("projects");
-	let display = "none";
+	let opacity = 0;
 	onMount(() => {
-		display = "block";
+		opacity = 1;
 	});
 </script>
 
@@ -21,7 +21,7 @@
 			<a class="link" href="/about">Read more.</a>
 		</h1>
 	</section>
-	<section class="projects-wrapper" style:--display={display}>
+	<section class="projects-wrapper" style:--opacity={opacity}>
 		<div class="projects" use:checkScroll>
 			{#each projects as project}
 				<section>
@@ -65,13 +65,18 @@
 			gap: 64px;
 		}
 	}
+	.title {
+		line-height: 1.1;
+	}
 	.projects-wrapper {
 		position: relative;
 		overflow: hidden;
 		&::before,
 		&::after {
+			--opacity: 0;
 			content: "";
-			display: var(--display);
+			display: block;
+			opacity: var(--opacity);
 			position: absolute;
 			width: 100%;
 			height: 64px;
@@ -112,6 +117,7 @@
 		grid-auto-rows: min-content;
 		grid-template-columns: 1fr;
 		padding-block: 1px;
+		overscroll-behavior: contain;
 		position: relative;
 	}
 	@media (min-width: 1080px) {
@@ -136,9 +142,7 @@
 		padding-block: 4px;
 		font-family: "PSFournier Std Petit";
 		& > * {
-			line-height: 1;
-		}
-		& > h2 {
+			line-height: 1.3;
 		}
 		&::before,
 		&::after {

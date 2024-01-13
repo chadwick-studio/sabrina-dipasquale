@@ -4,16 +4,21 @@
 	export let active = false;
 	let MIN = 0;
 	let MAX = 100;
-	const thumbWidth = 18;
+	const thumbWidth = 24;
 	$: fraction = ($percentage - MIN) / (MAX - MIN);
 	$: left = `calc(${fraction * 100}% + ${
 		(0.5 - fraction) * thumbWidth
 	}px)`;
 </script>
 
-<div class="slider-wrapper" style:--currentColor={$color.hex}>
+<div
+	class="slider-wrapper"
+	class:active
+	style:--currentColor={$color.hex}
+	style:--track-color={active ? "black" : "#5A557A"}
+>
 	<div class="slider">
-		<span style:left class="label" class:active>A</span>
+		<span style:left class="label">A</span>
 		<input
 			class="slider-input"
 			type="range"
@@ -31,26 +36,27 @@
 		font-size: 18px;
 		position: absolute;
 		color: #000;
-		width: 18px;
-		height: 18px;
+		width: 24px;
+		height: 24px;
 		pointer-events: none;
-		z-index: 100;
+		z-index: 99999;
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
 		text-align: center;
-		&.active {
-			display: block;
-			cursor: none;
-		}
 	}
 	.slider-wrapper {
 		width: 100%;
 		position: absolute;
 		bottom: 0;
 		left: 0;
-		padding: 20px;
+		padding: var(--padding);
+		padding-top: 8px;
 		background-color: var(--currentColor);
+		&.active .label {
+			display: block;
+			cursor: pointer;
+		}
 	}
 	.slider {
 		position: relative;
@@ -61,7 +67,7 @@
 			left: 0;
 			width: 100%;
 			height: 1px;
-			background-color: black;
+			background-color: var(--track-color);
 		}
 	}
 	.slider-input {
@@ -78,7 +84,9 @@
 		background: transparent;
 		cursor: pointer;
 	}
-
+	.active .slider-input {
+		cursor: default;
+	}
 	/* Removes default focus */
 	input[type="range"]:focus {
 		outline: none;
@@ -86,10 +94,9 @@
 
 	/***** Chrome, Safari, Opera and Edge Chromium styles *****/
 	/* slider track */
-	input[type="range"]::-webkit-slider-runnable-track {
-		background-color: black;
-		height: 1px;
 
+	input[type="range"]::-webkit-slider-runnable-track {
+		height: 1px;
 		background: transparent;
 	}
 
@@ -104,12 +111,12 @@
 		width: 16px;
 		border: none;
 		box-shadow: none;
+		background: transparent;
 	}
 
 	/******** Firefox styles ********/
 	/* slider track */
 	input[type="range"]::-moz-range-track {
-		background-color: black;
 		height: 1px;
 		background: transparent;
 	}

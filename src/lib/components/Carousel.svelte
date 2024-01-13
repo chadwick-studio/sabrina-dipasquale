@@ -293,6 +293,7 @@
 	.carousel {
 		container: carousel / size;
 		height: 100%;
+		cursor: initial;
 	}
 	.images-container {
 		position: relative;
@@ -309,6 +310,7 @@
 		scroll-snap-type: inline mandatory;
 		-ms-overflow-style: none; /* for Internet Explorer, Edge */
 		scrollbar-width: none; /* for Firefox */
+		cursor: none;
 	}
 	.images-scroller::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
@@ -327,7 +329,9 @@
 	}
 	.form {
 		display: flex;
-		gap: 32px;
+		flex-wrap: wrap;
+		column-gap: 32px;
+		row-gap: 32px;
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -338,14 +342,14 @@
 		input {
 			border-bottom: 1px solid var(--color);
 			margin-top: 4px;
+			width: 100%;
 		}
-		white-space: nowrap;
 		& > section {
 			display: grid;
+			width: min(100%, 264px);
 		}
 		z-index: 999;
 		background-color: var(--bg-color);
-		height: 100%;
 	}
 	.media {
 		position: absolute;
@@ -393,6 +397,9 @@
 		& > p {
 			margin-top: 1em;
 		}
+	}
+	.project-info-btn {
+		white-space: nowrap;
 	}
 	.description {
 		display: none;

@@ -2,7 +2,9 @@
 	import { goto, afterNavigate } from "$app/navigation";
 	import Slider from "$components/Slider.svelte";
 	import { color } from "$stores/stores.js";
+	import { checkScroll } from "$utils/checkScroll.js";
 	import { generateImageUrl } from "$utils/generateImageUrl";
+	import { onMount } from "svelte";
 	export let data;
 	export let alt = "";
 
@@ -36,55 +38,54 @@
 	const goBack = () => {
 		goto(previousPage);
 	};
+	let opacity = 0;
+	onMount(() => {
+		opacity = 1;
+	});
 </script>
 
 <div class="aboutme-img">
 	<img src={generateImageUrl(aboutme.img).url()} {alt} />
+	<button on:click={goBack} class="show-less-mobile">Show less</button>
 </div>
-<div class="aboutme-container">
-	<div class="aboutme">
-		<h1 class="description-title">{aboutme.description.title}</h1>
-		<div class="text-grid">
-			<div class="column">
-				<section class="description">
-					<p>{aboutme.description.text}</p>
-				</section>
+<div
+	class="aboutme-container"
+	style:--opacity={opacity}
+	style:--bg-color={$color.hex}
+>
+	<div class="aboutme-wrapper">
+		<div class="aboutme" use:checkScroll>
+			<h1 class="description-title">
+				{aboutme.description.title}
+			</h1>
+			<div class="text-grid">
+				<div class="column">
+					<section class="description">
+						<p>
+							{aboutme.description
+								.text}
+						</p>
+					</section>
+				</div>
+				<div class="column">
+					<section class="experience">
+						<h2>
+							{aboutme.experience
+								.title}
+						</h2>
+						<p>{aboutme.experience.text}</p>
+					</section>
+					<section class="awards">
+						<h2>{aboutme.awards.title}</h2>
+						<p>{aboutme.awards.text}</p>
+					</section>
+				</div>
 			</div>
-			<div class="column">
-				<section class="experience">
-					<h2>{aboutme.experience.title}</h2>
-					<p>{aboutme.experience.text}</p>
-				</section>
-				<section class="awards">
-					<h2>{aboutme.awards.title}</h2>
-					<p>{aboutme.awards.text}</p>
-				</section>
-			</div>
-		</div>
-		<div class="contact-info-container">
-			<ul>
-				<li>
-					<button on:click={openLightbox}
-						><span>Email</span>
-						<svg
-							width="1em"
-							height="1em"
-							version="1.1"
-							viewBox="0 0 1200 1200"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<path
-								d="m300 200h629.5l-865 864.5 71 71 864.5-865v629.5h100v-800h-800z"
-							/>
-						</svg></button
-					>
-				</li>
-				{#each aboutme.social as social}
+			<div class="contact-info-container">
+				<ul>
 					<li>
-						<a href={social.link}>
-							<span
-								>{social.title}</span
-							>
+						<button on:click={openLightbox}
+							><span>Email</span>
 							<svg
 								width="1em"
 								height="1em"
@@ -95,17 +96,40 @@
 								<path
 									d="m300 200h629.5l-865 864.5 71 71 864.5-865v629.5h100v-800h-800z"
 								/>
-							</svg>
-						</a>
+							</svg></button
+						>
 					</li>
-				{/each}
-			</ul>
-			<button class="show-less | link" on:click={goBack}
-				>Show less</button
-			>
+					{#each aboutme.social as social}
+						<li>
+							<a href={social.link}>
+								<span
+									>{social.title}</span
+								>
+								<svg
+									width="1em"
+									height="1em"
+									version="1.1"
+									viewBox="0 0 1200 1200"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<path
+										d="m300 200h629.5l-865 864.5 71 71 864.5-865v629.5h100v-800h-800z"
+									/>
+								</svg>
+							</a>
+						</li>
+					{/each}
+				</ul>
+				<button
+					class="show-less | link"
+					on:click={goBack}>Show less</button
+				>
+			</div>
 		</div>
 	</div>
+	<Slider></Slider>
 </div>
+
 {#if lightboxVisibility}
 	<div class="email-lightbox-container" transition:move>
 		<div class="email-form-container">
@@ -189,13 +213,63 @@
 <style lang="postcss">
 	.aboutme-container {
 		height: 100%;
-		overflow-y: auto;
+		overflow: hidden;
+		display: grid;
+		grid-template-columns: 1fr;
 		padding: var(--padding);
+		padding-bottom: 64px;
 		line-height: 1.4;
+		position: relative;
+	}
+	@media (min-width: 768px) {
+		.aboutme-container {
+			padding-top: 64px;
+			padding-bottom: 32px;
+		}
+	}
+	.aboutme-wrapper {
+		position: relative;
+		overflow: hidden;
+		&::before,
+		&::after {
+			content: "";
+			display: block;
+			opacity: var(--opacity);
+			position: absolute;
+			width: 100%;
+			height: 64px;
+			left: 0;
+			z-index: 1000;
+			pointer-events: none;
+		}
+		&::before {
+			top: 0;
+			background-image: linear-gradient(
+				to top,
+				transparent,
+				var(--bg-color)
+			);
+		}
+		&::after {
+			bottom: 0;
+			background-image: linear-gradient(
+				to bottom,
+				transparent,
+				var(--bg-color)
+			);
+		}
+		&:has(.aboutme.scroll-top)::before {
+			opacity: 0;
+		}
+		&:has(.aboutme.scroll-bottom)::after {
+			opacity: 0;
+		}
 	}
 	.aboutme {
 		overflow-y: auto;
 		position: relative;
+		overscroll-behavior: contain;
+		height: 100%;
 		& section + section {
 			margin-top: 56px;
 		}
@@ -203,9 +277,16 @@
 	}
 	.show-less {
 		margin-top: 32px;
+		display: none;
+	}
+	@media (min-width: 768px) {
+		.show-less {
+			display: block;
+		}
 	}
 	.aboutme-img {
 		overflow: hidden;
+		position: relative;
 	}
 	img {
 		object-fit: cover;
@@ -216,6 +297,12 @@
 		display: grid;
 		row-gap: 48px;
 		margin-top: 48px;
+	}
+	.show-less-mobile {
+		position: absolute;
+		z-index: 90;
+		bottom: var(--padding);
+		left: var(--padding);
 	}
 	@media (min-width: 768px) {
 		.text-grid {
@@ -242,6 +329,13 @@
 		width: 100%;
 		background-color: #ead4dc;
 		z-index: 1000;
+	}
+	@media (min-width: 768px) {
+		.email-lightbox-container {
+			grid-template-columns: 1fr 1fr;
+			grid-template-rows: 1fr;
+			height: min(60svh, 600px);
+		}
 	}
 	.email-form-container {
 		padding: 20px;
@@ -283,6 +377,12 @@
 		font-size: 24px;
 		color: #c53232;
 		line-height: 1;
+		font-family: "PS Fournier Std Petit";
+	}
+	@media (min-width: 768px) {
+		.email-form-title {
+			font-size: 36px;
+		}
 	}
 	label {
 		color: #c53232;
