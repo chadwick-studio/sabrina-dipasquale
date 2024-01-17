@@ -334,7 +334,10 @@
 		.email-lightbox-container {
 			grid-template-columns: 1fr 1fr;
 			grid-template-rows: 1fr;
-			height: min(60svh, 600px);
+			height: min(70svh, 600px);
+			padding: 48px;
+			padding-top: 64px;
+			padding-bottom: 12px;
 		}
 	}
 	.email-form-container {
