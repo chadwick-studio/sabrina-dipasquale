@@ -8,4 +8,6 @@ export let pageIndex = writable(0);
 
 export const color = writable({});
 
+export const fontColor = writable("black");
+
 export let hidden = writable(false);

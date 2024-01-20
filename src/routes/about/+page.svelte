@@ -42,17 +42,14 @@
 	onMount(() => {
 		opacity = 1;
 	});
+	$: console.log(aboutme);
 </script>
 
 <div class="aboutme-img">
-	<img src={generateImageUrl(aboutme.img).url()} {alt} />
+	<img src={generateImageUrl(aboutme.img).url()} alt={aboutme.img.alt} />
 	<button on:click={goBack} class="show-less-mobile">Show less</button>
 </div>
-<div
-	class="aboutme-container"
-	style:--opacity={opacity}
-	style:--bg-color={$color.hex}
->
+<div class="aboutme-container" style:opacity style:--bg-color={$color.hex}>
 	<div class="aboutme-wrapper">
 		<div class="aboutme" use:checkScroll>
 			<h1 class="description-title">
@@ -201,12 +198,12 @@
 				</svg>
 			</button>
 		</div>
-		<div class="img-container">
-			<img
-				src="https://picsum.photos/id/237/536/354"
-				alt=""
-			/>
-		</div>
+		<div
+			class="img-container"
+			style:background-image="url({generateImageUrl(
+				aboutme.lightboxImg,
+			).url()})"
+		></div>
 	</div>
 {/if}
 
@@ -223,7 +220,7 @@
 	}
 	@media (min-width: 768px) {
 		.aboutme-container {
-			padding-top: 64px;
+			padding-top: 96px;
 			padding-bottom: 32px;
 		}
 	}
@@ -234,7 +231,7 @@
 		&::after {
 			content: "";
 			display: block;
-			opacity: var(--opacity);
+			opacity: 0;
 			position: absolute;
 			width: 100%;
 			height: 64px;
@@ -305,6 +302,9 @@
 		left: var(--padding);
 	}
 	@media (min-width: 768px) {
+		.show-less-mobile {
+			display: none;
+		}
 		.text-grid {
 			grid-template-columns: 1fr 1fr;
 			gap: var(--padding);
@@ -330,26 +330,33 @@
 		background-color: #ead4dc;
 		z-index: 1000;
 	}
+
 	@media (min-width: 768px) {
 		.email-lightbox-container {
 			grid-template-columns: 1fr 1fr;
 			grid-template-rows: 1fr;
-			height: min(70svh, 600px);
-			padding: 48px;
-			padding-top: 64px;
-			padding-bottom: 12px;
+			height: fit-content;
 		}
 	}
 	.email-form-container {
 		padding: 20px;
 		display: grid;
+		height: fit-content;
 		& > button {
 			width: fit-content;
 			cursor: pointer;
 			justify-self: end;
 			aspect-ratio: 1;
-			width: 64px;
+			width: 96px;
 			rotate: 270deg;
+			transform: translateY(32px);
+		}
+	}
+	@media (min-width: 768px) {
+		.email-form-container {
+			padding: 48px;
+			padding-top: 64px;
+			padding-bottom: 12px;
 		}
 	}
 	form {
@@ -413,5 +420,16 @@
 
 	.full-width {
 		grid-column: 1 / -1;
+	}
+	.experience p,
+	.description p,
+	.awards p {
+		font-family: "PS Fournier Std Petit";
+	}
+	.img-container {
+		overflow: hidden;
+		background-repeat: no-repeat;
+		background-size: cover;
+		background-position: top;
 	}
 </style>

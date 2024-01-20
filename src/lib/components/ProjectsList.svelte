@@ -2,7 +2,7 @@
 	// @ts-nocheck
 	import { page } from "$app/stores";
 	import { getContext, onMount } from "svelte";
-	import { color } from "$stores/stores";
+	import { color, fontColor } from "$stores/stores";
 	import { checkScroll } from "$utils/checkScroll";
 	import Slider from "./Slider.svelte";
 
@@ -13,7 +13,11 @@
 	});
 </script>
 
-<div class="projects-list" style:--background-color={$color.hex}>
+<div
+	class="projects-list"
+	style:--background-color={$color.hex}
+	style:--color={$fontColor || "black"}
+>
 	<section class="title">
 		<h1>
 			<span class="uppercase bold">Sabrina Dipasquale</span>
@@ -21,7 +25,7 @@
 			<a class="link" href="/about">Read more.</a>
 		</h1>
 	</section>
-	<section class="projects-wrapper" style:--opacity={opacity}>
+	<section class="projects-wrapper" style:opacity>
 		<div class="projects" use:checkScroll>
 			{#each projects as project}
 				<section>
@@ -37,7 +41,7 @@
 						<h2>
 							<span class="bold"
 								>{project.company}</span
-							>, {project.title}
+							>{#if project.title}, {project.title}{/if}
 						</h2>
 						<h3 class="italic">
 							{project.role}
@@ -82,6 +86,7 @@
 			left: 0;
 			z-index: 1000;
 			pointer-events: none;
+			opacity: 0;
 		}
 		&::before {
 			top: 0;

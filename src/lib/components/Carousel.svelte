@@ -1,66 +1,62 @@
 <script>
 	import { afterNavigate, goto } from "$app/navigation";
-	import { setContext, getContext, onMount } from "svelte";
-	import { writable } from "svelte/store";
-	import { color } from "$stores/stores";
-	import { direction, pageIndex, hidden } from "$stores/stores";
+	import { getContext, onMount, afterUpdate } from "svelte";
+	import { fade } from "svelte/transition";
+	import { color, fontColor } from "$stores/stores";
+	import { direction, hidden } from "$stores/stores";
 	import { generateImageUrl } from "$utils/generateImageUrl";
 	import { scroller } from "$utils/scroller";
-
+	import { tick } from "svelte";
 	export let project;
 	export let keyphrase;
 	import Cursor from "./Cursor.svelte";
-	import { browser } from "$app/environment";
 	import { generateFileUrl } from "$utils/generateVideoUrl";
 
 	const projects = getContext("projects");
 	let carouselWidth;
 	let scrollerNode;
 
-	// Change project
-	let src;
 	let isHovering = false;
 	// Change project
-
+	let pageIndex = 0;
 	$: projectIndex = projects.findIndex((el) => el._id === project._id);
 
 	$: hidden.set(project.hidden || false);
 
-	// const scrollElementIntoView = (index) => {
-	// 	if (scrollerNode && index) {
-	// 		[...scrollerNode.children][index].scrollIntoView();
-	// 	}
-	// };
-
 	const scrollIntoView = (index) => {
 		[...scrollerNode.children][index].scrollIntoView();
 	};
-	const gotoNextPage = () => {
+
+	const gotoNextPage = async () => {
 		if ($direction !== 1) direction.set(1);
 
 		if (
-			$pageIndex === project.media.length - 1 ||
+			pageIndex === project.media.length - 1 ||
 			scrollerNode.children.length === 1
 		) {
 			projectIndex = (projectIndex + 1) % projects.length;
+			await tick();
 			goto(`/${projects[projectIndex].slug.current}`);
 		} else {
-			pageIndex.update((n) => n + 1);
-			scrollIntoView($pageIndex);
+			pageIndex++;
+			await tick();
+			scrollIntoView(pageIndex);
 		}
 	};
 
-	const gotoPrevPage = () => {
+	const gotoPrevPage = async () => {
 		if ($direction !== -1) direction.set(-1);
 
-		if ($pageIndex === 0 || scrollerNode.children.length === 1) {
+		if (pageIndex === 0 || scrollerNode.children.length === 1) {
 			projectIndex =
 				(projectIndex - 1 + projects.length) %
 				projects.length;
+			await tick();
 			goto(`/${projects[projectIndex].slug.current}`);
 		} else {
-			pageIndex.update((n) => n - 1);
-			scrollIntoView($pageIndex);
+			pageIndex--;
+			await tick();
+			scrollIntoView(pageIndex);
 		}
 	};
 
@@ -84,7 +80,7 @@
 
 	let keyphraseInput;
 	let viewProjectButton;
-	const handleClick = (e) => {
+	const handleClick = async (e) => {
 		if (
 			e.target === keyphraseInput ||
 			e.target === viewProjectButton
@@ -104,7 +100,7 @@
 	let clicked = false;
 	let value;
 	afterNavigate(() => {
-		pageIndex.set($direction === 1 ? 0 : project.media.length - 1);
+		pageIndex = $direction === 1 ? 0 : project.media.length - 1;
 		scrollerNode.scrollTo({
 			left: $direction === 1 ? 0 : scrollerNode.scrollWidth,
 			behavior: "instant",
@@ -120,6 +116,8 @@
 	class="carousel"
 	bind:clientWidth={carouselWidth}
 	style:--bg-color={$color.hex}
+	style:--color={$fontColor || "black"}
+	transition:fade
 >
 	{#if !$hidden}
 		<div class="media">
@@ -133,8 +131,7 @@
 			>
 			<ul class="pagination | no-select">
 				<li class="no-select">
-					{$pageIndex + 1} / {project.media
-						.length}
+					{pageIndex + 1} / {project.media.length}
 				</li>
 				<li class="no-select">
 					<button
@@ -172,9 +169,9 @@
 		<ul
 			class="images-scroller"
 			bind:this={scrollerNode}
-			use:scroller={$pageIndex}
+			use:scroller={pageIndex}
 			on:indexChange={(e) => {
-				pageIndex.set(e.detail);
+				pageIndex = e.detail;
 			}}
 		>
 			{#if !$hidden}
@@ -182,6 +179,8 @@
 					<li data-index={i}>
 						{#if el._type === "img"}
 							<img
+								data-layout={el.layout ||
+									0}
 								src={generateImageUrl(
 									el,
 								).url()}
@@ -190,6 +189,7 @@
 							/>
 						{:else}
 							<video
+								data-layout={el.layout}
 								src={generateFileUrl(
 									el,
 								)}
@@ -210,7 +210,7 @@
 				on:submit={() => {
 					if (value === keyphrase.keyphrase) {
 						hidden.set(false);
-						pageIndex.set(1);
+						pageIndex = 1;
 						scrollerNode.scrollTo({
 							left: 0,
 							behavior: "instant",
@@ -238,7 +238,6 @@
 		{/if}
 	</div>
 </div>
-
 <Cursor x={mouse.x} y={mouse.y} {isHovering}>
 	{#if $direction === 1}
 		<svg
@@ -248,7 +247,11 @@
 			viewBox="0 0 1200 1200"
 			xmlns="http://www.w3.org/2000/svg"
 		>
-			<g stroke-miterlimit="10" stroke-width="2.5">
+			<g
+				stroke={$fontColor || "black"}
+				stroke-miterlimit="10"
+				stroke-width="2.5"
+			>
 				<path
 					transform="scale(12)"
 					d="m24.5 49.9h50.4"
@@ -271,7 +274,11 @@
 			viewBox="0 0 1200 1200"
 			xmlns="http://www.w3.org/2000/svg"
 		>
-			<g stroke-miterlimit="10" stroke-width="2.5">
+			<g
+				stroke={$fontColor || "black"}
+				stroke-miterlimit="10"
+				stroke-width="2.5"
+			>
 				<path
 					transform="scale(12)"
 					d="m75.5 50.1h-50.4"
@@ -319,13 +326,30 @@
 	.images-scroller > li {
 		height: 100cqh;
 		scroll-snap-align: start;
+		display: grid;
+		place-items: center;
 	}
-	.images-scroller > li > img,
-	video {
+	[data-layout="0"] {
+		display: none;
+	}
+	[data-layout="1"] {
 		width: 100%;
 		height: 100%;
 		object-fit: contain;
-		user-select: none;
+	}
+	[data-layout="2"] {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	[data-layout="3"] {
+		width: min(80%, 600px);
+		height: min(auto, 100%);
+		max-height: 90%;
+		object-fit: cover;
+		box-shadow:
+			rgba(0, 0, 0, 0.16) 0px 3px 6px,
+			rgba(0, 0, 0, 0.23) 0px 3px 6px;
 	}
 	.form {
 		display: flex;
@@ -403,6 +427,8 @@
 	}
 	.description {
 		display: none;
+		max-width: 70ch;
+		line-height: 1.3;
 	}
 	@media (min-width: 1080px) {
 		.description {
@@ -411,8 +437,5 @@
 		.project-info-btn {
 			display: none;
 		}
-	}
-	svg > g {
-		stroke: var(--color);
 	}
 </style>
