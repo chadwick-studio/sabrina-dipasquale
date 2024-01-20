@@ -4,10 +4,10 @@ export const percentage = writable(50);
 
 export const direction = writable(1);
 
-export let pageIndex = writable(0);
+export const pageIndex = writable(0);
 
 export const color = writable({});
 
 export const fontColor = writable("black");
 
-export let hidden = writable(false);
+export const hidden = writable(false);

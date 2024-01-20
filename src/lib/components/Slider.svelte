@@ -59,7 +59,7 @@
 		place-items: center;
 		& svg {
 			aspect-ratio: 24 / 26.924969;
-			height: 16px;
+			height: 14px;
 		}
 	}
 	.slider-wrapper {

@@ -2,7 +2,7 @@
 	import { afterNavigate, goto } from "$app/navigation";
 	import { getContext, onMount, afterUpdate } from "svelte";
 	import { fade } from "svelte/transition";
-	import { color, fontColor } from "$stores/stores";
+	import { color, fontColor, pageIndex } from "$stores/stores";
 	import { direction, hidden } from "$stores/stores";
 	import { generateImageUrl } from "$utils/generateImageUrl";
 	import { scroller } from "$utils/scroller";
@@ -18,7 +18,6 @@
 
 	let isHovering = false;
 	// Change project
-	let pageIndex = 0;
 	$: projectIndex = projects.findIndex((el) => el._id === project._id);
 
 	$: hidden.set(project.hidden || false);
@@ -31,32 +30,32 @@
 		if ($direction !== 1) direction.set(1);
 
 		if (
-			pageIndex === project.media.length - 1 ||
+			$pageIndex === project.media.length - 1 ||
 			scrollerNode.children.length === 1
 		) {
 			projectIndex = (projectIndex + 1) % projects.length;
 			await tick();
 			goto(`/${projects[projectIndex].slug.current}`);
 		} else {
-			pageIndex++;
+			pageIndex.update((n) => n + 1);
 			await tick();
-			scrollIntoView(pageIndex);
+			scrollIntoView($pageIndex);
 		}
 	};
 
 	const gotoPrevPage = async () => {
 		if ($direction !== -1) direction.set(-1);
 
-		if (pageIndex === 0 || scrollerNode.children.length === 1) {
+		if ($pageIndex === 0 || scrollerNode.children.length === 1) {
 			projectIndex =
 				(projectIndex - 1 + projects.length) %
 				projects.length;
 			await tick();
 			goto(`/${projects[projectIndex].slug.current}`);
 		} else {
-			pageIndex--;
+			pageIndex.update((n) => n - 1);
 			await tick();
-			scrollIntoView(pageIndex);
+			scrollIntoView($pageIndex);
 		}
 	};
 
@@ -105,9 +104,9 @@
 				}, 500);
 				delayInProgress = true;
 				if ($direction === 1) {
-					gotoNextPage();
+					if (!delayInProgress) gotoNextPage();
 				} else {
-					gotoPrevPage();
+					if (!delayInProgress) gotoPrevPage();
 				}
 			}
 		}
@@ -120,7 +119,7 @@
 	let clicked = false;
 	let value;
 	afterNavigate(() => {
-		pageIndex = $direction === 1 ? 0 : project.media.length - 1;
+		pageIndex.set($direction === 1 ? 0 : project.media.length - 1);
 		scrollerNode.scrollTo({
 			left: $direction === 1 ? 0 : scrollerNode.scrollWidth,
 			behavior: "instant",
@@ -150,7 +149,8 @@
 			>
 			<ul class="pagination | no-select">
 				<li class="no-select">
-					{pageIndex + 1} / {project.media.length}
+					{$pageIndex + 1} / {project.media
+						.length}
 				</li>
 				<li class="no-select">
 					<button
@@ -188,9 +188,9 @@
 		<ul
 			class="images-scroller"
 			bind:this={scrollerNode}
-			use:scroller={pageIndex}
+			use:scroller={$pageIndex}
 			on:indexChange={(e) => {
-				pageIndex = e.detail;
+				pageIndex.set(e.detail);
 			}}
 		>
 			{#if !$hidden}
@@ -233,7 +233,7 @@
 				on:submit={() => {
 					if (value === keyphrase.keyphrase) {
 						hidden.set(false);
-						pageIndex = 1;
+						pageIndex.set(1);
 						scrollerNode.scrollTo({
 							left: 0,
 							behavior: "instant",

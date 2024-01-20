@@ -2,7 +2,12 @@
 	// @ts-nocheck
 	import { page } from "$app/stores";
 	import { getContext, onMount } from "svelte";
-	import { color, fontColor, percentage } from "$stores/stores";
+	import {
+		color,
+		fontColor,
+		percentage,
+		pageIndex,
+	} from "$stores/stores";
 	import { checkScroll } from "$utils/checkScroll";
 	import Slider from "./Slider.svelte";
 
@@ -31,6 +36,8 @@
 				<section>
 					<a
 						class="project-link"
+						on:click={() =>
+							pageIndex.set(0)}
 						href="/{project.slug.current}"
 						aria-current={$page.url
 							.pathname ===

@@ -4,7 +4,7 @@
 	import Cursor from "$lib/components/Cursor.svelte";
 	import Carousel from "$lib/components/Carousel.svelte";
 	import ProjectsList from "$lib/components/ProjectsList.svelte";
-	import { percentage } from "$lib/stores/stores.js";
+	import { percentage } from "$stores/stores";
 
 	export let data;
 
