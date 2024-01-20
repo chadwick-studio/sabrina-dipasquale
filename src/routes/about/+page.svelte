@@ -42,7 +42,6 @@
 	onMount(() => {
 		opacity = 1;
 	});
-	$: console.log(aboutme);
 </script>
 
 <div class="aboutme-img">
@@ -234,7 +233,6 @@
 		&::after {
 			content: "";
 			display: block;
-			opacity: 0;
 			position: absolute;
 			width: 100%;
 			height: 64px;
@@ -249,6 +247,7 @@
 				transparent,
 				var(--bg-color)
 			);
+			opacity: 1;
 		}
 		&::after {
 			bottom: 0;
@@ -257,6 +256,7 @@
 				transparent,
 				var(--bg-color)
 			);
+			opacity: 1;
 		}
 		&:has(.aboutme.scroll-top)::before {
 			opacity: 0;

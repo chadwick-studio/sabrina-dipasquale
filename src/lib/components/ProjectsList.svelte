@@ -79,17 +79,16 @@
 		&::after {
 			content: "";
 			display: block;
-			opacity: var(--opacity);
 			position: absolute;
 			width: 100%;
 			height: 64px;
 			left: 0;
 			z-index: 1000;
 			pointer-events: none;
-			opacity: 0;
 		}
 		&::before {
 			top: 0;
+			opacity: 1;
 			background-image: linear-gradient(
 				to top,
 				transparent,
@@ -98,6 +97,7 @@
 		}
 		&::after {
 			bottom: 0;
+			opacity: 1;
 			background-image: linear-gradient(
 				to bottom,
 				transparent,
