@@ -46,7 +46,13 @@
 </script>
 
 <div class="aboutme-img">
-	<img src={generateImageUrl(aboutme.img).url()} alt={aboutme.img.alt} />
+	<img
+		src={generateImageUrl(aboutme.img)
+			.format("webp")
+			.width(1000)
+			.url()}
+		alt={aboutme.img.alt}
+	/>
 	<button on:click={goBack} class="show-less-mobile">Show less</button>
 </div>
 <div class="aboutme-container" style:--bg-color={$color.hex}>
@@ -218,11 +224,15 @@
 				</svg>
 			</button>
 		</div>
+		<!-- prettier-ignore -->
 		<div
 			class="img-container"
-			style:background-image="url({generateImageUrl(
+			style:background-image='url({generateImageUrl(
 				aboutme.lightboxImg,
-			).url()})"
+			)
+				.format("webp")
+				.width(1000)
+				.url()})' 
 		></div>
 	</div>
 {/if}

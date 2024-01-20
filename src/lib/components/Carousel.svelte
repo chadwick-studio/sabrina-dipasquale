@@ -202,7 +202,14 @@
 									0}
 								src={generateImageUrl(
 									el,
-								).url()}
+								)
+									.format(
+										"webp",
+									)
+									.width(
+										1000,
+									)
+									.url()}
 								alt=""
 								draggable="false"
 							/>

@@ -8,7 +8,13 @@
 
 <div class="front-page-carousel">
 	<a href="/about">About</a>
-	<img src={generateImageUrl(home.media[0]).url()} alt="" />
+	<img
+		src={generateImageUrl(home.media[0])
+			.format("webp")
+			.width(1000)
+			.url()}
+		alt=""
+	/>
 </div>
 
 <style lang="postcss">
