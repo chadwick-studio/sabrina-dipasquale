@@ -39,6 +39,7 @@
 		goto(previousPage);
 	};
 	let visible = false;
+	let value;
 	onMount(() => {
 		visible = true;
 	});
@@ -48,8 +49,8 @@
 	<img src={generateImageUrl(aboutme.img).url()} alt={aboutme.img.alt} />
 	<button on:click={goBack} class="show-less-mobile">Show less</button>
 </div>
-<div class="aboutme-container" class:visible style:--bg-color={$color.hex}>
-	<div class="aboutme-wrapper">
+<div class="aboutme-container" style:--bg-color={$color.hex}>
+	<div class="aboutme-wrapper" class:visible>
 		<div class="aboutme" use:checkScroll>
 			<h1 class="description-title">
 				{aboutme.description.title}
@@ -130,13 +131,30 @@
 	<div class="email-lightbox-container" transition:move>
 		<div class="email-form-container">
 			<h1 class="email-form-title">Let's talk.</h1>
-			<form action="">
+			<form
+				action="https://api.web3forms.com/submit"
+				method="POST"
+			>
+				<input
+					type="hidden"
+					name="access_key"
+					value="YOUR_ACCESS_KEY_HERE"
+				/>
+				<input
+					type="checkbox"
+					name="botcheck"
+					style="display: none;"
+					value="{value} messaged you about your portfolio!"
+				/>
+				<input type="hidden" name="subject" value="" />
 				<section class="name">
 					<label for="name">Full Name</label>
 					<input
 						type="text"
 						id="name"
 						name="name"
+						required
+						bind:value
 					/>
 				</section>
 				<section class="email">
@@ -147,6 +165,7 @@
 						type="text"
 						id="email"
 						name="email"
+						required
 					/>
 				</section>
 				<section class="subject full-width">
@@ -155,6 +174,7 @@
 						type="text"
 						id="subject"
 						name="subject"
+						required
 					/>
 				</section>
 				<section class="message full-width">
@@ -163,6 +183,7 @@
 						type="text"
 						id="message"
 						name="message"
+						required
 					/>
 				</section>
 				<button>Send</button>
@@ -273,13 +294,27 @@
 	.aboutme {
 		overflow-y: auto;
 		position: relative;
-		overscroll-behavior: contain;
+		overscroll-behavior: none;
 		height: 100%;
 		& section + section {
 			margin-top: 56px;
 		}
 		padding-bottom: 96px;
+		scrollbar-width: thin;
+		scrollbar-color: black transparent;
 	}
+	.aboutme::-webkit-scrollbar {
+		width: 4px;
+	}
+	.aboutme::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	.aboutme::-webkit-scrollbar-thumb {
+		background-color: black;
+		border-radius: 0px;
+		border: none;
+	}
+
 	.show-less {
 		margin-top: 32px;
 		display: none;
@@ -329,7 +364,7 @@
 	}
 	.email-lightbox-container {
 		display: grid;
-		grid-template-rows: 1fr 1fr;
+		grid-template-rows: auto 1fr;
 		position: absolute;
 		top: 0;
 		left: 0;

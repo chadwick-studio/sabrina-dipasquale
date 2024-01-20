@@ -126,8 +126,21 @@
 		grid-auto-rows: min-content;
 		grid-template-columns: 1fr;
 		padding-block: 1px;
-		overscroll-behavior: contain;
+		overscroll-behavior: none;
 		position: relative;
+		scrollbar-width: thin;
+		scrollbar-color: var(--fontColor) transparent;
+	}
+	.projects::-webkit-scrollbar {
+		width: 4px;
+	}
+	.projects::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	.projects::-webkit-scrollbar-thumb {
+		background-color: var(--fontColor);
+		border-radius: 0px;
+		border: none;
 	}
 	@media (min-width: 1080px) {
 		.projects {

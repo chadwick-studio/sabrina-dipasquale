@@ -13,6 +13,9 @@
 </div>
 
 <style lang="postcss">
+	:global(body) {
+		overscroll-behavior: none;
+	}
 	.site-layout {
 		--padding: 20px;
 		display: grid;
