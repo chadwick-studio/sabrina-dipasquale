@@ -117,7 +117,6 @@
 	bind:clientWidth={carouselWidth}
 	style:--bg-color={$color.hex}
 	style:--color={$fontColor || "black"}
-	transition:fade
 >
 	{#if !$hidden}
 		<div class="media">

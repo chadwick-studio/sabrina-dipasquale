@@ -208,6 +208,9 @@
 {/if}
 
 <style lang="postcss">
+	* {
+		color: black;
+	}
 	.aboutme-container {
 		height: 100%;
 		overflow: hidden;
