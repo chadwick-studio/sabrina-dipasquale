@@ -1,6 +1,6 @@
 <script>
 	// @ts-nocheck
-	import { percentage, color } from "$lib/stores/stores";
+	import { percentage, color, fontColor } from "$lib/stores/stores";
 	export let active = false;
 	let MIN = 0;
 	let MAX = 100;
@@ -66,7 +66,7 @@
 			bottom: 0;
 			left: 0;
 			width: 100%;
-			height: 1px;
+			height: 2px;
 			background-color: var(--track-color);
 		}
 	}
