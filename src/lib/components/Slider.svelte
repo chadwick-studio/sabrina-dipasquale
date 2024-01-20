@@ -18,7 +18,19 @@
 	style:--track-color={active ? "black" : "#5A557A"}
 >
 	<div class="slider">
-		<span style:left class="label">A</span>
+		<div style:left class="label">
+			<svg
+				viewBox="0 0 6.35 7.123898"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<defs id="defs2" />
+				<g transform="translate(-85.849782,-93.502992)">
+					<path
+						d="m 90.443611,98.553225 0.704452,2.073665 h 1.051719 l -2.579687,-7.123898 h -1.091407 l -2.678906,7.123898 h 0.992188 l 0.744141,-2.073665 z m -2.559844,-0.85328 1.141015,-3.135313 h 0.01985 l 1.051718,3.135313 z"
+					/>
+				</g>
+			</svg>
+		</div>
 		<input
 			class="slider-input"
 			type="range"
@@ -44,6 +56,11 @@
 		left: 50%;
 		transform: translate(-50%, -50%);
 		text-align: center;
+		place-items: center;
+		& svg {
+			aspect-ratio: 24 / 26.924969;
+			height: 16px;
+		}
 	}
 	.slider-wrapper {
 		width: 100%;
@@ -54,7 +71,7 @@
 		padding-top: 8px;
 		background-color: var(--currentColor);
 		&.active .label {
-			display: block;
+			display: grid;
 			cursor: pointer;
 		}
 	}
@@ -66,7 +83,7 @@
 			bottom: 0;
 			left: 0;
 			width: 100%;
-			height: 2px;
+			height: 1px;
 			background-color: var(--track-color);
 		}
 	}
@@ -104,7 +121,6 @@
 	input[type="range"]::-webkit-slider-thumb {
 		-webkit-appearance: none; /* Override default look */
 		appearance: none;
-		margin-top: -12px; /* Centers thumb on the track */
 
 		/*custom styles*/
 		height: 24px;

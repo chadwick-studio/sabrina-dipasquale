@@ -80,16 +80,36 @@
 
 	let keyphraseInput;
 	let viewProjectButton;
-	const handleClick = async (e) => {
-		if (
-			e.target === keyphraseInput ||
-			e.target === viewProjectButton
-		)
-			return;
-		if ($direction === 1) {
-			gotoNextPage();
-		} else {
-			gotoPrevPage();
+	let canClick = true;
+	let delayInProgress = false;
+	function isTouchDevice() {
+		return (
+			"ontouchstart" in window ||
+			navigator.maxTouchPoints > 0 ||
+			navigator.msMaxTouchPoints > 0
+		);
+	}
+
+	const handleClick = (e) => {
+		if (canClick && isTouchDevice) {
+			canClick = false;
+			if (
+				e.target === keyphraseInput ||
+				e.target === viewProjectButton
+			) {
+				return;
+			} else {
+				setTimeout(function () {
+					canClick = true;
+					delayInProgress = false;
+				}, 500);
+				delayInProgress = true;
+				if ($direction === 1) {
+					gotoNextPage();
+				} else {
+					gotoPrevPage();
+				}
+			}
 		}
 	};
 
@@ -192,9 +212,13 @@
 								src={generateFileUrl(
 									el,
 								)}
-								autoplay
+								autoplay="autoplay"
+								loop="loop"
 								muted
+								defaultMuted
 								playsinline
+								oncontextmenu="return false;"
+								preload="auto"
 							></video>
 						{/if}
 					</li>
@@ -311,6 +335,7 @@
 		grid-auto-columns: 100%;
 		height: 100cqh;
 		overflow-x: auto;
+		overflow-y: hidden;
 		scroll-behavior: smooth;
 		overscroll-behavior-inline: contain;
 		scroll-snap-type: inline mandatory;

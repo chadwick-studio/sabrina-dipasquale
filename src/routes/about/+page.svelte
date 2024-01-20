@@ -38,9 +38,9 @@
 	const goBack = () => {
 		goto(previousPage);
 	};
-	let opacity = 0;
+	let visible = false;
 	onMount(() => {
-		opacity = 1;
+		visible = true;
 	});
 </script>
 
@@ -48,7 +48,7 @@
 	<img src={generateImageUrl(aboutme.img).url()} alt={aboutme.img.alt} />
 	<button on:click={goBack} class="show-less-mobile">Show less</button>
 </div>
-<div class="aboutme-container" style:opacity style:--bg-color={$color.hex}>
+<div class="aboutme-container" class:visible style:--bg-color={$color.hex}>
 	<div class="aboutme-wrapper">
 		<div class="aboutme" use:checkScroll>
 			<h1 class="description-title">
@@ -239,6 +239,13 @@
 			left: 0;
 			z-index: 1000;
 			pointer-events: none;
+			opacity: 0;
+		}
+		&.visible::before {
+			opacity: 1;
+		}
+		&.visible::after {
+			opacity: 1;
 		}
 		&::before {
 			top: 0;
@@ -247,7 +254,6 @@
 				transparent,
 				var(--bg-color)
 			);
-			opacity: 1;
 		}
 		&::after {
 			bottom: 0;
@@ -256,7 +262,6 @@
 				transparent,
 				var(--bg-color)
 			);
-			opacity: 1;
 		}
 		&:has(.aboutme.scroll-top)::before {
 			opacity: 0;

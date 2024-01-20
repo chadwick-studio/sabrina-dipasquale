@@ -2,14 +2,14 @@
 	// @ts-nocheck
 	import { page } from "$app/stores";
 	import { getContext, onMount } from "svelte";
-	import { color, fontColor } from "$stores/stores";
+	import { color, fontColor, percentage } from "$stores/stores";
 	import { checkScroll } from "$utils/checkScroll";
 	import Slider from "./Slider.svelte";
 
 	const projects = getContext("projects");
-	let opacity = 0;
+	let visible = false;
 	onMount(() => {
-		opacity = 1;
+		visible = true;
 	});
 </script>
 
@@ -25,8 +25,8 @@
 			<a class="link" href="/about">Read more.</a>
 		</h1>
 	</section>
-	<section class="projects-wrapper" style:opacity>
-		<div class="projects" use:checkScroll>
+	<section class="projects-wrapper" class:visible>
+		<div class="projects" use:checkScroll={$percentage}>
 			{#each projects as project}
 				<section>
 					<a
@@ -86,9 +86,15 @@
 			z-index: 1000;
 			pointer-events: none;
 		}
-		&::before {
-			top: 0;
+		&.visible::before {
 			opacity: 1;
+		}
+		&.visible::after {
+			opacity: 1;
+		}
+		&::before {
+			opacity: 0;
+			top: 0;
 			background-image: linear-gradient(
 				to top,
 				transparent,
@@ -96,8 +102,8 @@
 			);
 		}
 		&::after {
-			bottom: 0;
 			opacity: 1;
+			bottom: 0;
 			background-image: linear-gradient(
 				to bottom,
 				transparent,
@@ -148,6 +154,12 @@
 		& > * {
 			line-height: 1.3;
 		}
+		& > h2 {
+			padding-top: 4px;
+		}
+		& > h3 {
+			padding-bottom: 4px;
+		}
 		&::before,
 		&::after {
 			content: "";
@@ -159,11 +171,9 @@
 			opacity: 0.3;
 		}
 		&::before {
-			top: 5px;
 			left: 0;
 		}
 		&::after {
-			bottom: 4px;
 			left: 0;
 		}
 		&[aria-current="page"] {
