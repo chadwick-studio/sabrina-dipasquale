@@ -358,17 +358,17 @@
 	}
 	[data-layout="1"] {
 		width: 100%;
-		height: 100%;
+		height: 100cqh;
 		object-fit: contain;
 	}
 	[data-layout="2"] {
 		width: 100%;
-		height: 100%;
+		height: 100cqh;
 		object-fit: cover;
 	}
 	[data-layout="3"] {
-		width: min(80%, 600px);
-		height: min(auto, 100%);
+		width: min(80cqw, 600px);
+		height: min(auto, 100cqh);
 		max-height: 90%;
 		object-fit: cover;
 		box-shadow:
