@@ -104,9 +104,9 @@
 				}, 500);
 				delayInProgress = true;
 				if ($direction === 1) {
-					if (!delayInProgress) gotoNextPage();
+					gotoNextPage();
 				} else {
-					if (!delayInProgress) gotoPrevPage();
+					gotoPrevPage();
 				}
 			}
 		}
