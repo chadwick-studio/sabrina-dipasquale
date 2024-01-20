@@ -155,10 +155,10 @@
 			line-height: 1.3;
 		}
 		& > h2 {
-			padding-top: 4px;
+			padding-top: 6px;
 		}
 		& > h3 {
-			padding-bottom: 4px;
+			padding-bottom: 6px;
 		}
 		&::before,
 		&::after {
