@@ -367,17 +367,20 @@
 		width: 100%;
 		height: 100cqh;
 		object-fit: contain;
+		object-position: center;
 	}
 	[data-layout="2"] {
 		width: 100%;
 		height: 100cqh;
 		object-fit: cover;
+		object-position: center;
 	}
 	[data-layout="3"] {
 		width: min(80cqw, 600px);
 		height: min(auto, 100cqh);
 		max-height: 90%;
 		object-fit: cover;
+		object-position: center;
 		box-shadow:
 			rgba(0, 0, 0, 0.16) 0px 3px 6px,
 			rgba(0, 0, 0, 0.23) 0px 3px 6px;
