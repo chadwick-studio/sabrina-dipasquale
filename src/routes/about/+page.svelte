@@ -224,15 +224,13 @@
 				</svg>
 			</button>
 		</div>
-		<!-- prettier-ignore -->
 		<div
 			class="img-container"
-			style:background-image='url({generateImageUrl(
-				aboutme.lightboxImg,
-			)
-				.format("webp")
-				.width(1000)
-				.url()})' 
+			style:background-image={aboutme.lightboxImg?.asset &&
+				`url(${generateImageUrl(aboutme.lightboxImg)
+					.format("webp")
+					.width(1000)
+					.url()})`}
 		></div>
 	</div>
 {/if}

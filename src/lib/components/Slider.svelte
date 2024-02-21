@@ -4,7 +4,7 @@
 	export let active = false;
 	let MIN = 0;
 	let MAX = 100;
-	const thumbWidth = 24;
+	const thumbWidth = 16;
 	$: fraction = ($percentage - MIN) / (MAX - MIN);
 	$: left = `calc(${fraction * 100}% + ${
 		(0.5 - fraction) * thumbWidth
@@ -15,7 +15,7 @@
 	class="slider-wrapper"
 	class:active
 	style:--currentColor={$color.hex}
-	style:--track-color={active ? "black" : "#5A557A"}
+	style:--track-color={active ? $fontColor : "#5A557A"}
 >
 	<div class="slider">
 		<div style:left class="label">
@@ -26,6 +26,7 @@
 				<defs id="defs2" />
 				<g transform="translate(-85.849782,-93.502992)">
 					<path
+						fill={$fontColor}
 						d="m 90.443611,98.553225 0.704452,2.073665 h 1.051719 l -2.579687,-7.123898 h -1.091407 l -2.678906,7.123898 h 0.992188 l 0.744141,-2.073665 z m -2.559844,-0.85328 1.141015,-3.135313 h 0.01985 l 1.051718,3.135313 z"
 					/>
 				</g>
@@ -45,11 +46,10 @@
 <style>
 	.label {
 		display: none;
-		font-size: 18px;
 		position: absolute;
 		color: #000;
-		width: 24px;
-		height: 24px;
+		width: 16px;
+		height: 16px;
 		pointer-events: none;
 		z-index: 99999;
 		top: 50%;
@@ -59,7 +59,7 @@
 		place-items: center;
 		& svg {
 			aspect-ratio: 24 / 26.924969;
-			height: 14px;
+			height: 12px;
 		}
 	}
 	.slider-wrapper {
@@ -91,7 +91,7 @@
 		display: block;
 		width: 100%;
 		position: relative;
-		height: 32px;
+		height: 28px;
 	}
 	/********** Range Input Styles **********/
 	/*Range Reset*/

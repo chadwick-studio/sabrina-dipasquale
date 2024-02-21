@@ -11,4 +11,7 @@
 	$: fontColor.set(project.fontColor);
 </script>
 
+<svelte:head>
+	<meta name="theme-color" content={$color} />
+</svelte:head>
 <Carousel {keyphrase} {project}></Carousel>

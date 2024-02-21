@@ -11,6 +11,7 @@
 	export let keyphrase;
 	import Cursor from "./Cursor.svelte";
 	import { generateFileUrl } from "$utils/generateVideoUrl";
+	import Padlock from "./icons/Padlock.svelte";
 
 	const projects = getContext("projects");
 	let carouselWidth;
@@ -118,6 +119,7 @@
 	};
 	let clicked = false;
 	let value;
+	let passwordValue = "";
 	afterNavigate(() => {
 		pageIndex.set($direction === 1 ? 0 : project.media.length - 1);
 		scrollerNode.scrollTo({
@@ -125,6 +127,22 @@
 			behavior: "instant",
 		});
 	});
+	$: value,
+		() => {
+			let tempText = value.replace(/\*/g, "");
+			if (tempText == "") {
+				passwordValue = actualText.substr(
+					0,
+					actualText.length - 1,
+				);
+			} else {
+				actualText += x.replace(/\*/g, "");
+			}
+			document.getElementById("myText").value = "";
+			for (var i = 0; i < x.length; i++) {
+				document.getElementById("myText").value += "*";
+			}
+		};
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -235,36 +253,46 @@
 			{/if}
 		</ul>
 		{#if $hidden}
-			<form
-				class="form"
-				on:submit={() => {
-					if (value === keyphrase.keyphrase) {
-						hidden.set(false);
-						pageIndex.set(1);
-						scrollerNode.scrollTo({
-							left: 0,
-							behavior: "instant",
-						});
-					}
-				}}
-			>
-				<section>
-					<label for="keyphrase"
-						>Enter Keyphrase:</label
-					>
-					<input
-						on:click|stopPropagation
-						type="text"
-						id="keyphrase"
-						name="keyphrase"
-						bind:this={keyphraseInput}
-						bind:value
-					/>
-				</section>
-				<button bind:this={viewProjectButton}>
-					View Project
-				</button>
-			</form>
+			<div class="hidden-form">
+				<form
+					class="form"
+					on:submit={() => {
+						if (
+							value ===
+							keyphrase.keyphrase
+						) {
+							hidden.set(false);
+							pageIndex.set(1);
+							scrollerNode.scrollTo({
+								left: 0,
+								behavior: "instant",
+							});
+						}
+					}}
+				>
+					<section>
+						<label for="keyphrase"
+							>Password</label
+						>
+						<Padlock
+							width="139px"
+							height="139px"
+						></Padlock>
+						<input
+							on:click|stopPropagation
+							type="text"
+							id="keyphrase"
+							name="keyphrase"
+							bind:this={keyphraseInput}
+							bind:value
+							data-value={passwordValue}
+						/>
+					</section>
+					<button bind:this={viewProjectButton}>
+						View Project
+					</button>
+				</form>
+			</div>
 		{/if}
 	</div>
 </div>
@@ -385,29 +413,47 @@
 			rgba(0, 0, 0, 0.16) 0px 3px 6px,
 			rgba(0, 0, 0, 0.23) 0px 3px 6px;
 	}
-	.form {
-		display: flex;
-		flex-wrap: wrap;
-		column-gap: 32px;
-		row-gap: 32px;
+	.hidden-form {
+		display: grid;
+		place-items: center;
+		width: 100%;
+		height: 100cqh;
 		position: absolute;
 		top: 0;
 		left: 0;
-		width: 100%;
 		padding: var(--padding);
-		justify-content: space-between;
-		align-items: start;
-		input {
-			border-bottom: 1px solid var(--color);
-			margin-top: 4px;
-			width: 100%;
+		font-family: "PSFournier Std Petit";
+		--_color: #0f5cb7;
+		color: var(--_color);
+	}
+	.form {
+		display: grid;
+		width: min(100%, 400px);
+		:global(svg) {
+			margin-inline: auto;
 		}
-		& > section {
-			display: grid;
-			width: min(100%, 264px);
+		label {
+			display: block;
+			line-height: 1;
+			text-align: center;
+			font-size: 60px;
+			font-weight: bold;
+		}
+		input {
+			font-size: 24px;
+			border: 2px solid var(--_color);
+			border-radius: 10px;
+			padding: 8px 64px;
+			width: 100%;
+			text-align: center;
 		}
 		z-index: 999;
 		background-color: var(--bg-color);
+		button {
+			text-align: center;
+			align-self: center;
+			justify-self: center;
+		}
 	}
 	.media {
 		position: absolute;

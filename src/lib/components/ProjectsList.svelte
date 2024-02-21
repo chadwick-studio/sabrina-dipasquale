@@ -168,7 +168,7 @@
 	.project-link {
 		display: block;
 		position: relative;
-		padding-block: 6px;
+		padding-block: 2px;
 		font-family: "PSFournier Std Petit";
 		overflow: hidden;
 		& > * {
