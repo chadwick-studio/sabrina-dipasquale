@@ -453,6 +453,7 @@
 			background-color: #c53232;
 			color: white;
 			margin-top: 96px;
+			border-radius: 8px;
 			text-align: center;
 			width: fit-content;
 			padding: 16px 64px;
