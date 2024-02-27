@@ -58,7 +58,7 @@
 </div>
 <div class="aboutme-container">
 	<div class="aboutme-wrapper" class:visible>
-		<div class="aboutme" use:checkScroll>
+		<div class="aboutme scrollbar" use:checkScroll>
 			<h1 class="description-title">
 				{aboutme.description.title}
 			</h1>
@@ -334,19 +334,6 @@
 			margin-top: 56px;
 		}
 		padding-bottom: 96px;
-		scrollbar-width: thin;
-		scrollbar-color: black transparent;
-	}
-	.aboutme::-webkit-scrollbar {
-		width: 4px;
-	}
-	.aboutme::-webkit-scrollbar-track {
-		background: transparent;
-	}
-	.aboutme::-webkit-scrollbar-thumb {
-		background-color: black;
-		border-radius: 0px;
-		border: none;
 	}
 
 	.show-less {

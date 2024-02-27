@@ -2,7 +2,7 @@
 	// @ts-nocheck
 	import { page } from "$app/stores";
 	import { getContext, onMount } from "svelte";
-	import { bgcolor, color, percentage } from "$stores/stores";
+	import { bgcolor, color, percentage, direction } from "$stores/stores";
 	import { checkScroll } from "$utils/checkScroll";
 	import Slider from "./Slider.svelte";
 
@@ -26,6 +26,8 @@
 			{#each projects as project}
 				<section>
 					<a
+						on:click={() =>
+							direction.set(1)}
 						class="project-link"
 						href="/{project.slug.current}"
 						aria-current={$page.url

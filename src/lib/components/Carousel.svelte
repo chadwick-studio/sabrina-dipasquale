@@ -4,7 +4,7 @@
 	import { getContext, onMount } from "svelte";
 	import { tick } from "svelte";
 	import { fade } from "svelte/transition";
-	import { bgcolor } from "$stores/stores";
+	import { bgcolor, direction } from "$stores/stores";
 	import PasswordForm from "./PasswordForm.svelte";
 
 	//js imports
@@ -24,7 +24,6 @@
 
 	let index = 0;
 	let projectIndex = 0;
-	let direction = 1;
 	let hasTouchScreen = false;
 	let passwordValue;
 
@@ -35,12 +34,12 @@
 	};
 
 	const changePage = async () => {
-		if (direction === 1) {
+		if ($direction === 1) {
 			if (
 				index === project.media.length - 1 ||
 				project.media.length === 1
 			) {
-				direction = 1;
+				direction.set(1);
 				projectIndex =
 					(projectIndex - 1 + projects.length) %
 					projects.length;
@@ -51,7 +50,7 @@
 			}
 		} else {
 			if (index === 0 || project.media.length === 1) {
-				direction = -1;
+				direction.set(-1);
 				projectIndex =
 					(projectIndex + (1 % projects.length)) %
 					projects.length;
@@ -64,11 +63,11 @@
 	};
 
 	const gotoPrevPage = () => {
-		direction = -1;
+		direction.set(-1);
 		changePage();
 	};
 	const gotoNextPage = () => {
-		direction = 1;
+		direction.set(1);
 		changePage();
 	};
 
@@ -76,7 +75,7 @@
 
 	afterNavigate(() => {
 		speed = "instant";
-		index = direction === 1 ? 0 : project.media.length - 1;
+		index = $direction === 1 ? 0 : project.media.length - 1;
 		setTimeout(() => {
 			speed = "smooth";
 		}, 100);
