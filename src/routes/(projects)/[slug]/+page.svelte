@@ -1,17 +1,16 @@
 <script>
 	import Carousel from "$lib/components/Carousel.svelte";
 	import { fade } from "svelte/transition";
-	import { color, fontColor } from "$stores/stores";
-
+	import { color, bgcolor } from "$stores/stores";
 	export let data;
 	$: ({ project } = data);
-	$: ({ keyphrase } = data);
+	$: ({ password } = data);
 
+	$: bgcolor.set(project.bgcolor);
 	$: color.set(project.color);
-	$: fontColor.set(project.fontColor);
 </script>
 
 <svelte:head>
-	<meta name="theme-color" content={$color} />
+	<meta name="theme-color" content={$bgcolor} />
 </svelte:head>
-<Carousel {keyphrase} {project}></Carousel>
+<Carousel {password} {project}></Carousel>

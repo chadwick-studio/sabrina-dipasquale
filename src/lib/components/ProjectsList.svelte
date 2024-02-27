@@ -2,12 +2,7 @@
 	// @ts-nocheck
 	import { page } from "$app/stores";
 	import { getContext, onMount } from "svelte";
-	import {
-		color,
-		fontColor,
-		percentage,
-		pageIndex,
-	} from "$stores/stores";
+	import { bgcolor, color, percentage } from "$stores/stores";
 	import { checkScroll } from "$utils/checkScroll";
 	import Slider from "./Slider.svelte";
 
@@ -18,11 +13,7 @@
 	});
 </script>
 
-<div
-	class="projects-list"
-	style:--background-color={$color.hex}
-	style:--color={$fontColor || "black"}
->
+<div class="projects-list">
 	<section class="title">
 		<h1>
 			<span class="uppercase bold">Sabrina Dipasquale</span>
@@ -36,8 +27,6 @@
 				<section>
 					<a
 						class="project-link"
-						on:click={() =>
-							pageIndex.set(0)}
 						href="/{project.slug.current}"
 						aria-current={$page.url
 							.pathname ===
@@ -66,7 +55,6 @@
 		position: relative;
 		padding: var(--padding);
 		height: 100%;
-		background-color: var(--background-color);
 		display: grid;
 		grid-template: auto 1fr / 1fr;
 		padding-bottom: 64px;
@@ -77,7 +65,8 @@
 		}
 	}
 	.title {
-		line-height: 1.1;
+		line-height: 1.3;
+		margin-top: 3px;
 	}
 	.projects-wrapper {
 		position: relative;
@@ -105,8 +94,9 @@
 			background-image: linear-gradient(
 				to top,
 				transparent,
-				var(--background-color)
+				var(--bg-color)
 			);
+			transition: var(--bgcolor-transition);
 		}
 		&::after {
 			opacity: 1;
@@ -114,8 +104,9 @@
 			background-image: linear-gradient(
 				to bottom,
 				transparent,
-				var(--background-color)
+				var(--bg-color)
 			);
+			transition: var(--bgcolor-transition);
 		}
 		&:has(> .projects.scroll-top)::before {
 			opacity: 0;
@@ -145,12 +136,13 @@
 		background: transparent;
 	}
 	.projects::-webkit-scrollbar-thumb {
-		background-color: var(--fontColor);
+		background-color: var(--color);
 		border-radius: 0px;
 		border: none;
 	}
 	@media (min-width: 1080px) {
 		.projects {
+			padding-right: var(--padding);
 			grid-template-columns: 1fr 1fr;
 			& > section:nth-of-type(2n) {
 				grid-column: 2 / 3;

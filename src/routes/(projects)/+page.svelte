@@ -1,9 +1,10 @@
 <script>
 	import { generateImageUrl } from "$utils/generateImageUrl.js";
-	import { color } from "$stores/stores";
+	import { bgcolor } from "$stores/stores";
 	export let data;
 	$: ({ home } = data);
-	$: color.set(home.color);
+	$: bgcolor.set(home?.bgcolor);
+	$: console.log($bgcolor);
 </script>
 
 <div class="front-page-carousel">

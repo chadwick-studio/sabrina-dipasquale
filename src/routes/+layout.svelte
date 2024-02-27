@@ -1,34 +1,33 @@
 <script>
 	import "../app.pcss";
 	import "../styles/reset.css";
-	import { color, fontColor } from "$stores/stores";
+	import { color, bgcolor } from "$stores/stores";
 </script>
 
-<div
-	class="site-layout"
-	style:background-color={$color?.hex}
-	style:color={$fontColor}
->
+<div class="site-layout" style:--bg-color={$bgcolor.hex} style:--color={$color}>
 	<slot />
 </div>
 
 <style lang="postcss">
-	:global(body) {
-		overscroll-behavior: none;
-	}
 	.site-layout {
 		--padding: 20px;
+		--bgcolor-transition: background 0ms ease-in;
 		display: grid;
 		grid-template: 1fr 1fr / 1fr;
 		font-family: "Helvetica";
 		height: 100svh;
 		color: var(--color);
+		background-color: var(--bg-color);
+		transition: var(--bgcolor-transition);
 	}
 	@media (min-width: 768px) {
 		.site-layout {
 			--padding: 32px;
 			grid-template: 1fr / 1fr 1fr;
 		}
+	}
+	:global(*) {
+		overscroll-behavior: none;
 	}
 	:global(.italic) {
 		font-style: italic;

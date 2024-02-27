@@ -1,16 +1,17 @@
 <script>
 	import { goto, afterNavigate } from "$app/navigation";
 	import Slider from "$components/Slider.svelte";
-	import { color } from "$stores/stores.js";
+	import { bgcolor } from "$stores/stores.js";
 	import { checkScroll } from "$utils/checkScroll.js";
 	import { generateImageUrl } from "$utils/generateImageUrl";
+	import { generateFileUrl } from "$utils/generateVideoUrl.js";
 	import { onMount } from "svelte";
+	import { fade } from "svelte/transition";
 	export let data;
-	export let alt = "";
 
 	$: ({ aboutme } = data);
 
-	$: color.set(aboutme.color);
+	$: bgcolor.set(aboutme.bgcolor);
 
 	let lightboxVisibility = false;
 	const openLightbox = () => {
@@ -55,7 +56,7 @@
 	/>
 	<button on:click={goBack} class="show-less-mobile">Show less</button>
 </div>
-<div class="aboutme-container" style:--bg-color={$color.hex}>
+<div class="aboutme-container">
 	<div class="aboutme-wrapper" class:visible>
 		<div class="aboutme" use:checkScroll>
 			<h1 class="description-title">
@@ -76,11 +77,18 @@
 							{aboutme.experience
 								.title}
 						</h2>
-						<p>{aboutme.experience.text}</p>
+						<p>
+							{aboutme.experience
+								.text}
+						</p>
 					</section>
 					<section class="awards">
-						<h2>{aboutme.awards.title}</h2>
-						<p>{aboutme.awards.text}</p>
+						<h2>
+							{aboutme.awards.title}
+						</h2>
+						<p>
+							{aboutme.awards.text}
+						</p>
 					</section>
 				</div>
 			</div>
@@ -132,7 +140,6 @@
 	</div>
 	<Slider></Slider>
 </div>
-
 {#if lightboxVisibility}
 	<div class="email-lightbox-container" transition:move>
 		<div class="email-form-container">
@@ -197,41 +204,60 @@
 			<button on:click={closeLightbox}>
 				<span class="sr-only">Close</span>
 				<svg
-					width="100%"
-					height="100%"
-					version="1.1"
-					viewBox="0 0 1200 1200"
+					viewBox="0 0 374 741"
+					fill="none"
 					xmlns="http://www.w3.org/2000/svg"
 				>
-					<g
+					<path
+						d="M186 741L186 18Z"
+						fill="black"
+					/>
+					<path
+						d="M186 741L186 18"
+						stroke="#C53232"
+						stroke-width="30"
 						stroke-miterlimit="10"
-						stroke-width="2.5"
-						stroke="#c53232"
-					>
-						<path
-							transform="scale(12)"
-							d="m24.5 49.9h50.4"
-						/>
-						<path
-							transform="scale(12)"
-							d="m59.9 35.3 15.6 15.6"
-						/>
-						<path
-							transform="scale(12)"
-							d="m59.9 64.7 15.6-15.6"
-						/>
-					</g>
+					/>
+					<path
+						d="M10.5999 198.2L197.8 11.0002Z"
+						fill="black"
+					/>
+					<path
+						d="M10.5999 198.2L197.8 11.0002"
+						stroke="#C53232"
+						stroke-width="30"
+						stroke-miterlimit="10"
+					/>
+					<path
+						d="M363.4 198.2L176.2 11.0002Z"
+						fill="black"
+					/>
+					<path
+						d="M363.4 198.2L176.2 11.0002"
+						stroke="#C53232"
+						stroke-width="30"
+						stroke-miterlimit="10"
+					/>
 				</svg>
 			</button>
 		</div>
-		<div
-			class="img-container"
-			style:background-image={aboutme.lightboxImg?.asset &&
-				`url(${generateImageUrl(aboutme.lightboxImg)
-					.format("webp")
-					.width(1000)
-					.url()})`}
-		></div>
+		<div class="img-container">
+			{#if aboutme?.lightboxVideo?.asset}
+				<video
+					src={generateFileUrl(
+						aboutme?.lightboxVideo,
+					)}
+					autoplay="autoplay"
+					loop="loop"
+					muted
+					defaultMuted
+					playsinline
+					oncontextmenu="return false;"
+					preload="auto"
+					grid
+				></video>
+			{/if}
+		</div>
 	</div>
 {/if}
 
@@ -376,7 +402,7 @@
 		position: absolute;
 		top: 0;
 		left: 0;
-		height: 100svh;
+		height: fit-content;
 		width: 100%;
 		background-color: #ead4dc;
 		z-index: 1000;
@@ -386,7 +412,6 @@
 		.email-lightbox-container {
 			grid-template-columns: 1fr 1fr;
 			grid-template-rows: 1fr;
-			height: fit-content;
 		}
 	}
 	.email-form-container {
@@ -398,31 +423,31 @@
 			cursor: pointer;
 			justify-self: end;
 			aspect-ratio: 1;
-			width: 96px;
-			rotate: 270deg;
-			transform: translateY(32px);
+			width: 40px;
+			aspect-ratio: 374 / 741;
+			margin-top: 12px;
 		}
 	}
 	@media (min-width: 768px) {
 		.email-form-container {
 			padding: 48px;
 			padding-top: 64px;
-			padding-bottom: 12px;
+			padding-bottom: 32px;
 		}
 	}
 	form {
 		margin-top: 24px;
 		& > section {
 			display: grid;
-			& + section {
-				margin-top: 32px;
-			}
+		}
+		& section:nth-child(n + 2) + section {
+			margin-top: 32px;
 		}
 	}
 	form {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		column-gap: max(5vw, 1rem);
+		column-gap: max(2vw, 16px);
 		align-items: end;
 		& button {
 			background-color: #c53232;
@@ -430,24 +455,25 @@
 			margin-top: 96px;
 			text-align: center;
 			width: fit-content;
-			padding: 1rem 3rem;
+			padding: 16px 64px;
 			cursor: pointer;
 		}
 	}
 	.email-form-title {
-		font-size: 24px;
+		font-size: 32px;
 		color: #c53232;
 		line-height: 1;
 		font-family: "PS Fournier Std Petit";
 	}
 	@media (min-width: 768px) {
 		.email-form-title {
-			font-size: 36px;
+			font-size: 48px;
 		}
 	}
 	label {
 		color: #c53232;
-		font-size: 12px;
+		font-size: 16px;
+		line-height: 1;
 	}
 	input {
 		border-bottom: 1px solid #c53232;
@@ -471,6 +497,15 @@
 
 	.full-width {
 		grid-column: 1 / -1;
+	}
+	@media (max-width: 448px) {
+		.name,
+		.email {
+			grid-column: 1 / -1;
+		}
+		.name {
+			margin-top: 32px;
+		}
 	}
 	.experience p,
 	.description p,

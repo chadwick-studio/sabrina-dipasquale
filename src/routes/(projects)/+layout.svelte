@@ -1,8 +1,6 @@
 <script>
 	import { setContext } from "svelte";
 	import Slider from "$lib/components/Slider.svelte";
-	import Cursor from "$lib/components/Cursor.svelte";
-	import Carousel from "$lib/components/Carousel.svelte";
 	import ProjectsList from "$lib/components/ProjectsList.svelte";
 	import { percentage } from "$stores/stores";
 

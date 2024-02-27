@@ -1,161 +1,102 @@
 <script>
+	//svelte imports
 	import { afterNavigate, goto } from "$app/navigation";
-	import { getContext, onMount, afterUpdate } from "svelte";
-	import { fade } from "svelte/transition";
-	import { color, fontColor, pageIndex } from "$stores/stores";
-	import { direction, hidden } from "$stores/stores";
-	import { generateImageUrl } from "$utils/generateImageUrl";
-	import { scroller } from "$utils/scroller";
+	import { getContext, onMount } from "svelte";
 	import { tick } from "svelte";
-	export let project;
-	export let keyphrase;
-	import Cursor from "./Cursor.svelte";
+	import { fade } from "svelte/transition";
+	import { bgcolor } from "$stores/stores";
+	import PasswordForm from "./PasswordForm.svelte";
+
+	//js imports
+	import { generateImageUrl } from "$utils/generateImageUrl";
 	import { generateFileUrl } from "$utils/generateVideoUrl";
-	import Padlock from "./icons/Padlock.svelte";
+	import detectTouchScreen from "$utils/detectTouchScreen";
+
+	//actions
+	import scrollIntoView from "$utils/scrollIntoView";
+	import cursor from "$utils/cursor";
+	import observe from "$utils/intersectionObserver";
+
+	export let project;
+	export let password;
 
 	const projects = getContext("projects");
-	let carouselWidth;
-	let scrollerNode;
 
-	let isHovering = false;
-	// Change project
-	$: projectIndex = projects.findIndex((el) => el._id === project._id);
-
-	$: hidden.set(project.hidden || false);
-
-	const scrollIntoView = (index) => {
-		[...scrollerNode.children][index].scrollIntoView();
-	};
-
-	const gotoNextPage = async () => {
-		if ($direction !== 1) direction.set(1);
-
-		if (
-			$pageIndex === project.media.length - 1 ||
-			scrollerNode.children.length === 1
-		) {
-			projectIndex = (projectIndex + 1) % projects.length;
-			await tick();
-			goto(`/${projects[projectIndex].slug.current}`);
-		} else {
-			pageIndex.update((n) => n + 1);
-			await tick();
-			scrollIntoView($pageIndex);
-		}
-	};
-
-	const gotoPrevPage = async () => {
-		if ($direction !== -1) direction.set(-1);
-
-		if ($pageIndex === 0 || scrollerNode.children.length === 1) {
-			projectIndex =
-				(projectIndex - 1 + projects.length) %
-				projects.length;
-			await tick();
-			goto(`/${projects[projectIndex].slug.current}`);
-		} else {
-			pageIndex.update((n) => n - 1);
-			await tick();
-			scrollIntoView($pageIndex);
-		}
-	};
-
-	// Mouse
-	const mouse = { x: 0, y: 0 };
-
-	const handleMouseMove = (e) => {
-		isHovering = true;
-		mouse.x = e.clientX;
-		mouse.y = e.clientY;
-		if (mouse.x > carouselWidth / 2) {
-			direction.set(1);
-		} else {
-			direction.set(-1);
-		}
-	};
-
-	const handleMouseLeave = () => {
-		isHovering = false;
-	};
-
-	let keyphraseInput;
-	let viewProjectButton;
-	let canClick = true;
-	let delayInProgress = false;
-	function isTouchDevice() {
-		return (
-			"ontouchstart" in window ||
-			navigator.maxTouchPoints > 0 ||
-			navigator.msMaxTouchPoints > 0
-		);
-	}
-
-	const handleClick = (e) => {
-		if (canClick && isTouchDevice) {
-			canClick = false;
-			if (
-				e.target === keyphraseInput ||
-				e.target === viewProjectButton
-			) {
-				return;
-			} else {
-				setTimeout(function () {
-					canClick = true;
-					delayInProgress = false;
-				}, 500);
-				delayInProgress = true;
-				if ($direction === 1) {
-					gotoNextPage();
-				} else {
-					gotoPrevPage();
-				}
-			}
-		}
-	};
+	let index = 0;
+	let projectIndex = 0;
+	let direction = 1;
+	let hasTouchScreen = false;
+	let passwordValue;
 
 	let projectInfoLightbox = false;
+
 	const toggleProjectInfo = () => {
 		projectInfoLightbox = !projectInfoLightbox;
 	};
-	let clicked = false;
-	let value;
-	let passwordValue = "";
-	afterNavigate(() => {
-		pageIndex.set($direction === 1 ? 0 : project.media.length - 1);
-		scrollerNode.scrollTo({
-			left: $direction === 1 ? 0 : scrollerNode.scrollWidth,
-			behavior: "instant",
-		});
-	});
-	$: value,
-		() => {
-			let tempText = value.replace(/\*/g, "");
-			if (tempText == "") {
-				passwordValue = actualText.substr(
-					0,
-					actualText.length - 1,
-				);
+
+	const changePage = async () => {
+		if (direction === 1) {
+			if (
+				index === project.media.length - 1 ||
+				project.media.length === 1
+			) {
+				direction = 1;
+				projectIndex =
+					(projectIndex - 1 + projects.length) %
+					projects.length;
+				await tick();
+				goto(`/${projects[projectIndex].slug.current}`);
 			} else {
-				actualText += x.replace(/\*/g, "");
+				index++;
 			}
-			document.getElementById("myText").value = "";
-			for (var i = 0; i < x.length; i++) {
-				document.getElementById("myText").value += "*";
+		} else {
+			if (index === 0 || project.media.length === 1) {
+				direction = -1;
+				projectIndex =
+					(projectIndex + (1 % projects.length)) %
+					projects.length;
+				await tick();
+				goto(`/${projects[projectIndex].slug.current}`);
+			} else {
+				index--;
 			}
-		};
+		}
+	};
+
+	const gotoPrevPage = () => {
+		direction = -1;
+		changePage();
+	};
+	const gotoNextPage = () => {
+		direction = 1;
+		changePage();
+	};
+
+	let speed = "smooth";
+
+	afterNavigate(() => {
+		speed = "instant";
+		index = direction === 1 ? 0 : project.media.length - 1;
+		setTimeout(() => {
+			speed = "smooth";
+		}, 100);
+	});
+
+	onMount(() => {
+		hasTouchScreen = detectTouchScreen();
+	});
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div
-	class="carousel"
-	bind:clientWidth={carouselWidth}
-	style:--bg-color={$color.hex}
-	style:--color={$fontColor || "black"}
->
-	{#if !$hidden}
+{#key project}
+	<div
+		class="carousel"
+		in:fade={{ duration: 200, delay: 200 + 100 }}
+		out:fade={{ duration: 200 }}
+	>
 		<div class="media">
 			<p class="description">
 				{project.description}
@@ -167,53 +108,69 @@
 			>
 			<ul class="pagination | no-select">
 				<li class="no-select">
-					{$pageIndex + 1} / {project.media
-						.length}
+					{index + 1} / {project.media.length}
 				</li>
 				<li class="no-select">
 					<button
-						class="next-btn"
-						on:click|stopPropagation={gotoNextPage}
+						class="next-page-btn"
+						on:click={gotoNextPage}
 						>Next</button
 					>
 				</li>
 			</ul>
 		</div>
-	{/if}
-	<a href="/about">About</a>
-	{#if projectInfoLightbox}
-		<div class="project-info-lightbox">
-			<button on:click={toggleProjectInfo}>Close</button>
-			<p class="project-info-lightbox_description">
-				{project.description}
-			</p>
-		</div>
-	{/if}
-	<div
-		class="images-container"
-		on:mouseleave={handleMouseLeave}
-		on:mousemove={handleMouseMove}
-		on:mousedown={() => (clicked = true)}
-		on:mousemove={() => (clicked = false)}
-		on:mouseup={(e) => {
-			if (clicked) {
-				handleClick(e);
-			} else {
-				clicked = false;
-			}
-		}}
-	>
-		<ul
-			class="images-scroller"
-			bind:this={scrollerNode}
-			use:scroller={$pageIndex}
-			on:indexChange={(e) => {
-				pageIndex.set(e.detail);
-			}}
-		>
-			{#if !$hidden}
+		<a href="/about">About</a>
+		{#if projectInfoLightbox}
+			<div class="project-info-lightbox">
+				<button on:click={toggleProjectInfo}
+					>Close</button
+				>
+				<p class="project-info-lightbox__description">
+					{project.description}
+				</p>
+			</div>
+		{/if}
+		<div class="scroller-container" use:cursor>
+			<div
+				class="scroller-controls"
+				class:active={!hasTouchScreen}
+			>
+				<button
+					on:click={() => {
+						if (!hasTouchScreen)
+							gotoPrevPage();
+					}}
+					class="scroller-control prev-page-btn"
+				></button>
+				<button
+					on:click={() => {
+						if (!hasTouchScreen)
+							gotoNextPage();
+					}}
+					class="scroller-control next-page-btn"
+				></button>
+			</div>
+			<ul
+				class="scroller no-scrollbar"
+				use:scrollIntoView={{ index, speed }}
+			>
 				{#each project.media as el, i}
-					<li data-index={i}>
+					<li
+						on:enterScreen={() => {
+							if (el?.addbgcolor) {
+								bgcolor.set(
+									el.bgcolor,
+								);
+							}
+							if (hasTouchScreen) {
+								console.log(
+									"hi",
+								);
+								index = i;
+							}
+						}}
+						use:observe
+					>
 						{#if el._type === "img"}
 							<img
 								data-layout={el.layout ||
@@ -244,127 +201,61 @@
 								playsinline
 								oncontextmenu="return false;"
 								preload="auto"
+								grid
 							></video>
 						{/if}
 					</li>
 				{/each}
-			{:else}
-				<li></li>
-			{/if}
-		</ul>
-		{#if $hidden}
-			<div class="hidden-form">
-				<form
-					class="form"
-					on:submit={() => {
-						if (
-							value ===
-							keyphrase.keyphrase
-						) {
-							hidden.set(false);
-							pageIndex.set(1);
-							scrollerNode.scrollTo({
-								left: 0,
-								behavior: "instant",
-							});
-						}
-					}}
-				>
-					<section>
-						<label for="keyphrase"
-							>Password</label
-						>
-						<Padlock
-							width="139px"
-							height="139px"
-						></Padlock>
-						<input
-							on:click|stopPropagation
-							type="text"
-							id="keyphrase"
-							name="keyphrase"
-							bind:this={keyphraseInput}
-							bind:value
-							data-value={passwordValue}
-						/>
-					</section>
-					<button bind:this={viewProjectButton}>
-						View Project
-					</button>
-				</form>
-			</div>
-		{/if}
+				{#if project?.hidden}
+					{console.log(
+						project?.passwordFieldColor,
+					)}
+					<PasswordForm
+						bind:value={passwordValue}
+						on:submit={() => {
+							if (
+								passwordValue ===
+								password?.password
+							)
+								project.hidden = false;
+						}}
+						img={project?.passwordImg}
+						fieldColor={project
+							?.passwordFieldColor
+							.hex}
+						bgcolor={project
+							?.passwordBgColor?.hex}
+					></PasswordForm>
+				{/if}
+			</ul>
+		</div>
 	</div>
-</div>
-<Cursor x={mouse.x} y={mouse.y} {isHovering}>
-	{#if $direction === 1}
-		<svg
-			width="100%"
-			height="100%"
-			version="1.1"
-			viewBox="0 0 1200 1200"
-			xmlns="http://www.w3.org/2000/svg"
-		>
-			<g
-				stroke={$fontColor || "black"}
-				stroke-miterlimit="10"
-				stroke-width="2.5"
-			>
-				<path
-					transform="scale(12)"
-					d="m24.5 49.9h50.4"
-				/>
-				<path
-					transform="scale(12)"
-					d="m59.9 35.3 15.6 15.6"
-				/>
-				<path
-					transform="scale(12)"
-					d="m59.9 64.7 15.6-15.6"
-				/>
-			</g>
-		</svg>
-	{:else}
-		<svg
-			width="100%"
-			height="100%"
-			version="1.1"
-			viewBox="0 0 1200 1200"
-			xmlns="http://www.w3.org/2000/svg"
-		>
-			<g
-				stroke={$fontColor || "black"}
-				stroke-miterlimit="10"
-				stroke-width="2.5"
-			>
-				<path
-					transform="scale(12)"
-					d="m75.5 50.1h-50.4"
-				/>
-				<path
-					transform="scale(12)"
-					d="m40.1 64.7-15.6-15.6"
-				/>
-				<path
-					transform="scale(12)"
-					d="m40.1 35.3-15.6 15.6"
-				/>
-			</g>
-		</svg>
-	{/if}
-</Cursor>
+{/key}
 
 <style lang="postcss">
 	.carousel {
 		container: carousel / size;
 		height: 100%;
-		cursor: initial;
+		isolation: isolate;
 	}
-	.images-container {
+	.scroller-container {
 		position: relative;
 		height: 100cqh;
 	}
-	.images-scroller {
+	.scroller-controls {
+		display: none;
+		grid-template-columns: 1fr 1fr;
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100cqh;
+		width: 100%;
+		z-index: 10;
+	}
+	.scroller-controls.active {
+		display: grid;
+	}
+	.scroller {
 		display: grid;
 		grid-auto-flow: column;
 		grid-auto-columns: 100%;
@@ -374,15 +265,17 @@
 		scroll-behavior: smooth;
 		overscroll-behavior-inline: contain;
 		scroll-snap-type: inline mandatory;
+		position: relative;
+	}
+	.no-scrollbar {
 		-ms-overflow-style: none; /* for Internet Explorer, Edge */
 		scrollbar-width: none; /* for Firefox */
-		cursor: none;
 	}
-	.images-scroller::-webkit-scrollbar {
+	.no-scrollbar::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
 	}
 
-	.images-scroller > li {
+	.scroller > li {
 		height: 100cqh;
 		scroll-snap-align: start;
 		display: grid;
@@ -448,7 +341,6 @@
 			text-align: center;
 		}
 		z-index: 999;
-		background-color: var(--bg-color);
 		button {
 			text-align: center;
 			align-self: center;
@@ -500,6 +392,7 @@
 		padding: var(--padding);
 		& > p {
 			margin-top: 1em;
+			line-height: 1.3;
 		}
 	}
 	.project-info-btn {
@@ -516,6 +409,20 @@
 		}
 		.project-info-btn {
 			display: none;
+		}
+	}
+
+	@media (hover: hover) {
+		:global(.cursor) {
+			width: 128px;
+			height: 128px;
+			transform: translate(-50%, -50%);
+			top: var(--y);
+			left: var(--x);
+			position: absolute;
+			pointer-events: none;
+			cursor: none;
+			z-index: 99999;
 		}
 	}
 </style>

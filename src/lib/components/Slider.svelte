@@ -1,6 +1,6 @@
 <script>
 	// @ts-nocheck
-	import { percentage, color, fontColor } from "$lib/stores/stores";
+	import { percentage, bgcolor, color } from "$lib/stores/stores";
 	export let active = false;
 	let MIN = 0;
 	let MAX = 100;
@@ -14,8 +14,7 @@
 <div
 	class="slider-wrapper"
 	class:active
-	style:--currentColor={$color.hex}
-	style:--track-color={active ? $fontColor : "#5A557A"}
+	style:--track-color={active ? $color || "#000" : "#5A557A"}
 >
 	<div class="slider">
 		<div style:left class="label">
@@ -26,7 +25,7 @@
 				<defs id="defs2" />
 				<g transform="translate(-85.849782,-93.502992)">
 					<path
-						fill={$fontColor}
+						fill={$color}
 						d="m 90.443611,98.553225 0.704452,2.073665 h 1.051719 l -2.579687,-7.123898 h -1.091407 l -2.678906,7.123898 h 0.992188 l 0.744141,-2.073665 z m -2.559844,-0.85328 1.141015,-3.135313 h 0.01985 l 1.051718,3.135313 z"
 					/>
 				</g>
@@ -69,7 +68,8 @@
 		left: 0;
 		padding: var(--padding);
 		padding-top: 8px;
-		background-color: var(--currentColor);
+		background-color: var(--bg-color);
+		transition: var(--bgcolor-transition);
 		&.active .label {
 			display: grid;
 			cursor: pointer;
