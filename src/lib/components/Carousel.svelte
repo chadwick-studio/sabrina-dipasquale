@@ -23,7 +23,8 @@
 	const projects = getContext("projects");
 
 	let index = 0;
-	let projectIndex = 0;
+	$: projectIndex = projects.findIndex((el) => el._id === project._id);
+	$: console.log(projectIndex);
 	let hasTouchScreen = false;
 	let passwordValue;
 
@@ -39,9 +40,8 @@
 				index === project.media.length - 1 ||
 				project.media.length === 1
 			) {
-				direction.set(1);
 				projectIndex =
-					(projectIndex - 1 + projects.length) %
+					(projectIndex + (1 % projects.length)) %
 					projects.length;
 				await tick();
 				goto(`/${projects[projectIndex].slug.current}`);
@@ -50,9 +50,8 @@
 			}
 		} else {
 			if (index === 0 || project.media.length === 1) {
-				direction.set(-1);
 				projectIndex =
-					(projectIndex + (1 % projects.length)) %
+					(projectIndex - 1 + projects.length) %
 					projects.length;
 				await tick();
 				goto(`/${projects[projectIndex].slug.current}`);
@@ -95,6 +94,7 @@
 		class="carousel"
 		in:fade={{ duration: 200, delay: 200 + 100 }}
 		out:fade={{ duration: 200 }}
+		use:cursor
 	>
 		<div class="media">
 			<p class="description">
@@ -129,7 +129,7 @@
 				</p>
 			</div>
 		{/if}
-		<div class="scroller-container" use:cursor>
+		<div class="scroller-container">
 			<div
 				class="scroller-controls"
 				class:active={!hasTouchScreen}
@@ -347,6 +347,7 @@
 		}
 	}
 	.media {
+		cursor: default;
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -376,8 +377,11 @@
 			display: none;
 		}
 	}
+	.scroller-control {
+cursor: none;
+	}
 	a,
-	button {
+	button:not(.scroller-control) {
 		cursor: pointer;
 	}
 	.project-info-lightbox {
@@ -393,6 +397,7 @@
 			margin-top: 1em;
 			line-height: 1.3;
 		}
+		cursor: default;
 	}
 	.project-info-btn {
 		white-space: nowrap;

@@ -17,12 +17,45 @@ export default function createCursor(node) {
 	node.appendChild(cursorElement);
 
 	const changeCursorSvg = (direction) => {
-		if (direction === -1) {
-			cursorElement.classList.remove("right");
-			cursorElement.classList.add("left");
+		if (direction === 1) {
+			cursorElement.innerHTML = `<svg width="100%" height="100%"
+			version="1.1"
+			viewBox="0 0 1200 1200"
+			xmlns="http://www.w3.org/2000/svg"
+		>
+			<g
+				stroke="black"
+				stroke-miterlimit="10"
+				stroke-width="2.5"
+			>
+				<path
+					transform="scale(12)"
+					d="m24.5 49.9h50.4"
+				/>
+				<path
+					transform="scale(12)"
+					d="m59.9 35.3 15.6 15.6"
+				/>
+				<path
+					transform="scale(12)"
+					d="m59.9 64.7 15.6-15.6"
+				/>
+			</g>
+		</svg>`;
 		} else {
-			cursorElement.classList.remove("left");
-			cursorElement.classList.add("right");
+			cursorElement.innerHTML = `<svg
+				width="100%"
+				height="100%"
+				version="1.1"
+				viewBox="0 0 1200 1200"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<g stroke="black" stroke-miterlimit="10" stroke-width="2.5">
+					<path transform="scale(12)" d="m75.5 50.1h-50.4" />
+					<path transform="scale(12)" d="m40.1 64.7-15.6-15.6" />
+					<path transform="scale(12)" d="m40.1 35.3-15.6 15.6" />
+				</g>
+			</svg>`;
 		}
 	};
 
@@ -35,6 +68,8 @@ export default function createCursor(node) {
 			e.target === node.querySelector(".scroller-controls > .next-page-btn")
 		) {
 			changeCursorSvg(1);
+		} else {
+			hideCursor();
 		}
 	};
 
@@ -44,15 +79,13 @@ export default function createCursor(node) {
 	};
 
 	const handleCursor = (e) => {
-		cursorElement.style.setProperty("--x", e.clientX);
-		cursorElement.style.setProperty("--y", e.clientY);
+		cursorElement.style.setProperty("--x", `${e.clientX}px`);
+		cursorElement.style.setProperty("--y", `${e.clientY}px`);
 		changeCursor(e);
 	};
 
 	const hideCursor = () => {
 		cursorElement.style.display = "none";
-		cursorElement.classList.remove("right");
-		cursorElement.classList.remove("left");
 	};
 
 	node.addEventListener("mousemove", handleCursor);
