@@ -22,7 +22,7 @@
 		</h1>
 	</section>
 	<section class="projects-wrapper" class:visible>
-		<div class="projects" use:checkScroll={$percentage}>
+		<div class="projects scrollbar" use:checkScroll={$percentage}>
 			{#each projects as project}
 				<section>
 					<a
@@ -124,21 +124,7 @@
 		grid-auto-rows: min-content;
 		grid-template-columns: 1fr;
 		padding-block: 1px;
-		overscroll-behavior: none;
 		position: relative;
-		scrollbar-width: thin;
-		scrollbar-color: var(--fontColor) transparent;
-	}
-	.projects::-webkit-scrollbar {
-		width: 4px;
-	}
-	.projects::-webkit-scrollbar-track {
-		background: transparent;
-	}
-	.projects::-webkit-scrollbar-thumb {
-		background-color: var(--color);
-		border-radius: 0px;
-		border: none;
 	}
 	@media (min-width: 1080px) {
 		.projects {

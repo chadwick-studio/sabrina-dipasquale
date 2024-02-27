@@ -4,21 +4,26 @@
 	import { color, bgcolor } from "$stores/stores";
 </script>
 
-<div class="site-layout" style:--bg-color={$bgcolor.hex} style:--color={$color}>
+<div
+	class="site-layout"
+	style:--bg-color={$bgcolor.hex}
+	style:--color={$color}
+	style:--r={$color === "black" ? "0" : "255"}
+	style:--g={$color === "black" ? "0" : "255"}
+	style:--b={$color === "black" ? "0" : "255"}
+>
 	<slot />
 </div>
 
 <style lang="postcss">
 	.site-layout {
 		--padding: 20px;
-		--bgcolor-transition: background 0ms ease-in;
 		display: grid;
 		grid-template: 1fr 1fr / 1fr;
 		font-family: "Helvetica";
 		height: 100svh;
 		color: var(--color);
 		background-color: var(--bg-color);
-		transition: var(--bgcolor-transition);
 	}
 	@media (min-width: 768px) {
 		.site-layout {
@@ -52,5 +57,21 @@
 		position: absolute;
 		white-space: nowrap;
 		width: 1px;
+	}
+	:global(.scrollbar) {
+		scrollbar-width: thin;
+		scrollbar-color: rgb(var(--r) var(--g) var(--b) / 0.3)
+			transparent;
+	}
+	:global(.scrollbar::-webkit-scrollbar) {
+		width: 2px;
+	}
+	:global(.scrollbar::-webkit-scrollbar-track) {
+		background: transparent;
+	}
+	:global(.scrollbar::-webkit-scrollbar-thumb) {
+		background-color: rgb(var(--r) var(--g) var(--b) / 0.3);
+		border-radius: 0px;
+		border: none;
 	}
 </style>
