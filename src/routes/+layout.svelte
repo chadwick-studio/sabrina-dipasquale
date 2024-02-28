@@ -58,20 +58,28 @@
 		white-space: nowrap;
 		width: 1px;
 	}
-	:global(.scrollbar) {
-		scrollbar-width: thin;
-		scrollbar-color: rgb(var(--r) var(--g) var(--b) / 0.3)
-			transparent;
+	@-moz-document url-prefix() {
+		:global(.scrollbar) {
+			scrollbar-width: thin;
+			scrollbar-color: rgb(var(--r) var(--g) var(--b) / 0.3)
+				transparent;
+		}
 	}
 	:global(.scrollbar::-webkit-scrollbar) {
-		width: 2px;
+		width: 1px;
+		background-color: transparent;
 	}
 	:global(.scrollbar::-webkit-scrollbar-track) {
-		background: transparent;
+		background-color: transparent;
 	}
 	:global(.scrollbar::-webkit-scrollbar-thumb) {
-		background-color: rgb(var(--r) var(--g) var(--b) / 0.3);
-		border-radius: 0px;
-		border: none;
+		background-color: rgb(var(--r) var(--g) var(--b) / .3);
 	}
+	/*
+	:global(.scrollbar::-webkit-scrollbar-thumb) {
+		background-color: rgb(var(--r) var(--g) var(--b) / 0.3);
+		border: none;
+		border: 2px solid #555555;
+	}
+	*/
 </style>
