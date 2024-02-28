@@ -27,6 +27,7 @@
 
 <style lang="postcss">
 	.password-form {
+		color: black;
 		display: grid;
 		place-items: center;
 		position: absolute;
@@ -66,6 +67,7 @@
 		font-size: 16px;
 		font-weight: 300;
 		margin-top: 8px;
+		cursor: pointer;
 	}
 	img {
 		margin-inline: auto;

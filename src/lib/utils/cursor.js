@@ -1,3 +1,4 @@
+const mouseCoords = { x: 0, y: 0 };
 const throttle = (interval, fn) => {
 	let lastTime = performance.now() - interval;
 	return (...args) => {
@@ -7,12 +8,11 @@ const throttle = (interval, fn) => {
 		fn(...args);
 	};
 };
-
 export default function createCursor(node) {
 	const cursorElement = document.createElement("div");
 	cursorElement.classList.add("cursor");
-	cursorElement.style.setProperty("--x", 0);
-	cursorElement.style.setProperty("--y", 0);
+	cursorElement.style.setProperty("--x", mouseCoords.x + "px");
+	cursorElement.style.setProperty("--y", mouseCoords.y + "px");
 	cursorElement.style.display = "none";
 	node.appendChild(cursorElement);
 
@@ -80,8 +80,10 @@ export default function createCursor(node) {
 	};
 
 	const handleCursor = (e) => {
-		cursorElement.style.setProperty("--x", `${e.clientX}px`);
-		cursorElement.style.setProperty("--y", `${e.clientY}px`);
+		mouseCoords.x = e.clientX;
+		mouseCoords.y = e.clientY;
+		cursorElement.style.setProperty("--x", `${mouseCoords.x}px`);
+		cursorElement.style.setProperty("--y", `${mouseCoords.y}px`);
 		changeCursor(e);
 	};
 
