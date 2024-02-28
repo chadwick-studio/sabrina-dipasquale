@@ -2,7 +2,7 @@ export default function observe(node) {
 	const options = {
 		root: node.parentElement,
 		rootMargin: "0px",
-		threshold: 0.75,
+		threshold: 0.15,
 	};
 	const intersectionObserver = new IntersectionObserver((entries) => {
 		entries.forEach((entry) => {
@@ -16,8 +16,8 @@ export default function observe(node) {
 	return {
 		destroy() {
 			if (intersectionObserver) {
-			intersectionObserver.unobserve(node);
-			intersectionObserver.disconnect();
+				intersectionObserver.unobserve(node);
+				intersectionObserver.disconnect();
 			}
 		},
 	};

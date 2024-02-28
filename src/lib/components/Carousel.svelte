@@ -155,9 +155,6 @@
 				{#each project.media as el, i}
 					<li
 						on:enterScreen={() => {
-							console.log(
-								el,
-							);
 							if (el?.addbgcolor) {
 								bgcolor.set(
 									el.bgcolor,

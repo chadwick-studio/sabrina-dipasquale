@@ -24,7 +24,7 @@ export default function createCursor(node) {
 			xmlns="http://www.w3.org/2000/svg"
 		>
 			<g
-				stroke="black"
+				stroke="var(--color)"
 				stroke-miterlimit="10"
 				stroke-width="2.5"
 			>
@@ -50,7 +50,8 @@ export default function createCursor(node) {
 				viewBox="0 0 1200 1200"
 				xmlns="http://www.w3.org/2000/svg"
 			>
-				<g stroke="black" stroke-miterlimit="10" stroke-width="2.5">
+				<g 
+				stroke="var(--color)" stroke-miterlimit="10" stroke-width="2.5">
 					<path transform="scale(12)" d="m75.5 50.1h-50.4" />
 					<path transform="scale(12)" d="m40.1 64.7-15.6-15.6" />
 					<path transform="scale(12)" d="m40.1 35.3-15.6 15.6" />
