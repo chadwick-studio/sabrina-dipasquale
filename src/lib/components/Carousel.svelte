@@ -24,7 +24,6 @@
 
 	let index = 0;
 	$: projectIndex = projects.findIndex((el) => el._id === project._id);
-	$: console.log(projectIndex);
 	let hasTouchScreen = false;
 	let passwordValue;
 
@@ -156,15 +155,19 @@
 				{#each project.media as el, i}
 					<li
 						on:enterScreen={() => {
+							console.log(
+								el,
+							);
 							if (el?.addbgcolor) {
 								bgcolor.set(
 									el.bgcolor,
 								);
+							} else {
+								bgcolor.set(
+									project?.bgcolor,
+								);
 							}
 							if (hasTouchScreen) {
-								console.log(
-									"hi",
-								);
 								index = i;
 							}
 						}}
@@ -206,9 +209,6 @@
 					</li>
 				{/each}
 				{#if project?.hidden}
-					{console.log(
-						project?.passwordFieldColor,
-					)}
 					<PasswordForm
 						bind:value={passwordValue}
 						on:submit={() => {
@@ -378,7 +378,7 @@
 		}
 	}
 	.scroller-control {
-cursor: none;
+		cursor: none;
 	}
 	a,
 	button:not(.scroller-control) {
