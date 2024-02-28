@@ -125,12 +125,11 @@
 		column-gap: var(--padding);
 		grid-auto-rows: min-content;
 		grid-template-columns: 1fr;
-		padding-block: 1px;
+		padding-right: var(--padding);
 		position: relative;
 	}
 	@media (min-width: 1080px) {
 		.projects {
-			padding-right: var(--padding);
 			grid-template-columns: 1fr 1fr;
 			& > section:nth-of-type(2n) {
 				grid-column: 2 / 3;

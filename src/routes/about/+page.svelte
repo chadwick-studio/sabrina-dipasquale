@@ -330,6 +330,7 @@
 		position: relative;
 		overscroll-behavior: none;
 		height: 100%;
+		padding-right: var(--padding);
 		& section + section {
 			margin-top: 56px;
 		}
@@ -502,8 +503,11 @@
 	}
 	.img-container {
 		overflow: hidden;
-		background-repeat: no-repeat;
-		background-size: cover;
-		background-position: top;
+	}
+	video {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center;
 	}
 </style>
