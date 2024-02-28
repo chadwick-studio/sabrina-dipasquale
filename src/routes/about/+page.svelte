@@ -7,6 +7,7 @@
 	import { generateFileUrl } from "$utils/generateVideoUrl.js";
 	import { onMount } from "svelte";
 	import { fade } from "svelte/transition";
+	import { cubicIn, cubicOut } from "svelte/easing";
 	export let data;
 
 	$: ({ aboutme } = data);
@@ -141,7 +142,11 @@
 	<Slider></Slider>
 </div>
 {#if lightboxVisibility}
-	<div class="email-lightbox-container" transition:move>
+	<div
+		class="email-lightbox-container"
+		in:move={{ duration: 600, easing: cubicOut }}
+		out:move={{ duration: 300, easing: cubicIn }}
+	>
 		<div class="email-form-container">
 			<h1 class="email-form-title">Let's talk.</h1>
 			<form
