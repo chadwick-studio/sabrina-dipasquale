@@ -150,6 +150,7 @@
 			</div>
 			<ul
 				class="scroller no-scrollbar"
+				class:no-scroll={project?.hidden}
 				use:scrollIntoView={{ index, speed }}
 			>
 				{#each project.media as el, i}
@@ -262,6 +263,9 @@
 		overscroll-behavior-inline: contain;
 		scroll-snap-type: inline mandatory;
 		position: relative;
+		&.no-scroll {
+overflow-x: hidden;
+		}
 	}
 	.no-scrollbar {
 		-ms-overflow-style: none; /* for Internet Explorer, Edge */

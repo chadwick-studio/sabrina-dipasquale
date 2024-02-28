@@ -72,4 +72,12 @@
 	img {
 		margin-inline: auto;
 	}
+	@media (max-width: 575px) {
+		.password-input {
+			margin-top: 24px;
+		}
+		img {
+			height: 112px;
+		}
+	}
 </style>
