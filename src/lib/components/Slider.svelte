@@ -58,7 +58,7 @@
 		place-items: center;
 		& svg {
 			aspect-ratio: 24 / 26.924969;
-			height: 12px;
+			height: 9px;
 		}
 	}
 	.slider-wrapper {
@@ -91,7 +91,7 @@
 		display: block;
 		width: 100%;
 		position: relative;
-		height: 28px;
+		height: 26px;
 	}
 	/********** Range Input Styles **********/
 	/*Range Reset*/

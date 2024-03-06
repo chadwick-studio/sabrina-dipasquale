@@ -1,19 +1,49 @@
 <script>
 	import "../app.pcss";
 	import "../styles/reset.css";
-	import { color, bgcolor } from "$stores/stores";
+
+	import { setContext } from "svelte";
+	import { color, bgcolor, percentage } from "$stores/stores";
+	import { page } from "$app/stores";
+
+	import Slider from "$components/Slider.svelte";
+	import ProjectsList from "$components/ProjectsList.svelte";
+	import AboutDropdown from "$components/AboutDropdown.svelte";
+
+	export let data;
+
+	// Projects variable
+	setContext("projects", data.projects);
+
+	let minFontSize = 12;
+	// let maxFontSize = 22;
+	// let minLeading = 1.1;
+	// let maxLeading = 1.3;
+	$: fontSize = 0.1 * $percentage + minFontSize + "px";
 </script>
 
+<svelte:head>
+	<meta name="theme-color" content={$bgcolor} />
+</svelte:head>
 <div
 	class="site-layout"
-	style:--bg-color={$bgcolor.hex}
+	style:--bg-color={$bgcolor?.hex}
 	style:--color={$color}
 	style:--r={$color === "black" ? "0" : "255"}
 	style:--g={$color === "black" ? "0" : "255"}
 	style:--b={$color === "black" ? "0" : "255"}
 >
-	<slot />
+	<div class="carousel-container" style:--font-size={fontSize}>
+		<slot />
+	</div>
+	<div class="projects-list-container" style:--font-size={fontSize}>
+		<ProjectsList />
+		<Slider active></Slider>
+	</div>
 </div>
+{#if $page.url.pathname === "/about"}
+	<AboutDropdown aboutme={$page.data.aboutme}></AboutDropdown>
+{/if}
 
 <style lang="postcss">
 	.site-layout {
@@ -30,6 +60,17 @@
 			--padding: 32px;
 			grid-template: 1fr / 1fr 1fr;
 		}
+	}
+	.carousel-container,
+	.projects-list-container {
+		overflow: hidden;
+		font-size: var(--font-size);
+	}
+	.carousel-container {
+		cursor: none;
+	}
+	.projects-list-container {
+		position: relative;
 	}
 	:global(*) {
 		overscroll-behavior: none;
@@ -73,7 +114,7 @@
 		background-color: transparent;
 	}
 	:global(.scrollbar::-webkit-scrollbar-thumb) {
-		background-color: rgb(var(--r) var(--g) var(--b) / .3);
+		background-color: rgb(var(--r) var(--g) var(--b) / 0.3);
 	}
 	/*
 	:global(.scrollbar::-webkit-scrollbar-thumb) {

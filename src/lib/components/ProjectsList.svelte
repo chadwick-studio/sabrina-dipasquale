@@ -2,7 +2,7 @@
 	// @ts-nocheck
 	import { page } from "$app/stores";
 	import { getContext, onMount } from "svelte";
-	import { bgcolor, color, percentage, direction } from "$stores/stores";
+	import { bgcolor, percentage, direction } from "$stores/stores";
 	import { checkScroll } from "$utils/checkScroll";
 	import Slider from "./Slider.svelte";
 
@@ -23,28 +23,63 @@
 	</section>
 	<section class="projects-wrapper" class:visible>
 		<div class="projects scrollbar" use:checkScroll={$percentage}>
-			{#each projects as project}
+			{#each projects as project, i}
 				<section>
-					<a
-						on:click={() =>
-							direction.set(1)}
-						class="project-link"
-						href="/{project.slug.current}"
-						aria-current={$page.url
-							.pathname ===
-						`/${project.slug.current}`
-							? "page"
-							: false}
-					>
-						<h2>
-							<span class="bold"
-								>{project.company}</span
-							>{#if project.title}, {project.title}{/if}
-						</h2>
-						<h3 class="italic">
-							{project.role}
-						</h3>
-					</a>
+					{#if i === 0}
+						<a
+							on:click={() =>
+								direction.set(
+									1,
+								)}
+							class="project-link"
+							href="/{project.slug
+								.current}"
+							aria-current={$page.url
+								.pathname ===
+								`/${project.slug.current}` ||
+							$page.url.pathname ===
+								"/"
+								? "page"
+								: false}
+						>
+							<h2>
+								<span
+									class="bold"
+									>{project.company}</span
+								>{#if project.title},
+									{project.title}{/if}
+							</h2>
+							<h3 class="italic">
+								{project.role}
+							</h3>
+						</a>
+					{:else}
+						<a
+							on:click={() =>
+								direction.set(
+									1,
+								)}
+							class="project-link"
+							href="/{project.slug
+								.current}"
+							aria-current={$page.url
+								.pathname ===
+							`/${project.slug.current}`
+								? "page"
+								: false}
+						>
+							<h2>
+								<span
+									class="bold"
+									>{project.company}</span
+								>{#if project.title},
+									{project.title}{/if}
+							</h2>
+							<h3 class="italic">
+								{project.role}
+							</h3>
+						</a>
+					{/if}
 				</section>
 			{/each}
 		</div>

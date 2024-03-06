@@ -17,13 +17,13 @@
 	import cursor from "$utils/cursor";
 	import observe from "$utils/intersectionObserver";
 
-	export let project;
-	export let password;
+	export let password = "";
+	export let project = {};
 
 	const projects = getContext("projects");
 
 	let index = 0;
-	$: projectIndex = projects.findIndex((el) => el._id === project._id);
+	$: projectIndex = projects.findIndex((el) => el?._id === project?._id);
 	let hasTouchScreen = false;
 	let passwordValue;
 
@@ -36,8 +36,8 @@
 	const changePage = async () => {
 		if ($direction === 1) {
 			if (
-				index === project.media.length - 1 ||
-				project.media.length === 1
+				index === project?.media.length - 1 ||
+				project?.media.length === 1
 			) {
 				projectIndex =
 					(projectIndex + (1 % projects.length)) %
@@ -48,7 +48,7 @@
 				index++;
 			}
 		} else {
-			if (index === 0 || project.media.length === 1) {
+			if (index === 0 || project?.media.length === 1) {
 				projectIndex =
 					(projectIndex - 1 + projects.length) %
 					projects.length;
@@ -73,7 +73,7 @@
 
 	afterNavigate(() => {
 		speed = "instant";
-		index = $direction === 1 ? 0 : project.media.length - 1;
+		index = $direction === 1 ? 0 : project?.media.length - 1;
 		setTimeout(() => {
 			speed = "smooth";
 		}, 100);
@@ -97,7 +97,7 @@
 	>
 		<div class="media">
 			<p class="description">
-				{project.description}
+				{project?.description}
 			</p>
 			<button
 				class="project-info-btn"
@@ -106,7 +106,7 @@
 			>
 			<ul class="pagination | no-select">
 				<li class="no-select">
-					{index + 1} / {project.media.length}
+					{index + 1} / {project?.media.length}
 				</li>
 				<li class="no-select">
 					<button
@@ -124,7 +124,7 @@
 					>Close</button
 				>
 				<p class="project-info-lightbox__description">
-					{project.description}
+					{project?.description || ""}
 				</p>
 			</div>
 		{/if}
@@ -153,59 +153,71 @@
 				class:no-scroll={project?.hidden}
 				use:scrollIntoView={{ index, speed }}
 			>
-				{#each project.media as el, i}
-					<li
-						on:enterScreen={() => {
-							if (el?.addbgcolor) {
-								bgcolor.set(
-									el.bgcolor,
-								);
-							} else {
-								bgcolor.set(
-									project?.bgcolor,
-								);
-							}
-							if (hasTouchScreen) {
-								index = i;
-							}
-						}}
-						use:observe
-					>
-						{#if el._type === "img"}
-							<img
-								data-layout={el.layout ||
-									0}
-								src={generateImageUrl(
-									el,
-								)
-									.format(
-										"webp",
+				{#if project?.media}
+					{#each project?.media as el, i}
+						<li
+							style:background-color={el?.mediaBgColor
+								? el
+										.mediaBgColor
+										.hex
+								: $bgcolor.hex}
+							on:enterScreen={() => {
+								if (
+									el?.addbgcolor
+								) {
+									bgcolor.set(
+										el?.bgcolor,
+									);
+								} else {
+									bgcolor.set(
+										project?.bgcolor,
+									);
+								}
+								if (
+									hasTouchScreen
+								) {
+									index =
+										i;
+								}
+							}}
+							use:observe
+						>
+							{#if el?._type === "img"}
+								<img
+									data-layout={el?.layout ||
+										0}
+									src={generateImageUrl(
+										el,
 									)
-									.width(
-										1500,
-									)
-									.url()}
-								alt=""
-								draggable="false"
-							/>
-						{:else}
-							<video
-								data-layout={el.layout}
-								src={generateFileUrl(
-									el,
-								)}
-								autoplay="autoplay"
-								loop="loop"
-								muted
-								defaultMuted
-								playsinline
-								oncontextmenu="return false;"
-								preload="auto"
-								grid
-							></video>
-						{/if}
-					</li>
-				{/each}
+										.format(
+											"webp",
+										)
+										.width(
+											1500,
+										)
+										.url()}
+									alt=""
+									draggable="false"
+								/>
+							{:else}
+								<video
+									data-layout={el?.layout}
+									src={generateFileUrl(
+										el,
+									)}
+									autoplay="autoplay"
+									loop="loop"
+									muted
+									defaultMuted
+									playsinline
+									oncontextmenu="return false;"
+									preload="auto"
+									grid
+								></video>
+							{/if}
+						</li>
+					{/each}
+				{/if}
 				{#if project?.hidden}
 					<PasswordForm
 						bind:value={passwordValue}
@@ -264,7 +276,7 @@
 		scroll-snap-type: inline mandatory;
 		position: relative;
 		&.no-scroll {
-overflow-x: hidden;
+			overflow-x: hidden;
 		}
 	}
 	.no-scrollbar {

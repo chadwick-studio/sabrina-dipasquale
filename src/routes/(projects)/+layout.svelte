@@ -1,38 +1,20 @@
 <script>
-	import { setContext } from "svelte";
-	import Slider from "$lib/components/Slider.svelte";
-	import ProjectsList from "$lib/components/ProjectsList.svelte";
-	import { percentage } from "$stores/stores";
-
+	import Carousel from "$components/Carousel.svelte";
+	import { bgcolor, color, project } from "$stores/stores";
+	import { page } from "$app/stores";
+	import { beforeNavigate } from "$app/navigation";
+	import { getContext } from "svelte";
 	export let data;
-
-	// Projects variable
-	setContext("projects", data.projects);
-	let minFontSize = 12;
-	let maxFontSize = 22;
-	let minLeading = 1.1;
-	let maxLeading = 1.3;
-	$: fontSize = 0.1 * $percentage + minFontSize + "px";
+	// sets initial variable;
+	const projects = getContext("projects");
+	let currentProject = projects[0];
+	$: project.set($page.data.project || currentProject);
+	$: bgcolor.set($page.data.project?.bgcolor || currentProject);
+	$: color.set($page.data.project?.color || currentProject);
+	// beforeNavigate(() => {
+	// 	sessionStorage.setItem("project", JSON.stringify($project));
+	// 	currentProject = JSON.parse(sessionStorage.getItem("project"));
+	// });
 </script>
 
-<div class="carousel-container" style:--font-size={fontSize}>
-	<slot />
-</div>
-<div class="projects-list-container" style:--font-size={fontSize}>
-	<ProjectsList></ProjectsList>
-	<Slider active></Slider>
-</div>
-
-<style lang="postcss">
-	.carousel-container,
-	.projects-list-container {
-		overflow: hidden;
-		font-size: var(--font-size);
-	}
-	.carousel-container {
-		cursor: none;
-	}
-	.projects-list-container {
-		position: relative;
-	}
-</style>
+<Carousel password={data.password} project={$project} />
