@@ -17,7 +17,7 @@
 	<section class="title">
 		<h1>
 			<span class="uppercase bold">Sabrina Dipasquale</span>
-			is a NYC-based Designer & Art Director.
+			is a NYC-based Art Director & Designer.
 			<a class="link" href="/about">Read more.</a>
 		</h1>
 	</section>
