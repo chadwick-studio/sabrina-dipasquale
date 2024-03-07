@@ -32,18 +32,10 @@
 	style:--r={$color === "black" ? "0" : "255"}
 	style:--g={$color === "black" ? "0" : "255"}
 	style:--b={$color === "black" ? "0" : "255"}
+	style:--font-size={fontSize}
 >
-	<div class="carousel-container" style:--font-size={fontSize}>
-		<slot />
-	</div>
-	<div class="projects-list-container" style:--font-size={fontSize}>
-		<ProjectsList />
-		<Slider active></Slider>
-	</div>
+	<slot />
 </div>
-{#if $page.url.pathname === "/about"}
-	<AboutDropdown aboutme={$page.data.aboutme}></AboutDropdown>
-{/if}
 
 <style lang="postcss">
 	.site-layout {
@@ -60,17 +52,6 @@
 			--padding: 32px;
 			grid-template: 1fr / 1fr 1fr;
 		}
-	}
-	.carousel-container,
-	.projects-list-container {
-		overflow: hidden;
-		font-size: var(--font-size);
-	}
-	.carousel-container {
-		cursor: none;
-	}
-	.projects-list-container {
-		position: relative;
 	}
 	:global(*) {
 		overscroll-behavior: none;
