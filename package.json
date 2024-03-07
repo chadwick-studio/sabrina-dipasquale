@@ -24,6 +24,7 @@
     "@barba/core": "^2.9.7",
     "@sanity/client": "^6.11.0",
     "@sanity/image-url": "^1.0.2",
+    "@sveltejs/adapter-netlify": "^4.1.0",
     "gsap": "^3.12.5"
   }
 }
