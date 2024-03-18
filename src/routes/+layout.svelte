@@ -24,6 +24,9 @@
 
 <svelte:head>
 	<meta name="theme-color" content={$bgcolor} />
+	<style>
+		@import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=block");
+	</style>
 </svelte:head>
 <div
 	class="site-layout"
@@ -42,7 +45,7 @@
 		--padding: 20px;
 		display: grid;
 		grid-template: 1fr 1fr / 1fr;
-		font-family: "Helvetica";
+		font-family: "Jost";
 		height: 100svh;
 		color: var(--color);
 		background-color: var(--bg-color);
