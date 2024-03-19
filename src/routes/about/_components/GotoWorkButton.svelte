@@ -37,7 +37,7 @@
 		gap: 8px;
 		margin-left: auto;
 		padding: 6px 10px;
-		background-color: #fff;
+		background-color: rgb(255 255 255 / 0.5);
 		border-radius: 32px;
 		font-size: 18px;
 		text-decoration: underline;

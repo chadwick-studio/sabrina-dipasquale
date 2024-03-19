@@ -22,184 +22,146 @@
 	});
 </script>
 
+<div class="media-wrapper">
+	<Media
+		type={aboutme?.media[0]?._type}
+		obj={aboutme?.media[0]}
+		objectPosition="top"
+	></Media>
+	<GotoWorkButton mobile></GotoWorkButton>
+</div>
 <div
-	class="page-wrapper"
-	style:--bg-color={aboutme.bgcolor.hex}
-	style:--color={aboutme.color}
-	style:--r={aboutme.color === "black" ? "0" : "255"}
-	style:--g={aboutme.color === "black" ? "0" : "255"}
-	style:--b={aboutme.color === "black" ? "0" : "255"}
+	class="aboutme-wrapper"
+	style:--bg-color={aboutme?.bgcolor.hex}
+	style:--color={aboutme?.color}
+	style:--r={aboutme?.color === "black" ? "0" : "255"}
+	style:--g={aboutme?.color === "black" ? "0" : "255"}
+	style:--b={aboutme?.color === "black" ? "0" : "255"}
 >
-	<div class="media-wrapper">
-		<Media
-			type={aboutme?.media[0]._type}
-			obj={aboutme?.media[0]}
-			objectPosition="top"
-		></Media>
-		<GotoWorkButton mobile></GotoWorkButton>
-	</div>
-	<div class="aboutme-wrapper">
-		<div class="scroll-wrapper" class:visible>
-			<div class="aboutme scrollbar" use:checkScroll>
-				<h1 class="description-title sr-only">
-					About Me
-				</h1>
-				<GotoWorkButton></GotoWorkButton>
-				<div class="aboutme-info-grid">
-					<section class="biography">
-						<p>
-							{aboutme?.biography}
-						</p>
-					</section>
-					<section class="contact-info">
-						<ul>
-							<li>
-								<button
-									on:click={toggleLightbox}
-									><span
-										>Email</span
-									>
-									<svg
-										aria-hidden="true"
-										width="1em"
-										height="1em"
-										version="1.1"
-										viewBox="0 0 1200 1200"
-										xmlns="http://www.w3.org/2000/svg"
-									>
-										<path
-											d="m300 200h629.5l-865 864.5 71 71 864.5-865v629.5h100v-800h-800z"
-										/>
-									</svg></button
+	<div class="scroll-wrapper" class:visible>
+		<div class="aboutme scrollbar" use:checkScroll>
+			<h1 class="description-title sr-only">About Me</h1>
+			<GotoWorkButton></GotoWorkButton>
+			<div class="aboutme-info-grid">
+				<section class="biography">
+					<p>
+						{aboutme?.biography}
+					</p>
+				</section>
+				<section class="contact-info">
+					<ul>
+						<li>
+							<button
+								on:click={toggleLightbox}
+								><span
+									>Email</span
 								>
-							</li>
-							{#if aboutme?.socialMedia}
-								{#each aboutme.socialMedia as social}
-									<li>
-										<a
-											href={social?.link}
+								<svg
+									aria-hidden="true"
+									width="1em"
+									height="1em"
+									version="1.1"
+									viewBox="0 0 1200 1200"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<path
+										d="m300 200h629.5l-865 864.5 71 71 864.5-865v629.5h100v-800h-800z"
+									/>
+								</svg></button
+							>
+						</li>
+						{#if aboutme?.socialMedia}
+							{#each aboutme.socialMedia as social}
+								<li>
+									<a
+										href={social?.link}
+									>
+										<span
+											>{social?.title}</span
 										>
-											<span
-												>{social?.title}</span
-											>
-											<svg
-												aria-hidden="true"
-												width="1em"
-												height="1em"
-												version="1.1"
-												viewBox="0 0 1200 1200"
-												xmlns="http://www.w3.org/2000/svg"
-											>
-												<path
-													d="m300 200h629.5l-865 864.5 71 71 864.5-865v629.5h100v-800h-800z"
-												/>
-											</svg>
-										</a>
+										<svg
+											aria-hidden="true"
+											width="1em"
+											height="1em"
+											version="1.1"
+											viewBox="0 0 1200 1200"
+											xmlns="http://www.w3.org/2000/svg"
+										>
+											<path
+												d="m300 200h629.5l-865 864.5 71 71 864.5-865v629.5h100v-800h-800z"
+											/>
+										</svg>
+									</a>
+								</li>
+							{/each}
+						{/if}
+					</ul>
+				</section>
+				<section class="more-info">
+					<section class="experience | info">
+						<h2>
+							{aboutme?.experience
+								?.title}
+						</h2>
+						<ul class="companies-list">
+							{#if aboutme?.experience?.companiesList}
+								{#each aboutme.experience?.companiesList as company}
+									<li>
+										<span
+											>{company?.date}</span
+										>
+										<span
+											>{company?.name}</span
+										>
 									</li>
 								{/each}
 							{/if}
 						</ul>
 					</section>
-					<section class="more-info">
-						<section
-							class="experience | info"
-						>
-							<h2>
-								{aboutme
-									?.experience
-									?.title}
-							</h2>
-							<ul
-								class="companies-list"
-							>
-								{#if aboutme?.experience?.companiesList}
-									{#each aboutme.experience?.companiesList as company}
-										<li
-										>
-											<span
-												>{company?.date}</span
-											>
-											<span
-												>{company?.name}</span
-											>
-										</li>
-									{/each}
-								{/if}
-							</ul>
-						</section>
-						<section class="clients | info">
-							<h2>
-								{aboutme
-									?.clients
-									?.title}
-							</h2>
-							<p>
-								{aboutme
-									?.clients
-									?.text}
-							</p>
-						</section>
-						<section class="awards | info">
-							<h2>
-								{aboutme?.awards
-									?.title}
-							</h2>
-							<p>
-								{aboutme?.awards
-									?.text}
-							</p>
-						</section>
-						<section class="skills | info">
-							<h2>
-								{aboutme?.skills
-									?.title}
-							</h2>
-							<p>
-								{aboutme?.skills
-									?.text}
-							</p>
-						</section>
+					<section class="clients | info">
+						<h2>
+							{aboutme?.clients
+								?.title}
+						</h2>
+						<p>
+							{aboutme?.clients?.text}
+						</p>
 					</section>
-				</div>
+					<section class="awards | info">
+						<h2>
+							{aboutme?.awards?.title}
+						</h2>
+						<p>
+							{aboutme?.awards?.text}
+						</p>
+					</section>
+					<section class="skills | info">
+						<h2>
+							{aboutme?.skills?.title}
+						</h2>
+						<p>
+							{aboutme?.skills?.text}
+						</p>
+					</section>
+				</section>
 			</div>
 		</div>
-		<Slider></Slider>
 	</div>
-	{#if lightboxVisibility}
-		<EmailLightbox
-			--bg-color={aboutme?.lightboxBgColor?.hex}
-			--primary-color={aboutme?.lightboxPrimaryColor?.hex}
-			on:closeLightbox={toggleLightbox}
-			media={aboutme?.lightboxMedia}
-		></EmailLightbox>
-	{/if}
+	<Slider></Slider>
 </div>
-
+{#if lightboxVisibility}
+	<EmailLightbox
+		--bg-color={aboutme?.lightboxBgColor?.hex}
+		--primary-color={aboutme?.lightboxPrimaryColor?.hex}
+		on:closeLightbox={toggleLightbox}
+		media={aboutme?.lightboxMedia}
+	></EmailLightbox>
+{/if}
 <!-- For data fetching only -->
 <slot />
 
 <style lang="postcss">
-	.page-wrapper {
-		--padding: 20px;
-		display: grid;
-		grid-template: 1fr 1fr / 1fr;
-		height: 100svh;
-		background-color: var(--bg-color);
-		color: var(--color);
-		position: fixed;
-		top: 0;
-		left: 0;
-		z-index: 100000;
-	}
-	@media (min-width: 768px) {
-		.page-wrapper {
-			--padding: 32px;
-			grid-template: 1fr / 1fr 1fr;
-		}
-	}
-
 	.aboutme-wrapper {
-		height: 100%;
 		overflow: hidden;
 		display: grid;
 		grid-template-columns: 1fr;
@@ -208,11 +170,13 @@
 		line-height: 1.4;
 		position: relative;
 		container: aboutme-wrapper / inline-size;
+		background-color: var(--bg-color);
+		color: var(--color);
 	}
 	@media (min-width: 768px) {
 		.aboutme-wrapper {
 			padding-top: 42px;
-			padding-bottom: 32px;
+			padding-bottom: 96px;
 		}
 	}
 
