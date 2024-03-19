@@ -171,7 +171,7 @@
 		position: relative;
 		container: aboutme-wrapper / inline-size;
 		background-color: var(--bg-color);
-		color: var(--color);
+		color: black;
 	}
 	@media (min-width: 768px) {
 		.aboutme-wrapper {
