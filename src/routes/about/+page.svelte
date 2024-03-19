@@ -334,7 +334,8 @@
 		}
 	}
 	.info {
-		line-height: 1.3;
+		line-height: 1.5;
+		letter-spacing: 0.03em;
 		& h2 {
 			font-size: 16px;
 			font-weight: 500;
@@ -342,6 +343,7 @@
 		& > p,
 		ul {
 			font-size: 14px;
+			font-weight: 300;
 		}
 		& h2 + p {
 			margin-top: 6px;

@@ -91,13 +91,13 @@
 				<button type="button" on:click={closeLightbox}>
 					<span class="sr-only">Close</span>
 					<svg
-						viewBox="0 0 16 47"
+						viewBox="0 0 37 36"
 						fill="none"
 						xmlns="http://www.w3.org/2000/svg"
 					>
 						<path
-							d="M8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.2929 0.292893L0.928934 6.65685C0.53841 7.04738 0.53841 7.68054 0.928934 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 47L9 1L7 1L7 47L9 47Z"
-							fill="#4E4E4F"
+							d="M6.53785 15.7919L17.295 5.03478L17.2865 34.5892L19.713 34.5892L19.7045 5.03478L30.4616 15.7919L32.1705 14.0831L18.4997 0.412368L4.82901 14.0831L6.53785 15.7919Z"
+							fill="var(--primary-color)"
 						/>
 					</svg>
 				</button>
@@ -165,8 +165,7 @@
 		width: 100%;
 		margin-top: 32px;
 		& button {
-
-		cursor: pointer;
+			cursor: pointer;
 			&[type="submit"] {
 				background-color: var(--primary-color);
 				color: white;
@@ -174,7 +173,7 @@
 				text-align: center;
 				width: fit-content;
 				font-size: 20px;
-				padding: 16px 36px;
+				padding: 16px 40px;
 				line-height: 1;
 				letter-spacing: 0.05em;
 				font-weight: 300;
@@ -182,8 +181,8 @@
 				cursor: pointer;
 			}
 			&[type="button"] {
-				aspect-ratio: 16 / 47;
-				height: 47px;
+				aspect-ratio: 37 / 36;
+				height: 36px;
 			}
 		}
 	}
