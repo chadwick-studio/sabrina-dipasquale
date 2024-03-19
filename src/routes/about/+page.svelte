@@ -284,7 +284,7 @@
 			margin-top: 68px;
 		}
 	}
-	@container aboutme-wrapper (min-width: 672px) {
+	@container aboutme-wrapper (min-width: 564px) {
 		.aboutme-info-grid {
 			display: grid;
 			grid-template-columns: 1fr 1fr;
