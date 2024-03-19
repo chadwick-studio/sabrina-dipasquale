@@ -1,13 +1,16 @@
 <script>
 	import { checkScroll } from "$utils/checkScroll.js";
-	import { generateImageUrl } from "$utils/generateImageUrl";
-	import { generateFileUrl } from "$utils/generateVideoUrl.js";
+	import { color, bgcolor } from "$stores/stores";
+
 	import { onMount } from "svelte";
+
 	import EmailLightbox from "$components/EmailLightbox.svelte";
 	import Slider from "$components/Slider.svelte";
 	import GotoWorkButton from "./_components/GotoWorkButton.svelte";
 	import Media from "$components/Media.svelte";
+
 	export let data;
+
 	$: ({ aboutme } = data);
 
 	let lightboxVisibility = false;
@@ -32,7 +35,7 @@
 </div>
 <div
 	class="aboutme-wrapper"
-	style:--bg-color={aboutme?.bgcolor.hex}
+	style:--bg-color={aboutme?.bgcolor?.hex}
 	style:--color={aboutme?.color}
 	style:--r={aboutme?.color === "black" ? "0" : "255"}
 	style:--g={aboutme?.color === "black" ? "0" : "255"}
@@ -170,8 +173,11 @@
 		line-height: 1.4;
 		position: relative;
 		container: aboutme-wrapper / inline-size;
+	}
+	.aboutme-wrapper,
+	.media-wrapper {
+		color: var(--color);
 		background-color: var(--bg-color);
-		color: black;
 	}
 	@media (min-width: 768px) {
 		.aboutme-wrapper {
