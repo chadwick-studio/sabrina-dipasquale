@@ -222,7 +222,8 @@
 		padding: 8px;
 		border: 1px solid var(--primary-color);
 		border-radius: 4px;
-		white-space: prewrap;
+		white-space: pre-wrap;
+		word-break: break-word;
 	}
 	.full-width {
 		grid-column: 1 / -1;

@@ -15,11 +15,33 @@
 	// Projects variable
 	setContext("projects", data.projects);
 
-	let minFontSize = 12;
-	// let maxFontSize = 22;
-	// let minLeading = 1.1;
-	// let maxLeading = 1.3;
-	$: fontSize = 0.1 * $percentage + minFontSize + "px";
+	let minFontSizeTitle = 24;
+	let maxFontSizeTitle = 36;
+	let minFontSizeBody = 18;
+	let maxFontSizeBody = 26;
+	let minFontSizeRole = 12;
+	let maxFontSizeRole = 16;
+	$: fontSizeTitle = getFontSize(
+		minFontSizeTitle,
+		maxFontSizeTitle,
+		$percentage,
+	);
+	$: fontSizeBody = getFontSize(
+		minFontSizeBody,
+		maxFontSizeBody,
+		$percentage,
+	);
+	$: fontSizeRole = getFontSize(
+		minFontSizeRole,
+		maxFontSizeRole,
+		$percentage,
+	);
+	const getFontSize = (min, max, percentage) => {
+		return (
+			(((max - min) / 100) * percentage + min).toFixed(2) +
+			"px"
+		);
+	};
 </script>
 
 <svelte:head>
@@ -35,7 +57,12 @@
 	style:--r={$color === "black" ? "0" : "255"}
 	style:--g={$color === "black" ? "0" : "255"}
 	style:--b={$color === "black" ? "0" : "255"}
-	style:--font-size={fontSize}
+	style:--inverse-r={$color === "black" ? "255" : "0"}
+	style:--inverse-g={$color === "black" ? "255" : "0"}
+	style:--inverse-b={$color === "black" ? "255" : "0"}
+	style:--font-size-title={fontSizeTitle}
+	style:--font-size-body={fontSizeBody}
+	style:--font-size-role={fontSizeRole}
 >
 	<slot />
 </div>
@@ -50,10 +77,10 @@
 		color: var(--color);
 		background-color: var(--bg-color);
 	}
-	@media (min-width: 768px) {
+	@media (min-width: 1016px) {
 		.site-layout {
 			--padding: 32px;
-			grid-template: 1fr / 1fr 1fr;
+			grid-template: 1fr / 1fr 508px;
 		}
 	}
 	:global(*) {

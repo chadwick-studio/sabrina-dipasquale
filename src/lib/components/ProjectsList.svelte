@@ -16,9 +16,27 @@
 <div class="projects-list">
 	<section class="title">
 		<h1>
-			<span class="uppercase bold">Sabrina Dipasquale</span>
-			is a NYC-based Art Director & Designer.
-			<a class="link" href="/about">Read more.</a>
+			<span>
+				Sabrina DiPasquale_<br />
+				<span class="uppercase bold">Art Director</span>
+				and Designer
+			</span>
+			<a class="about-link" href="/about">
+				<span>About</span>
+				<svg
+					aria-hidden="true"
+					width="1em"
+					height="1em"
+					version="1.1"
+					viewBox="0 0 1200 1200"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<path
+						fill="var(--color)"
+						d="m300 200h629.5l-865 864.5 71 71 864.5-865v629.5h100v-800h-800z"
+					/>
+				</svg>
+			</a>
 		</h1>
 	</section>
 	<section class="projects-wrapper" class:visible>
@@ -43,14 +61,16 @@
 								: false}
 						>
 							<h2>
-								<span
-									class="bold"
-									>{project.company}</span
-								>{#if project.title},
-									{project.title}{/if}
+								<span>
+									{project?.company}
+								</span><span>
+									{#if project?.title}
+										_{project.title}
+									{/if}
+								</span>
 							</h2>
-							<h3 class="italic">
-								{project.role}
+							<h3>
+								{project?.role}
 							</h3>
 						</a>
 					{:else}
@@ -70,13 +90,21 @@
 						>
 							<h2>
 								<span
-									class="bold"
-									>{project.company}</span
-								>{#if project.title},
-									{project.title}{/if}
+									>{project?.company}</span
+								><span
+									>{#if project?.title}_{project.title}{/if}</span
+								>
 							</h2>
-							<h3 class="italic">
-								{project.role}
+							<h3>
+								<!-- <ul> -->
+								<!-- 	{#each project?.roles as role} -->
+								<!-- 		<li -->
+								<!-- 		> -->
+								<!-- 			{role} -->
+								<!-- 		</li> -->
+								<!-- 	{/each} -->
+								<!-- </ul> -->
+								{project?.role}
 							</h3>
 						</a>
 					{/if}
@@ -88,6 +116,15 @@
 </div>
 
 <style lang="postcss">
+	h1 {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		column-gap: 32px;
+	}
+	h1 > span {
+		font-size: var(--font-size-title);
+	}
 	.projects-list {
 		position: relative;
 		padding: var(--padding);
@@ -163,14 +200,6 @@
 		padding-right: var(--padding);
 		position: relative;
 	}
-	@media (min-width: 1080px) {
-		.projects {
-			grid-template-columns: 1fr 1fr;
-			& > section:nth-of-type(2n) {
-				grid-column: 2 / 3;
-			}
-		}
-	}
 	.title {
 		display: none;
 	}
@@ -179,20 +208,30 @@
 			display: block;
 		}
 	}
+	.project-link > h2 {
+		& > span:first-child {
+			font-weight: 500;
+		}
+		& > span:last-child {
+			font-weight: 300;
+		}
+	}
 	.project-link {
 		display: block;
 		position: relative;
 		padding-block: 2px;
-		font-family: "PSFournier Std Petit";
 		overflow: hidden;
 		& > * {
 			line-height: 1.3;
 		}
 		& > h2 {
 			padding-top: 6px;
+			font-size: var(--font-size-body);
+			font-weight: 500;
 		}
 		& > h3 {
 			padding-bottom: 6px;
+			font-size: var(--font-size-role);
 		}
 		&::before,
 		&::after {
@@ -220,6 +259,25 @@
 				color: var(--color);
 				opacity: 0.6;
 			}
+		}
+	}
+
+	.about-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		margin-left: auto;
+		padding: 6px 10px;
+		background-color: rgb(255 255 255 / 0.5);
+		border-radius: 32px;
+		font-size: 16px;
+		text-decoration: underline;
+		cursor: pointer;
+		&.mobile {
+			position: absolute;
+			top: var(--padding);
+			right: var(--padding);
+			margin: 0;
 		}
 	}
 </style>
