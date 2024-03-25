@@ -98,15 +98,17 @@
 		out:fade={{ duration: 200 }}
 		use:cursor
 	>
-		<ProjectInfo
-			description={project?.description}
-			on:click={toggleProjectInfo}
-		></ProjectInfo>
-		<Pagination
-			{index}
-			mediaLength={project?.media.length}
-			on:click={gotoNextPage}
-		></Pagination>
+		{#if !project?.hidden}
+			<ProjectInfo
+				description={project?.description}
+				on:click={toggleProjectInfo}
+			></ProjectInfo>
+			<Pagination
+				{index}
+				mediaLength={project?.media.length}
+				on:click={gotoNextPage}
+			></Pagination>
+		{/if}
 		<ArrowLink carousel>About</ArrowLink>
 		<div class="scroller-container">
 			<div
