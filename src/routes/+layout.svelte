@@ -15,6 +15,10 @@
 	// Projects variable
 	setContext("projects", data.projects);
 
+	let minFontSizeUI = 16;
+	let maxFontSizeUI = 20;
+	let minFontSizeDescription = 18;
+	let maxFontSizeDescription = 22;
 	let minFontSizeTitle = 24;
 	let maxFontSizeTitle = 36;
 	let minFontSizeBody = 18;
@@ -36,6 +40,12 @@
 		maxFontSizeRole,
 		$percentage,
 	);
+	$: fontSizeUI = getFontSize(minFontSizeUI, maxFontSizeUI, $percentage);
+	$: fontSizeDescription = getFontSize(
+		minFontSizeDescription,
+		maxFontSizeDescription,
+		$percentage,
+	);
 	const getFontSize = (min, max, percentage) => {
 		return (
 			(((max - min) / 100) * percentage + min).toFixed(2) +
@@ -46,12 +56,15 @@
 
 <svelte:head>
 	<meta name="theme-color" content={$bgcolor} />
+	<title>{$page.data.title}</title>
+	<meta name="description" content={$page.data.description} />
 	<style>
 		@import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=block");
 	</style>
 </svelte:head>
 <div
 	class="site-layout"
+	class:about-page={$page.url.pathname === "/about"}
 	style:--bg-color={$bgcolor?.hex}
 	style:--color={$color}
 	style:--r={$color === "black" ? "0" : "255"}
@@ -63,13 +76,15 @@
 	style:--font-size-title={fontSizeTitle}
 	style:--font-size-body={fontSizeBody}
 	style:--font-size-role={fontSizeRole}
+	style:--font-size-ui={fontSizeUI}
+	style:--font-size-description={fontSizeDescription}
 >
 	<slot />
 </div>
 
 <style lang="postcss">
 	.site-layout {
-		--padding: 20px;
+		--padding: clamp(20px, 12.3478px + 2.3913vi, 42px);
 		display: grid;
 		grid-template: 1fr 1fr / 1fr;
 		font-family: "Jost";
@@ -79,8 +94,10 @@
 	}
 	@media (min-width: 1016px) {
 		.site-layout {
-			--padding: 32px;
 			grid-template: 1fr / 1fr 508px;
+			&.about-page {
+				grid-template: 1fr / 1fr 1fr;
+			}
 		}
 	}
 	:global(*) {

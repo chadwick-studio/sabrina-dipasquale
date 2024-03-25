@@ -8,10 +8,13 @@
 	import Slider from "$components/Slider.svelte";
 	import GotoWorkButton from "./_components/GotoWorkButton.svelte";
 	import Media from "$components/Media.svelte";
+	import ArrowLink from "$components/ArrowLink.svelte";
 
 	export let data;
 
 	$: ({ aboutme } = data);
+	$: color.set(aboutme?.color);
+	$: bgcolor.set(aboutme?.bgcolor);
 
 	let lightboxVisibility = false;
 
@@ -23,6 +26,17 @@
 	onMount(() => {
 		visible = true;
 	});
+	import { goto, afterNavigate } from "$app/navigation";
+
+	let previousPage = "/";
+
+	afterNavigate(({ from }) => {
+		previousPage = from?.url.pathname || previousPage;
+	});
+
+	const gotoPreviousPage = () => {
+		goto(previousPage);
+	};
 </script>
 
 <div class="media-wrapper">
@@ -31,20 +45,15 @@
 		obj={aboutme?.media[0]}
 		objectPosition="top"
 	></Media>
-	<GotoWorkButton mobile></GotoWorkButton>
+	<ArrowLink button about on:click={gotoPreviousPage}>Work</ArrowLink>
 </div>
-<div
-	class="aboutme-wrapper"
-	style:--bg-color={aboutme?.bgcolor?.hex}
-	style:--color={aboutme?.color}
-	style:--r={aboutme?.color === "black" ? "0" : "255"}
-	style:--g={aboutme?.color === "black" ? "0" : "255"}
-	style:--b={aboutme?.color === "black" ? "0" : "255"}
->
+<div class="aboutme-wrapper">
 	<div class="scroll-wrapper" class:visible>
 		<div class="aboutme scrollbar" use:checkScroll>
 			<h1 class="description-title sr-only">About Me</h1>
-			<GotoWorkButton></GotoWorkButton>
+			<ArrowLink button on:click={gotoPreviousPage}
+				>Work</ArrowLink
+			>
 			<div class="aboutme-info-grid">
 				<section class="biography">
 					<p>
@@ -181,7 +190,6 @@
 	}
 	@media (min-width: 768px) {
 		.aboutme-wrapper {
-			padding-top: 42px;
 			padding-bottom: 96px;
 		}
 	}
@@ -236,7 +244,12 @@
 		position: relative;
 		overscroll-behavior: none;
 		height: 100%;
-		padding-right: var(--padding);
+			padding-right: var(--padding);
+	}
+	@media (min-width: 768px) {
+		.aboutme {
+		padding-right: 0;
+		}
 	}
 
 	.media-wrapper {

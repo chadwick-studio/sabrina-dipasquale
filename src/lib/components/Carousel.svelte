@@ -16,6 +16,9 @@
 	import scrollIntoView from "$utils/scrollIntoView";
 	import cursor from "$utils/cursor";
 	import observe from "$utils/intersectionObserver";
+	import Pagination from "./Pagination.svelte";
+	import ProjectInfo from "./ProjectInfo.svelte";
+	import ArrowLink from "./ArrowLink.svelte";
 
 	export let password = "";
 	export let project = {};
@@ -95,39 +98,16 @@
 		out:fade={{ duration: 200 }}
 		use:cursor
 	>
-		<div class="media">
-			<p class="description">
-				{project?.description}
-			</p>
-			<button
-				class="project-info-btn"
-				on:click={toggleProjectInfo}
-				>Project Info</button
-			>
-			<ul class="pagination | no-select">
-				<li class="no-select">
-					{index + 1} / {project?.media.length}
-				</li>
-				<li class="no-select">
-					<button
-						class="next-page-btn"
-						on:click={gotoNextPage}
-						>Next</button
-					>
-				</li>
-			</ul>
-		</div>
-		<a href="/about">About</a>
-		{#if projectInfoLightbox}
-			<div class="project-info-lightbox">
-				<button on:click={toggleProjectInfo}
-					>Close</button
-				>
-				<p class="project-info-lightbox__description">
-					{project?.description || ""}
-				</p>
-			</div>
-		{/if}
+		<ProjectInfo
+			description={project?.description}
+			on:click={toggleProjectInfo}
+		></ProjectInfo>
+		<Pagination
+			{index}
+			mediaLength={project?.media.length}
+			on:click={gotoNextPage}
+		></Pagination>
+		<ArrowLink carousel>About</ArrowLink>
 		<div class="scroller-container">
 			<div
 				class="scroller-controls"
@@ -243,6 +223,8 @@
 
 <style lang="postcss">
 	.carousel {
+		--_pagination-padding-block: 0.25em;
+		--_pagination-padding-inline: 0.5em;
 		container: carousel / size;
 		height: 100%;
 		isolation: isolate;
@@ -331,53 +313,6 @@
 		--_color: #0f5cb7;
 		color: var(--_color);
 	}
-	.form {
-		display: grid;
-		width: min(100%, 400px);
-		:global(svg) {
-			margin-inline: auto;
-		}
-		label {
-			display: block;
-			line-height: 1;
-			text-align: center;
-			font-size: 60px;
-			font-weight: bold;
-		}
-		input {
-			font-size: 24px;
-			border: 2px solid var(--_color);
-			border-radius: 10px;
-			padding: 8px 64px;
-			width: 100%;
-			text-align: center;
-		}
-		z-index: 999;
-		button {
-			text-align: center;
-			align-self: center;
-			justify-self: center;
-		}
-	}
-	.media {
-		cursor: default;
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		display: flex;
-		padding: var(--padding);
-		justify-content: space-between;
-		z-index: 888;
-		gap: 16px;
-	}
-	.pagination {
-		display: inline-flex;
-		gap: 1em;
-		& > * {
-			width: max-content;
-		}
-	}
 	a[href="/about"] {
 		position: absolute;
 		bottom: 20px;
@@ -390,45 +325,15 @@
 			display: none;
 		}
 	}
+
 	.scroller-control {
 		cursor: none;
 	}
+
 	a,
 	button:not(.scroller-control) {
 		cursor: pointer;
 	}
-	.project-info-lightbox {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		left: 0;
-		z-index: 990;
-		background-color: var(--bg-color);
-		padding: var(--padding);
-		& > p {
-			margin-top: 1em;
-			line-height: 1.3;
-		}
-		cursor: default;
-	}
-	.project-info-btn {
-		white-space: nowrap;
-	}
-	.description {
-		display: none;
-		max-width: 70ch;
-		line-height: 1.3;
-	}
-	@media (min-width: 1080px) {
-		.description {
-			display: block;
-		}
-		.project-info-btn {
-			display: none;
-		}
-	}
-
 	@media (hover: hover) {
 		:global(.cursor) {
 			width: 128px;

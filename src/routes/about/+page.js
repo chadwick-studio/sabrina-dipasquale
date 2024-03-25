@@ -7,6 +7,8 @@ export async function load({ params }) {
 	if (data) {
 		return {
 			aboutme: data,
+			title: "About Me | Sabrina Dipasquale",
+			description: data?.biography,
 		};
 	}
 	error(404, { message: "Not found" });

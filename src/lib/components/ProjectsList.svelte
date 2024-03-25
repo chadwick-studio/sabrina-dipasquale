@@ -5,6 +5,7 @@
 	import { bgcolor, percentage, direction } from "$stores/stores";
 	import { checkScroll } from "$utils/checkScroll";
 	import Slider from "./Slider.svelte";
+	import ArrowLink from "./ArrowLink.svelte";
 
 	const projects = getContext("projects");
 	let visible = false;
@@ -18,25 +19,10 @@
 		<h1>
 			<span>
 				Sabrina DiPasquale_<br />
-				<span class="uppercase bold">Art Director</span>
+				<span>Art Director</span>
 				and Designer
 			</span>
-			<a class="about-link" href="/about">
-				<span>About</span>
-				<svg
-					aria-hidden="true"
-					width="1em"
-					height="1em"
-					version="1.1"
-					viewBox="0 0 1200 1200"
-					xmlns="http://www.w3.org/2000/svg"
-				>
-					<path
-						fill="var(--color)"
-						d="m300 200h629.5l-865 864.5 71 71 864.5-865v629.5h100v-800h-800z"
-					/>
-				</svg>
-			</a>
+			<ArrowLink>About</ArrowLink>
 		</h1>
 	</section>
 	<section class="projects-wrapper" class:visible>
@@ -70,7 +56,18 @@
 								</span>
 							</h2>
 							<h3>
-								{project?.role}
+								{#if project?.roles}
+									<ul
+										class="project-roles"
+									>
+										{#each project?.roles as role}
+											<li
+											>
+												{role}
+											</li>
+										{/each}
+									</ul>
+								{/if}
 							</h3>
 						</a>
 					{:else}
@@ -96,15 +93,18 @@
 								>
 							</h2>
 							<h3>
-								<!-- <ul> -->
-								<!-- 	{#each project?.roles as role} -->
-								<!-- 		<li -->
-								<!-- 		> -->
-								<!-- 			{role} -->
-								<!-- 		</li> -->
-								<!-- 	{/each} -->
-								<!-- </ul> -->
-								{project?.role}
+								<ul
+									class="project-roles"
+								>
+									{#if project?.roles}
+										{#each project?.roles as role}
+											<li
+											>
+												{role}
+											</li>
+										{/each}
+									{/if}
+								</ul>
 							</h3>
 						</a>
 					{/if}
@@ -124,6 +124,12 @@
 	}
 	h1 > span {
 		font-size: var(--font-size-title);
+		line-height: 1.1;
+		font-family: "PSFournier Std Petit", serif;
+		font-weight: 300;
+	}
+	h1 > span > span {
+		font-weight: 600;
 	}
 	.projects-list {
 		position: relative;
@@ -137,10 +143,6 @@
 		.projects-list {
 			gap: 64px;
 		}
-	}
-	.title {
-		line-height: 1.3;
-		margin-top: 3px;
 	}
 	.projects-wrapper {
 		position: relative;
@@ -258,26 +260,18 @@
 			& > h3 {
 				color: var(--color);
 				opacity: 0.6;
+				font-style: italic;
 			}
 		}
 	}
-
-	.about-link {
-		display: inline-flex;
-		align-items: center;
-		gap: 8px;
-		margin-left: auto;
-		padding: 6px 10px;
-		background-color: rgb(255 255 255 / 0.5);
-		border-radius: 32px;
-		font-size: 16px;
-		text-decoration: underline;
-		cursor: pointer;
-		&.mobile {
-			position: absolute;
-			top: var(--padding);
-			right: var(--padding);
-			margin: 0;
+	.project-roles {
+		display: flex;
+		gap: 0.5em;
+		padding-top: 0.25em;
+		& > li {
+			padding: 0.25em 0.5em;
+			background-color: rgb(255 255 255 / 0.2);
+			border-radius: 16px;
 		}
 	}
 </style>

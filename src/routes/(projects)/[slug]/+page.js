@@ -8,6 +8,8 @@ export async function load({ params }) {
 	if (data) {
 		return {
 			project: data,
+			title: data?.company + "_" + data?.title + " | Sabrina Dipasquale",
+			description: data?.description,
 		};
 	}
 	error(404, { message: "Not found" });
