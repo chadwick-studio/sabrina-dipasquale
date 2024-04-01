@@ -56,7 +56,6 @@
 		white-space: nowrap;
 		cursor: pointer;
 		line-height: 1;
-		outline: 1px solid red;
 	}
 	.info {
 		display: block;
