@@ -35,19 +35,8 @@
 >
 	<div bind:clientHeight={height} class="email-form-container">
 		<h1 class="email-form-title">Let's chat.</h1>
-		<form action="https://api.web3forms.com/submit" method="POST">
-			<input
-				type="hidden"
-				name="access_key"
-				value="YOUR_ACCESS_KEY_HERE"
-			/>
-			<input
-				type="checkbox"
-				name="botcheck"
-				style="display: none;"
-				value="{value} messaged you about your portfolio!"
-			/>
-			<input type="hidden" name="subject" value="" />
+		<form method="POST" netlify-honeypot="bot-field" netlify>
+			<input name="bot-field" style="display: none;" />
 			<section class="name">
 				<label for="name">Full Name</label>
 				<input

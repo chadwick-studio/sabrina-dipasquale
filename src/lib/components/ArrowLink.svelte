@@ -23,8 +23,8 @@
 		align-items: center;
 		gap: 4px;
 		margin-left: auto;
-		padding: 0.25em 0.5em;
-		background-color: rgb(255 255 255 / 0.25);
+		padding: var(--pill-padding-block) var(--pill-padding-inline);
+		background-color: var(--pillColor);
 		border-radius: 16px;
 		font-size: var(--font-size-ui);
 		text-decoration: underline;

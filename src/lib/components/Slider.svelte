@@ -1,6 +1,7 @@
 <script>
 	// @ts-nocheck
 	import { percentage, bgcolor, color } from "$lib/stores/stores";
+	import { onMount } from "svelte";
 	export let active = false;
 	let MIN = 0;
 	let MAX = 100;
@@ -9,6 +10,13 @@
 	$: left = `calc(${fraction * 100}% + ${
 		(0.5 - fraction) * thumbWidth
 	}px)`;
+	onMount(() => {
+		const mq = window.matchMedia("(min-width: 768px)");
+		if (!mq.matches) {
+			console.log("hi");
+			percentage.set(0);
+		}
+	});
 </script>
 
 <div

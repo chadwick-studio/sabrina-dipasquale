@@ -225,8 +225,6 @@
 
 <style lang="postcss">
 	.carousel {
-		--_pagination-padding-block: 0.25em;
-		--_pagination-padding-inline: 0.5em;
 		container: carousel / size;
 		height: 100%;
 		isolation: isolate;
@@ -315,19 +313,6 @@
 		--_color: #0f5cb7;
 		color: var(--_color);
 	}
-	a[href="/about"] {
-		position: absolute;
-		bottom: 20px;
-		left: 20px;
-		z-index: 1000;
-		cursor: pointer;
-	}
-	@media (min-width: 768px) {
-		a[href="/about"] {
-			display: none;
-		}
-	}
-
 	.scroller-control {
 		cursor: none;
 	}

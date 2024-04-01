@@ -1,12 +1,11 @@
 <script>
 	import { checkScroll } from "$utils/checkScroll.js";
-	import { color, bgcolor } from "$stores/stores";
+	import { color, bgcolor, pillColor } from "$stores/stores";
 
 	import { onMount } from "svelte";
 
 	import EmailLightbox from "$components/EmailLightbox.svelte";
 	import Slider from "$components/Slider.svelte";
-	import GotoWorkButton from "./_components/GotoWorkButton.svelte";
 	import Media from "$components/Media.svelte";
 	import ArrowLink from "$components/ArrowLink.svelte";
 
@@ -15,6 +14,7 @@
 	$: ({ aboutme } = data);
 	$: color.set(aboutme?.color);
 	$: bgcolor.set(aboutme?.bgcolor);
+	$: pillColor.set (aboutme?.pillColor);
 
 	let lightboxVisibility = false;
 
@@ -244,11 +244,11 @@
 		position: relative;
 		overscroll-behavior: none;
 		height: 100%;
-			padding-right: var(--padding);
+		padding-right: var(--padding);
 	}
 	@media (min-width: 768px) {
 		.aboutme {
-		padding-right: 0;
+			padding-right: 0;
 		}
 	}
 

@@ -1,8 +1,10 @@
 <script>
 	export let rotate;
+	export let width = "1em";
 </script>
 
 <svg
+	style:width
 	viewBox="0 0 21 20"
 	fill="none"
 	xmlns="http://www.w3.org/2000/svg"
@@ -14,12 +16,10 @@
 </svg>
 
 <style lang="postcss">
-	/* your styles go here */
 	svg {
 		aspect-ratio: 21 / 20;
-		width: 1em;
 		& path {
-fill: var(--color);
+			fill: var(--color);
 		}
 	}
 </style>

@@ -11,3 +11,5 @@ export const color = writable("black");
 export const cursorCoords = writable({ x: 0, y: 0 });
 
 export const project = writable({});
+
+export const pillColor = writable({});

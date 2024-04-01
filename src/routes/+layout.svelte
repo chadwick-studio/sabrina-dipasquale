@@ -2,13 +2,9 @@
 	import "../app.pcss";
 	import "../styles/reset.css";
 
-	import { setContext } from "svelte";
-	import { color, bgcolor, percentage } from "$stores/stores";
+	import { onMount, setContext } from "svelte";
+	import { color, bgcolor, percentage, pillColor } from "$stores/stores";
 	import { page } from "$app/stores";
-
-	import Slider from "$components/Slider.svelte";
-	import ProjectsList from "$components/ProjectsList.svelte";
-	import AboutDropdown from "$components/AboutDropdown.svelte";
 
 	export let data;
 
@@ -67,6 +63,9 @@
 	class:about-page={$page.url.pathname === "/about"}
 	style:--bg-color={$bgcolor?.hex}
 	style:--color={$color}
+	style:--pillColor={$pillColor === "black"
+		? "rgb(0 0 0 /.1)"
+		: "rgb(255 255 255 / .35)"}
 	style:--r={$color === "black" ? "0" : "255"}
 	style:--g={$color === "black" ? "0" : "255"}
 	style:--b={$color === "black" ? "0" : "255"}
@@ -83,6 +82,10 @@
 </div>
 
 <style lang="postcss">
+	:global(:root) {
+		--pill-padding-block: 0.375em;
+		--pill-padding-inline: 0.5em;
+	}
 	.site-layout {
 		--padding: clamp(20px, 12.3478px + 2.3913vi, 42px);
 		display: grid;

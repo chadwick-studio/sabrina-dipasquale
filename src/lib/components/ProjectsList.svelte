@@ -121,15 +121,15 @@
 		justify-content: space-between;
 		align-items: flex-start;
 		column-gap: 32px;
-	}
-	h1 > span {
-		font-size: var(--font-size-title);
-		line-height: 1.1;
-		font-family: "PSFournier Std Petit", serif;
-		font-weight: 300;
-	}
-	h1 > span > span {
-		font-weight: 600;
+		& > span {
+			font-size: var(--font-size-title);
+			line-height: 1.1;
+			font-family: "PSFournier Std Petit", serif;
+			font-weight: 300;
+			& > span {
+				font-weight: 600;
+			}
+		}
 	}
 	.projects-list {
 		position: relative;
@@ -141,7 +141,7 @@
 	}
 	@media (min-width: 768px) {
 		.projects-list {
-			gap: 64px;
+			gap: 48px;
 		}
 	}
 	.projects-wrapper {
@@ -221,18 +221,20 @@
 	.project-link {
 		display: block;
 		position: relative;
-		padding-block: 2px;
+		padding-block: 8px;
 		overflow: hidden;
 		& > * {
-			line-height: 1.3;
+			line-height: 1;
 		}
 		& > h2 {
-			padding-top: 6px;
+			padding-top: 12px;
 			font-size: var(--font-size-body);
 			font-weight: 500;
+			line-height: 1;
+			margin-bottom: 0.25em;
 		}
 		& > h3 {
-			padding-bottom: 6px;
+			padding-bottom: 12px;
 			font-size: var(--font-size-role);
 		}
 		&::before,
@@ -269,8 +271,8 @@
 		gap: 0.5em;
 		padding-top: 0.25em;
 		& > li {
-			padding: 0.25em 0.5em;
-			background-color: rgb(255 255 255 / 0.2);
+			padding: var(--pill-padding-block) 0.625em;
+			background-color: var(--pillColor);
 			border-radius: 16px;
 		}
 	}

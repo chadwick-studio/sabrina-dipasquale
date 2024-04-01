@@ -5,7 +5,6 @@
 	const toggleProjectDescription = () => {
 		visible = !visible;
 	};
-	$: console.log(visible);
 </script>
 
 <div class:visible class="project-info-container">
@@ -29,9 +28,9 @@
 		margin-right: var(--padding);
 		z-index: 1000;
 		cursor: default;
-		background-color: rgb(255 255 255 / 0.2);
+		background-color: var(--pillColor);
 		border-radius: 16px;
-		padding: var(--_pagination-padding-block) var(--_pagination-padding-inline);
+		padding: var(--pill-padding-block) var(--pill-padding-inline);
 		font-size: var(--font-size-ui);
 		&.visible {
 			--_rotate: -180deg;
@@ -40,26 +39,21 @@
 			padding: var(--_padding-visible-block)
 				var(--_padding-visible-inline);
 			top: calc(
-				var(--padding) -
-					var(--_pagination-padding-block) - 0.5em
+				var(--padding) - var(--pill-padding-block) -
+					0.25em
 			);
-			left: calc(
-				var(--padding) -
-					var(--_pagination-padding-inline)
-			);
+			left: calc(var(--padding) - var(--pill-padding-inline));
 			width: calc(100% - var(--padding) * 2);
 		}
 	}
 	.project-info-btn {
-		display: inline-flex;
-		gap: 2px;
+		display: flex;
+		align-items: center;
+		gap: 4px;
 		white-space: nowrap;
 		cursor: pointer;
 		text-decoration: underline;
-		& > svg {
-			aspect-ratio: 21 / 20;
-			width: 1em;
-		}
+		line-height: 1;
 	}
 	.info {
 		display: block;
