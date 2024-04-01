@@ -4,14 +4,6 @@
 	import { generateImageUrl } from "$utils/generateImageUrl";
 	import { cubicIn, cubicOut } from "svelte/easing";
 
-	const move = (node, { duration }) => {
-		return {
-			duration,
-			css: (t, u) => {
-				return `transform: translateY(-${u * 100}%)`;
-			},
-		};
-	};
 	let value;
 
 	import { createEventDispatcher } from "svelte";
@@ -27,15 +19,14 @@
 	let height;
 </script>
 
-<div
-	class="email-lightbox-container"
-	in:move={{ duration: 600, easing: cubicOut }}
-	out:move={{ duration: 300, easing: cubicIn }}
-	style:--height={height + "px"}
->
+<div class="email-lightbox-container" style:--height={height + "px"}>
 	<div bind:clientHeight={height} class="email-form-container">
 		<h1 class="email-form-title">Let's chat.</h1>
-		<form name="contact" netlify-honeypot="bot-field" data-netlify="true">
+		<form
+			name="contact"
+			netlify-honeypot="bot-field"
+			netlify
+		>
 			<input name="bot-field" style="display: none;" />
 			<section class="name">
 				<label for="name">Full Name</label>
@@ -113,6 +104,8 @@
 		background-color: var(--bg-color);
 		z-index: 1000;
 		overflow: hidden;
+		transform: translateY(var(--translateY));
+		transition: transform 500ms ease;
 	}
 
 	@media (min-width: 768px) {

@@ -14,7 +14,7 @@
 	$: ({ aboutme } = data);
 	$: color.set(aboutme?.color);
 	$: bgcolor.set(aboutme?.bgcolor);
-	$: pillColor.set (aboutme?.pillColor);
+	$: pillColor.set(aboutme?.pillColor);
 
 	let lightboxVisibility = false;
 
@@ -161,14 +161,13 @@
 	</div>
 	<Slider></Slider>
 </div>
-{#if lightboxVisibility}
-	<EmailLightbox
-		--bg-color={aboutme?.lightboxBgColor?.hex}
-		--primary-color={aboutme?.lightboxPrimaryColor?.hex}
-		on:closeLightbox={toggleLightbox}
-		media={aboutme?.lightboxMedia}
-	></EmailLightbox>
-{/if}
+<EmailLightbox
+	--bg-color={aboutme?.lightboxBgColor?.hex}
+	--primary-color={aboutme?.lightboxPrimaryColor?.hex}
+	--translateY={lightboxVisibility ? "0" : "-100%"}
+	on:closeLightbox={toggleLightbox}
+	media={aboutme?.lightboxMedia}
+></EmailLightbox>
 <!-- For data fetching only -->
 <slot />
 
