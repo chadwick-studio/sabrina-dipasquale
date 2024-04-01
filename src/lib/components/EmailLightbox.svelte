@@ -1,8 +1,5 @@
 <script>
 	export let media;
-	import { generateFileUrl } from "$utils/generateVideoUrl";
-	import { generateImageUrl } from "$utils/generateImageUrl";
-	import { cubicIn, cubicOut } from "svelte/easing";
 
 	let value;
 
@@ -23,10 +20,10 @@
 	<div bind:clientHeight={height} class="email-form-container">
 		<h1 class="email-form-title">Let's chat.</h1>
 		<form
-			method="POST"
 			name="contact"
-			netlify-honeypot="bot-field"
+			method="POST"
 			netlify
+			netlify-honeypot="bot-field"
 		>
 			<input name="bot-field" style="display: none;" />
 			<section class="name">
