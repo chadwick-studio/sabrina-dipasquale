@@ -35,7 +35,7 @@
 >
 	<div bind:clientHeight={height} class="email-form-container">
 		<h1 class="email-form-title">Let's chat.</h1>
-		<form netlify-honeypot="bot-field" netlify>
+		<form name="contact" netlify-honeypot="bot-field" netlify>
 			<input name="bot-field" style="display: none;" />
 			<section class="name">
 				<label for="name">Full Name</label>
