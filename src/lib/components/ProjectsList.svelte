@@ -271,7 +271,8 @@
 		gap: 0.5em;
 		padding-top: 0.25em;
 		& > li {
-			padding: var(--pill-padding-block) var(--pill-padding-inline);
+			padding: var(--pill-padding-block)
+				var(--pill-padding-inline);
 			background-color: var(--pillColor);
 			border-radius: 16px;
 		}
