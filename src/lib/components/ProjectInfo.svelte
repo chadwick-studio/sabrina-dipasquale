@@ -21,7 +21,7 @@
 
 <style lang="postcss">
 	.project-info-container {
-		--_rotate: 0;
+		--_rotate: -135deg;
 		position: absolute;
 		top: var(--padding);
 		left: var(--padding);
@@ -33,16 +33,19 @@
 		padding: var(--pill-padding-block) var(--pill-padding-inline);
 		font-size: var(--font-size-ui);
 		&.visible {
-			--_rotate: -180deg;
+			--_rotate: 135deg;
 			--_padding-visible-block: 1em;
 			--_padding-visible-inline: 1em;
 			padding: var(--_padding-visible-block)
 				var(--_padding-visible-inline);
 			top: calc(
 				var(--padding) - var(--pill-padding-block) -
-					0.25em
+					0.4em
 			);
-			left: calc(var(--padding) - var(--pill-padding-inline));
+			left: calc(
+				var(--padding) - var(--pill-padding-inline) +
+					0.2em
+			);
 			width: calc(100% - var(--padding) * 2);
 		}
 	}
@@ -52,8 +55,8 @@
 		gap: 4px;
 		white-space: nowrap;
 		cursor: pointer;
-		text-decoration: underline;
 		line-height: 1;
+		outline: 1px solid red;
 	}
 	.info {
 		display: block;

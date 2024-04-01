@@ -83,8 +83,8 @@
 
 <style lang="postcss">
 	:global(:root) {
-		--pill-padding-block: 0.375em;
-		--pill-padding-inline: 0.5em;
+		--pill-padding-block: 0.3em;
+		--pill-padding-inline: 0.6em;
 	}
 	.site-layout {
 		--padding: clamp(20px, 12.3478px + 2.3913vi, 42px);

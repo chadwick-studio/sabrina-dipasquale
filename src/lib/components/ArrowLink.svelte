@@ -27,7 +27,6 @@
 		background-color: var(--pillColor);
 		border-radius: 16px;
 		font-size: var(--font-size-ui);
-		text-decoration: underline;
 		cursor: pointer;
 		margin-left: auto;
 		line-height: 1;
