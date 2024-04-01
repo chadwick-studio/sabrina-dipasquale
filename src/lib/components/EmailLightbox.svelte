@@ -23,6 +23,7 @@
 	<div bind:clientHeight={height} class="email-form-container">
 		<h1 class="email-form-title">Let's chat.</h1>
 		<form
+			method="POST"
 			name="contact"
 			netlify-honeypot="bot-field"
 			netlify
