@@ -76,7 +76,7 @@
 				/>
 			</section>
 			<div class="buttons">
-				<button class="submit">Send</button>
+				<button type="submit">Send</button>
 				<button type="button" on:click={closeLightbox}>
 					<span class="sr-only">Close</span>
 					<svg
@@ -156,7 +156,7 @@
 		margin-top: 32px;
 		& button {
 			cursor: pointer;
-			&.submit {
+			&[type="submit"] {
 				background-color: var(--primary-color);
 				color: white;
 				border-radius: 8px;
