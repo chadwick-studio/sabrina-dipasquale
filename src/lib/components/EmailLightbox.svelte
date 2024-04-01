@@ -25,6 +25,7 @@
 			netlify
 			netlify-honeypot="bot-field"
 		>
+		<input type="hidden" name="form-name" value="contact" />
 			<input name="bot-field" style="display: none;" />
 			<section class="name">
 				<label for="name">Full Name</label>
