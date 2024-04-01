@@ -1,7 +1,6 @@
 import { sanityClient } from "$lib/utils/sanityClient";
 import { error } from "@sveltejs/kit";
 
-export const prerender = true;
 export const load = async () => {
 	const data = await sanityClient.fetch(
 		`*[_type == "project"]|order(orderRank)`,
