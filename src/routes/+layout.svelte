@@ -15,7 +15,7 @@
 	let maxFontSizeUI = 20;
 	let minFontSizeDescription = 18;
 	let maxFontSizeDescription = 22;
-	let minFontSizeTitle = 24;
+	let minFontSizeTitle = 28;
 	let maxFontSizeTitle = 36;
 	let minFontSizeBody = 18;
 	let maxFontSizeBody = 26;

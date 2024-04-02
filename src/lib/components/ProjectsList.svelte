@@ -123,9 +123,6 @@
 			line-height: 1.1;
 			font-family: "PSFournier Std Petit", serif;
 			font-weight: 300;
-			& > span {
-				font-weight: 600;
-			}
 		}
 	}
 	.projects-list {
@@ -218,7 +215,7 @@
 	.project-link {
 		display: block;
 		position: relative;
-		padding-block: 8px;
+		padding-block: 6px;
 		overflow: hidden;
 		& > * {
 			line-height: 1;
