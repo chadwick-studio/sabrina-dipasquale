@@ -17,11 +17,7 @@
 <div class="projects-list">
 	<section class="title">
 		<h1>
-			<span>
-				Sabrina DiPasquale_<br />
-				<span>Art Director</span>
-				and Designer
-			</span>
+			<span> Sabrina DiPasquale_ </span>
 			<ArrowLink>About</ArrowLink>
 		</h1>
 	</section>
@@ -119,8 +115,9 @@
 	h1 {
 		display: flex;
 		justify-content: space-between;
-		align-items: flex-start;
+		align-items: flex-end;
 		column-gap: 32px;
+		line-height: 1;
 		& > span {
 			font-size: var(--font-size-title);
 			line-height: 1.1;

@@ -21,7 +21,7 @@
 
 <style lang="postcss">
 	.project-info-container {
-		--_rotate: -135deg;
+		--_rotate: -45deg;
 		position: absolute;
 		top: var(--padding);
 		left: var(--padding);
@@ -33,7 +33,7 @@
 		padding: var(--pill-padding-block) var(--pill-padding-inline);
 		font-size: var(--font-size-ui);
 		&.visible {
-			--_rotate: 135deg;
+			--_rotate: -135deg;
 			--_padding-visible-block: 1em;
 			--_padding-visible-inline: 1em;
 			padding: var(--_padding-visible-block)
