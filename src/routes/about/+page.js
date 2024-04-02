@@ -1,7 +1,6 @@
 import { error } from "@sveltejs/kit";
 import { sanityClient } from "$lib/utils/sanityClient";
 
-export const prerender = true;
 // @ts-ignore
 export async function load({ params }) {
 	const data = await sanityClient.fetch(`*[_type == "aboutme"][0]`);
