@@ -1,13 +1,14 @@
 <script>
 	import { checkScroll } from "$utils/checkScroll.js";
 	import { color, bgcolor, pillColor } from "$stores/stores";
-
+	import { goto, afterNavigate } from "$app/navigation";
 	import { onMount } from "svelte";
 
 	import EmailLightbox from "$components/EmailLightbox.svelte";
 	import Slider from "$components/Slider.svelte";
 	import Media from "$components/Media.svelte";
 	import ArrowLink from "$components/ArrowLink.svelte";
+	import { browser } from "$app/environment";
 
 	export let data;
 
@@ -17,26 +18,45 @@
 	$: pillColor.set(aboutme?.pillColor);
 
 	let lightboxVisibility = false;
-
+	let visible = false;
+	let previousPage = "/";
+	let hasScrollbar = false;
 	const toggleLightbox = () => {
 		lightboxVisibility = !lightboxVisibility;
 	};
-
-	let visible = false;
-	onMount(() => {
-		visible = true;
-	});
-	import { goto, afterNavigate } from "$app/navigation";
-
-	let previousPage = "/";
-
-	afterNavigate(({ from }) => {
-		previousPage = from?.url.pathname || previousPage;
-	});
-
 	const gotoPreviousPage = () => {
 		goto(previousPage);
 	};
+	const debounce = (callback, wait = 300) => {
+		let timeoutId = null;
+		return (...args) => {
+			window.clearTimeout(timeoutId);
+			timeoutId = window.setTimeout(() => {
+				callback.apply(null, args);
+			}, wait);
+		};
+	};
+	afterNavigate(({ from }) => {
+		previousPage = from?.url.pathname || previousPage;
+	});
+	onMount(() => {
+		visible = true;
+
+		const aboutmeScroll = document.querySelector(".aboutme");
+		hasScrollbar =
+			aboutmeScroll.scrollHeight > aboutmeScroll.clientHeight;
+		const handleResize = () => {
+			debounce(() => {
+				hasScrollbar =
+					aboutmeScroll.scrollHeight >
+					aboutmeScroll.clientHeight;
+			})();
+		};
+		window.addEventListener("resize", handleResize);
+		return () => {
+			window.removeEventListener("resize", handleResize);
+		};
+	});
 </script>
 
 <div class="media-wrapper">
@@ -48,12 +68,14 @@
 	<ArrowLink button about on:click={gotoPreviousPage}>Work</ArrowLink>
 </div>
 <div class="aboutme-wrapper">
+	<h1 class="description-title sr-only">About Me</h1>
+	<ArrowLink button on:click={gotoPreviousPage}>Work</ArrowLink>
 	<div class="scroll-wrapper" class:visible>
-		<div class="aboutme scrollbar" use:checkScroll>
-			<h1 class="description-title sr-only">About Me</h1>
-			<ArrowLink button on:click={gotoPreviousPage}
-				>Work</ArrowLink
-			>
+		<div
+			class="aboutme scrollbar"
+			class:hasScrollbar
+			use:checkScroll
+		>
 			<div class="aboutme-info-grid">
 				<section class="biography">
 					<p>
@@ -243,11 +265,8 @@
 		position: relative;
 		overscroll-behavior: none;
 		height: 100%;
-		padding-right: var(--padding);
-	}
-	@media (min-width: 768px) {
-		.aboutme {
-			padding-right: 0;
+		&.hasScrollbar {
+			padding-right: var(--padding);
 		}
 	}
 
@@ -262,7 +281,7 @@
 		row-gap: 48px;
 	}
 	@media (min-width: 768px) {
-		.aboutme-info-grid {
+		.scroll-wrapper {
 			margin-top: 68px;
 		}
 	}
@@ -271,6 +290,18 @@
 			display: grid;
 			grid-template-columns: 1fr 1fr;
 			column-gap: var(--padding);
+		}
+		.more-info {
+			grid-column: 2 / 3;
+			grid-row: 1 / 3;
+		}
+		.biography {
+			grid-column: 1 / 2;
+			grid-row: 1 / 2;
+		}
+		.contact-info {
+			grid-column: 1 / 2;
+			grid-row: 2 / 3;
 		}
 	}
 	.contact-info {
@@ -347,19 +378,5 @@
 	}
 	.contact-info {
 		order: 3;
-	}
-	@container aboutme-wrapper (min-width: 672px) {
-		.more-info {
-			grid-column: 2 / 3;
-			grid-row: 1 / 3;
-		}
-		.biography {
-			grid-column: 1 / 2;
-			grid-row: 1 / 2;
-		}
-		.contact-info {
-			grid-column: 1 / 2;
-			grid-row: 2 / 3;
-		}
 	}
 </style>

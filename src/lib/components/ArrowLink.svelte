@@ -30,6 +30,10 @@
 		cursor: pointer;
 		margin-left: auto;
 		line-height: 1;
+		&.button {
+			margin-top: 0.32em;
+			align-self: flex-start;
+		}
 		&.carousel,
 		&.about {
 			display: flex;
