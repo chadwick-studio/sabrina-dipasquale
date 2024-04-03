@@ -122,7 +122,7 @@
 			font-size: var(--font-size-title);
 			line-height: 1;
 			font-family: "Gilroy", regular;
-			font-weight: 500;
+			font-weight: 400;
 		}
 	}
 	.projects-list {
