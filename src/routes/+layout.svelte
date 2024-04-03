@@ -90,7 +90,7 @@
 		--padding: clamp(20px, 12.3478px + 2.3913vi, 42px);
 		display: grid;
 		grid-template: 1fr 1fr / 1fr;
-		font-family: "Jost";
+		font-family: "Gilroy";
 		height: 100svh;
 		color: var(--color);
 		background-color: var(--bg-color);
