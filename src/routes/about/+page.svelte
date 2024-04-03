@@ -322,8 +322,8 @@
 	/* Information */
 	.biography {
 		font-family: "Gilroy";
-		font-size: 18px;
-		line-height: 1.3;
+		font-size: 17px;
+		line-height: 1.5;
 	}
 	@container aboutme-wrapper (min-width: 672px) {
 		.biography {
