@@ -321,7 +321,7 @@
 	}
 	/* Information */
 	.biography {
-		font-family: "PSFournier Std Petit";
+		font-family: "Gilroy";
 		font-size: 18px;
 		line-height: 1.3;
 	}
