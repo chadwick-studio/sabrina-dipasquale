@@ -356,7 +356,7 @@
 		& > p,
 		ul {
 			font-size: 14px;
-			font-weight: 300;
+			font-weight: 400;
 		}
 		& h2 + p {
 			margin-top: 6px;
