@@ -121,7 +121,7 @@
 		& > span {
 			font-size: var(--font-size-title);
 			line-height: 1.1;
-			font-family: "PSFournier Std Petit", serif;
+			font-family: "Gilroy", regular;
 			font-weight: 300;
 		}
 	}
