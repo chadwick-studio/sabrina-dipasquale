@@ -9,7 +9,7 @@ export async function load({}) {
 		return {
 			project: data,
 			title: "Sabrina DiPasquale: Art Director and Designer",
-			description: "Sabrina DiPasquale: Art Director and Designer",
+			
 		};
 	}
 	error(404, { message: "Not found" });
