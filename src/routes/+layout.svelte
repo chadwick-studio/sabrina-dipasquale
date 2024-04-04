@@ -55,7 +55,7 @@
 	<title>{$page.data.title}</title>
 	<meta name="description" content={$page.data.description} />
 	<style>
-		@import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=block");
+		@import url("https://gist.github.com/mfd/09b70eb47474836f25a21660282ce0fd.js");
 	</style>
 </svelte:head>
 <div
