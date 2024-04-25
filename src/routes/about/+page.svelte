@@ -321,9 +321,9 @@
 	}
 	/* Information */
 	.biography {
-		font-family: "Gilroy";
-		font-size: 17px;
-		line-height: 1.2;
+		font-family: "PSFournier Std Petit";
+		font-size: 18px;
+		line-height: 1.3;
 	}
 	@container aboutme-wrapper (min-width: 672px) {
 		.biography {
@@ -356,7 +356,7 @@
 		& > p,
 		ul {
 			font-size: 14px;
-			font-weight: 400;
+			font-weight: 300;
 		}
 		& h2 + p {
 			margin-top: 6px;

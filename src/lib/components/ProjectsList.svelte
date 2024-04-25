@@ -120,9 +120,9 @@
 		line-height: 1;
 		& > span {
 			font-size: var(--font-size-title);
-			line-height: 1;
-			font-family: "Gilroy", regular;
-			font-weight: 400;
+			line-height: 1.1;
+			font-family: "PSFournier Std Petit", serif;
+			font-weight: 300;
 		}
 	}
 	.projects-list {

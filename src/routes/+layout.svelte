@@ -16,7 +16,7 @@
 	let minFontSizeDescription = 18;
 	let maxFontSizeDescription = 22;
 	let minFontSizeTitle = 28;
-	let maxFontSizeTitle = 33;
+	let maxFontSizeTitle = 36;
 	let minFontSizeBody = 18;
 	let maxFontSizeBody = 26;
 	let minFontSizeRole = 12;
@@ -90,7 +90,7 @@
 		--padding: clamp(20px, 12.3478px + 2.3913vi, 42px);
 		display: grid;
 		grid-template: 1fr 1fr / 1fr;
-		font-family: "Gilroy";
+		font-family: "Jost";
 		height: 100svh;
 		color: var(--color);
 		background-color: var(--bg-color);
