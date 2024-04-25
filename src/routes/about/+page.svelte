@@ -1,5 +1,6 @@
 <script>
   import Lenis from "lenis";
+  import gsap from "gsap";
   import { checkScroll } from "$utils/checkScroll.js";
   import { color, bgcolor, pillColor } from "$stores/stores";
   import { goto, afterNavigate } from "$app/navigation";
@@ -9,7 +10,8 @@
   import Slider from "$components/Slider.svelte";
   import Media from "$components/Media.svelte";
   import ArrowLink from "$components/ArrowLink.svelte";
-
+  import { browser } from "$app/environment";
+  import { getContext } from "svelte";
   export let data;
 
   $: ({ aboutme } = data);
@@ -65,6 +67,46 @@
       window.removeEventListener("resize", handleResize);
     };
   });
+  const ended = getContext("ended");
+  $: console.log($ended);
+  $: {
+    if (browser && $ended) {
+      const tl = gsap.timeline();
+      tl.to(".biography > p", {
+        opacity: 1,
+        duration: 0.8,
+      }).delay(0.6);
+      tl.to(".experience", {
+        opacity: 1,
+        duration: 0.8,
+      }).delay(0.5);
+      tl.to(".clients", {
+        opacity: 1,
+        duration: 0.6,
+      });
+      tl.to(".awards", {
+        opacity: 1,
+        duration: 0.6,
+      });
+      tl.to(".skills", {
+        opacity: 1,
+        duration: 0.6,
+      });
+      tl.to(".contact-info ul > li:first-child", {
+        opacity: 1,
+        duration: 0.4,
+      });
+      tl.to(".contact-info ul > li:nth-child(2)", {
+        opacity: 1,
+        duration: 0.3,
+      });
+      tl.to(".contact-info ul > li:last-child", {
+        opacity: 1,
+        duration: 0.3,
+      });
+    }
+  }
+  onMount(() => {});
 </script>
 
 <div class="media-wrapper">
@@ -163,6 +205,14 @@
 <slot />
 
 <style lang="postcss">
+  .biography > p,
+  .contact-info ul > li,
+  .experience,
+  .clients,
+  .awards,
+  .skills {
+    opacity: 0;
+  }
   .aboutme-wrapper {
     overflow: hidden;
     display: grid;

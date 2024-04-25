@@ -2,13 +2,14 @@
   import "../app.pcss";
   import "../styles/reset.css";
 
-  import { onMount, setContext } from "svelte";
+  import { getContext, onMount, setContext } from "svelte";
   import { color, bgcolor, percentage, pillColor } from "$stores/stores";
   import { page } from "$app/stores";
 
   import titlePageVideo from "$lib/assets/title_page_video.webm";
   import { browser } from "$app/environment";
   import { fade } from "svelte/transition";
+  import { writable } from "svelte/store";
 
   export let data;
 
@@ -53,6 +54,9 @@
     video.play();
     visible = true;
   });
+  const endedStore = writable(ended);
+  $: ended, endedStore.set(ended);
+  setContext("ended", endedStore);
 </script>
 
 <svelte:head>
@@ -125,9 +129,9 @@
 {/if}
 
 <style lang="postcss">
-video::-webkit-media-controls {
-  display: none;
-}
+  video::-webkit-media-controls {
+    display: none;
+  }
   video {
     width: 100vw;
     height: 100vh;
