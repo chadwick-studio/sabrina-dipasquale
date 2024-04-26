@@ -54,9 +54,6 @@
     video.play();
     visible = true;
   });
-  const endedStore = writable(ended);
-  $: ended, endedStore.set(ended);
-  setContext("ended", endedStore);
 </script>
 
 <svelte:head>

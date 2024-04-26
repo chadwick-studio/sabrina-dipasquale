@@ -53,24 +53,18 @@
       })();
     };
     window.addEventListener("resize", handleResize);
-    const lenis = new Lenis({
-      wrapper: document.querySelector(".aboutme"),
-      content: document.querySelector(".aboutme-content"),
-      lerp: 0.2,
-    });
-    function raf(time) {
-      lenis.raf(time);
+    if (browser) {
+      const lenis = new Lenis({
+        wrapper: document.querySelector(".aboutme"),
+        content: document.querySelector(".aboutme-content"),
+        lerp: 0.2,
+      });
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
       requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  });
-  const ended = getContext("ended");
-  $: console.log($ended);
-  $: {
-    if (browser && $ended) {
+
       const tl = gsap.timeline();
       tl.to(".biography > p", {
         opacity: 1,
@@ -105,8 +99,10 @@
         duration: 0.3,
       });
     }
-  }
-  onMount(() => {});
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  });
 </script>
 
 <div class="media-wrapper">
