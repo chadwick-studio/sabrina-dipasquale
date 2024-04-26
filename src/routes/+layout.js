@@ -1,7 +1,7 @@
 import { sanityClient } from "$lib/utils/sanityClient";
 import { error } from "@sveltejs/kit";
 
-export const load = async ({url}) => {
+export const load = async ({ url }) => {
   const data = await sanityClient.fetch(
     `*[_type == "project"]|order(orderRank)`,
   );
@@ -10,7 +10,7 @@ export const load = async ({url}) => {
     return {
       projects: data,
       password,
-      url: url.pathname
+      url: url.pathname,
     };
   }
   error(500, { message: "Internal Server Error" });

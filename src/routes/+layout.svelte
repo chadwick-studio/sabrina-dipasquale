@@ -2,14 +2,13 @@
   import "../app.pcss";
   import "../styles/reset.css";
 
-  import { getContext, onMount, setContext } from "svelte";
+  import { onMount, setContext } from "svelte";
   import { color, bgcolor, percentage, pillColor } from "$stores/stores";
   import { page } from "$app/stores";
 
   import titlePageVideo from "$lib/assets/title_page_video.webm";
   import { browser } from "$app/environment";
   import { fade } from "svelte/transition";
-  import { writable } from "svelte/store";
 
   export let data;
 

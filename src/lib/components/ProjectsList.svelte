@@ -223,6 +223,16 @@
     & > * {
       line-height: 1;
     }
+    transition: opacity 200ms ease;
+    &:hover {
+      > h2,
+      > h3 {
+        color: var(--color);
+        opacity: 0.6;
+        font-style: italic;
+    transition: opacity 200ms ease;
+      }
+    }
     & > h2 {
       padding-top: 12px;
       font-size: var(--font-size-body);
