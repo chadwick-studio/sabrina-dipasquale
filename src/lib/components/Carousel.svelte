@@ -20,8 +20,8 @@
   import ProjectInfo from "./ProjectInfo.svelte";
   import ArrowLink from "./ArrowLink.svelte";
 
-  export let password = "";
-  export let project = {};
+  export let password;
+  export let project;
 
   const projects = getContext("projects");
 
@@ -168,7 +168,7 @@
           <PasswordForm
             bind:value={passwordValue}
             on:submit={() => {
-              if (passwordValue === password?.password) project.hidden = false;
+              if (passwordValue === password) project.hidden = false;
             }}
             img={project?.passwordImg}
             fieldColor={project?.passwordFieldColor.hex}
@@ -258,24 +258,10 @@
       rgba(0, 0, 0, 0.16) 0px 3px 6px,
       rgba(0, 0, 0, 0.23) 0px 3px 6px;
   }
-  .hidden-form {
-    display: grid;
-    place-items: center;
-    width: 100%;
-    height: 100cqh;
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: var(--padding);
-    font-family: "PSFournier Std Petit";
-    --_color: #0f5cb7;
-    color: var(--_color);
-  }
   .scroller-control {
     cursor: none;
   }
 
-  a,
   button:not(.scroller-control) {
     cursor: pointer;
   }

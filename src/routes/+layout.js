@@ -5,11 +5,11 @@ export const load = async ({ url }) => {
   const data = await sanityClient.fetch(
     `*[_type == "project"]|order(orderRank)`,
   );
-  const password = await sanityClient.fetch(`*[_type == "settings"][0]`);
+  const settings = await sanityClient.fetch(`*[_type == "settings"][0]`);
   if (data) {
     return {
       projects: data,
-      password,
+      settings,
       url: url.pathname,
     };
   }

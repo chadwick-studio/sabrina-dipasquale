@@ -9,6 +9,7 @@
   import titlePageVideo from "$lib/assets/title_page_video.webm";
   import { browser } from "$app/environment";
   import { fade } from "svelte/transition";
+  import { generateFileUrl } from "$utils/generateVideoUrl";
 
   export let data;
 
@@ -66,7 +67,7 @@
     muted
     playsinline
     bind:this={video}
-    src={titlePageVideo}
+    src={generateFileUrl(data?.settings?.video)}
     bind:ended
   ></video>
 {/if}
